@@ -2,12 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import TotalUnits from './TotalUnits/TotalUnits'
+import Share from './Share/Share'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <TotalUnits units={10} />
+      <Share />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
