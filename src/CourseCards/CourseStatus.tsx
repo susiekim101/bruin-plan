@@ -31,26 +31,17 @@ function CourseStatus({ initialStatus = 'Will Take' }: CourseStatusProps) {
 
     return (
         <div className="
-            flex
-            items-center
-            gap-1
-            ">
+            flex items-center gap-1
+        ">
             <span className={`
-                h-2
-                w-2
-                rounded-full
-                ml-1
-                ${color}
+                h-2 w-2 rounded-full ml-1 ${color}
             `}></span>
             <select 
                 id={`${reactId}-status`}
                 ref={selectRef}
                 onChange={handleChange}
                 defaultValue={initialStatus}
-                className="
-                    w-auto
-                    max-w-20
-                ">
+                className="w-auto max-w-20">
                 <option value="Will Take">Will Take</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Taken">Taken</option>

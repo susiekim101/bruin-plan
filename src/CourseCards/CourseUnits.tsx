@@ -1,14 +1,14 @@
-import { useState, type ChangeEvent, useId } from 'react'
+import { useState, type ChangeEvent, useId } from 'react';
 
 function CourseUnits() {
-    const [numUnits, setNumUnits] = useState<number>(0)
+    const [numUnits, setNumUnits] = useState<number>(0);
     const reactId = useId();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value
-        const unitVal = Number(value)
+        const value = event.target.value;
+        const unitVal = Number(value);
         if (!isNaN(Number(unitVal))) {
-            setNumUnits(unitVal)
+            setNumUnits(unitVal);
         }
     }
     return (
@@ -24,6 +24,6 @@ function CourseUnits() {
             </input>
         </>
     );
-}
+};
 
-export default CourseUnits
+export default CourseUnits;

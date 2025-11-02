@@ -30,6 +30,6 @@ function CourseTitle() {
             </textarea>
         </>
     );
-}
+};
 
 export default CourseTitle;
