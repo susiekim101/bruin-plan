@@ -71,3 +71,35 @@ export default defineConfig([
   },
 ])
 ```
+
+# MySQL
+Install MySQL on macOS
+```
+brew install mysql
+```
+
+Start MySQL
+```
+brew services start mysql
+```
+
+Secure the Installation (for first run)
+```
+mysql_secure_installation
+```
+
+Run mysql
+```
+mysql -u root -p
+```
+
+Initialize the database with the script from your local machine
+
+```
+mysql -u root -p < database.sql
+```
+
+Add scraped course data
+```
+mysql -u root -p < course_scraper.sql
+```
