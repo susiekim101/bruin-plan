@@ -1,7 +1,6 @@
 import './App.css'
 import TotalUnits from './TotalUnits/TotalUnits'
 import Sidebar from './Sidebar/Sidebar'
-import Card from './CourseCards/Card'
 
 //import Share from './Share/Share'
 
