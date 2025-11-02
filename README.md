@@ -98,3 +98,8 @@ Initialize the database with the script from your local machine
 ```
 mysql -u root -p < database.sql
 ```
+
+Add scraped course data
+```
+mysql -u root -p < course_scraper.sql
+```
