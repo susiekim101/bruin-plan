@@ -21,10 +21,10 @@ CREATE TABLE Users (
 
 CREATE TABLE Courses (
     course_id INT PRIMARY KEY AUTO_INCREMENT,
-    course_number VARCHAR(20) UNIQUE NOT NULL,
+    course_number VARCHAR(20) NOT NULL,
     course_name VARCHAR(255) NOT NULL,
-    course_units INT NOT NULL,
-    category VARCHAR(50) NOT NULL,
+    course_units INT,
+    category VARCHAR(50),
     major_id INT,
     FOREIGN KEY (major_id) REFERENCES Majors(major_id)
 );
