@@ -1,5 +1,5 @@
-import TotalUnits from '../TotalUnits/TotalUnits.tsx'
-import Sidebar from '../Sidebar/Sidebar.tsx'
+import TotalUnits from './components/TotalUnits/TotalUnits.tsx'
+import Sidebar from './components/Sidebar/Sidebar.tsx'
 
 function Dashboard () {
     return (
