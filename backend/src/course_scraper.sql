@@ -1,3 +1,5 @@
+USE bruin_plan
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 TRUNCATE TABLE Courses;
