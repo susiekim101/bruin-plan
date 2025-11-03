@@ -1,12 +1,16 @@
-import TotalUnits from './components/TotalUnits/TotalUnits.tsx'
 import Sidebar from './components/Sidebar/Sidebar.tsx'
-
+import Header from './Header/Header.tsx'
 function Dashboard () {
     return (
-    <>
-        <TotalUnits units={15} />
-        <Sidebar />
-    </>
+    <div className="w-full h-screen flex">
+        <div className="w-full">
+            <Header year={1}/>
+        </div>
+        
+        <div>
+            <Sidebar /> 
+        </div>
+    </div>
     )
 }
 
