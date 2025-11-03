@@ -1,4 +1,4 @@
-import Card from '../CourseCards/Card'
+import Card from '../Dashboard/components/CourseCards/Card'
 import SearchBar from './SearchBar'
 
 function Sidebar() {
