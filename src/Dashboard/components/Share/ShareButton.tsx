@@ -7,7 +7,7 @@ export default function ShareButton() {
     return (
         <div>
             <button onClick={handleClick}
-                    className="w-fit text-white py-1 px-2 text-sm border rounded-md border-blue-900 bg-blue-900">Share</button>
+                    className="w-fit text-white py-1 px-2 text-sm border rounded-md border-blue-800 bg-blue-800">Share</button>
         </div>
     )
 }
