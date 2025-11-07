@@ -12,9 +12,6 @@ interface createUserProps {
 }
 
 export async function getMajorId({ major }: getMajorProps) {
-// Find the majors table
-    //     Get the major's id
-
     const major_query = `SELECT major_id FROM Majors WHERE major_name = ?;`;
 
     const [major_rows] = await connection.execute(major_query, [major]);
@@ -24,11 +21,6 @@ export async function getMajorId({ major }: getMajorProps) {
 }
 
 export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
-    
-
-        // Find the Users table
-    // Add entry (user_id, first_name, last_name, email, password_hash, major_id)
-    // Return the userId
     const major_id = getMajorId({ major });
 
     const user_query = `INSERT IGNORE INTO Users (first_name, last_name, email, password_hash, major_id)
