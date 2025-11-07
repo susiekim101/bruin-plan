@@ -9,7 +9,6 @@ const mockUser = {
   major: 'Computer Science'
 }
 
-const major_query = `SELECT major_id FROM Majors WHERE major_name = 'Computer Science';`;
 const major_id = 3;
 
 // Create a fixture for my database
