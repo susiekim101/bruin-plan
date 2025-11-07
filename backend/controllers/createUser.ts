@@ -30,14 +30,10 @@ export async function createUser({ first_name, last_name, email, password, major
     // Add entry (user_id, first_name, last_name, email, password_hash, major_id)
     // Return the userId
     const major_id = getMajorId({ major });
-    
+
     const user_query = `INSERT IGNORE INTO Users (first_name, last_name, email, password_hash, major_id)
     VALUES (?, ?, ?, ?, ?);`
     const user_values = [first_name, last_name, email, password, major_id];
 
     await connection.execute(user_query, user_values);
-    // const student_id = user_rows[0].insertId;
-
-    // return student_id;
-    return major_id;
 }
