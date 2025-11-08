@@ -8,7 +8,7 @@ export default function ViewAll() {
     return (
         <div>
             <button onClick={handleClick}
-                    className="w-fit text-white py-1 px-2 text-sm border rounded-md border-blue-900 bg-blue-900">View All</button>
+                    className="w-fit text-white py-1 px-2 text-sm border rounded-md border-blue-800 bg-blue-800">View All</button>
         </div>
     );
 }
