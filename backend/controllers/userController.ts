@@ -5,3 +5,7 @@ export const sharePlan = async (req: Request, res: Response) => {
     console.log(req.body)
     res.send("Sharing plan")
 }
+
+export const search = async (req: Request, res: Response) => {
+
+}
