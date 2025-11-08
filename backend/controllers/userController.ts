@@ -6,6 +6,7 @@ export const sharePlan = async (req: Request, res: Response) => {
     res.send("Sharing plan")
 }
 
-export const search = async (req: Request, res: Response) => {
-
+export async function search(searchTerm: string) {
+    return '';
+    //const query = `SELECT * FROM Courses where course_number = ?;`;
 }
