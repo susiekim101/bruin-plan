@@ -3,7 +3,7 @@ import Card from "../components/CourseCards/Card";
 
 function Quarters() {
     return(
-        <div className="flex flex-col w-1/4 overflow-x-auto justify-between bg-zinc-200 h-[calc(100vh-8em)] m-4 rounded-3xl p-4 overflow-scroll">
+        <div className="flex flex-col overflow-x-auto justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4 overflow-scroll">
             <div className="w-auto space-y-2">
                 <Card units={5} courseName="CS 35L" courseTitle="Software Engineering Lab"/>
                 <Card units={5} courseName="CS 130" courseTitle="Computer Architecture"/>

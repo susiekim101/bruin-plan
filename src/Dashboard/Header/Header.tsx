@@ -1,14 +1,15 @@
 import TotalUnits from "../components/TotalUnits/TotalUnits";
 import Share from "../components/Share/Share";
-import Year from "./Year";
 
-
-export default function Header() {
+interface HeaderProps {
+    year: number,
+}
+export default function Header({year}: HeaderProps) {
 
     return (
         <div className="w-full flex justify-between items-center px-3 my-3">
             <TotalUnits units={10}/>
-            <Year />
+            <p className="text-4xl text-sky-800 font-bold">Year {year}</p>
             <Share/>
         </div>
     );
