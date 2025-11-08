@@ -15,7 +15,7 @@ function Card({ courseName, courseTitle, units }: CardProps) {
     return (
         <>
             <div className="
-                bg-sky-600 rounded-[20px] border border-black w-fit h-fit flex flex-col p-3
+                bg-sky-600 rounded-[20px] border border-black w-full min-w-fit h-fit flex flex-col p-3
             ">
                 <div className="
                     p-1 flex justify-between text-amber-300 font-bold text-[12px]
