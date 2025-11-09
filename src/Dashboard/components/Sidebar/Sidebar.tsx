@@ -10,7 +10,6 @@ function Sidebar() {
                 <div className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                     <CustomCard />
                     <CustomCard />
-                    <CourseCard units={4} courseName='COM SCI 35L' courseTitle='Software Construction' courseClassification='Major'/>
                 </div>
             </div>
         </div>
