@@ -12,7 +12,7 @@ function Dashboard () {
 
     return (
     <div className="w-full h-screen flex">
-        <div className="w-full">
+        <div className="w-4/5">
             <Header year={yearNum}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
@@ -22,8 +22,19 @@ function Dashboard () {
                         disabled={yearNum <= 1}> 
                         <ChevronLeft className="size-10"/>
                     </button>
-                    <div className="flex grow min-w-1/4">
-                        <Year />
+                    <div className="relative w-full overflow-hidden flex justify-center">
+                        <div className="flex transition-transform duration-400 ease-in-out w-full"
+                            style={{transform: `translateX(-${yearNum * 100}%)` }}>
+                            {[...Array(5)].map((_, idx) => (
+                            <div
+                                key={idx}
+                                className="w-full shrink-0 flex justify-center items-start"
+                            >
+                                <div className="flex grow min-w-1/4">
+                                    <Year />
+                                </div>
+                            </div>
+                        ))}</div>
                     </div>
                     <button 
                         className="pr-0.5 pl-0 disabled:opacity-50 disabled:cursor-not-allowed"

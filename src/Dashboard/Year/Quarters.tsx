@@ -1,4 +1,5 @@
-import Card from "../components/CourseCards/Card";
+import CourseCards from "../components/CourseCards/CourseCards";
+import CustomCards from "../components/CourseCards/CustomCards";
 
 
 function Quarters() {
