@@ -13,7 +13,7 @@ jest.mock('../src/database', () => ({
   }
 }));
 
-const { loadCourseCards } = require('../controllers/loadCourseCards');
+const { loadCourses } = require('../controllers/loadCourseCards');
 
 // Start with clean state each time
 beforeEach(() => {
@@ -21,12 +21,20 @@ beforeEach(() => {
 });
 
 test('loadCourseCards should estabish connection to database', async () => {
-  await loadCourseCards();
+  await loadCourses();
   expect(mockGetConnection).toHaveBeenCalledTimes(1);
 });
 
+
 test('query with no specified major should return no courses', async () => {
-  const result = await loadCourseCards(-1);
+  const result = await loadCourses(-1);
   expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [-1]);
   expect(result).toEqual([]);
+});
+
+test('query with a specified major returns all courses with that major ID', async () => {
+  mockExecute.mockResolvedValueOnce([[{major_id: 1, course_name: 'Test Course'}]])
+  const result = await loadCourses(1);
+  expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [1]);
+  expect(result).toEqual([{major_id: 1, course_name: 'Test Course'}]);
 });

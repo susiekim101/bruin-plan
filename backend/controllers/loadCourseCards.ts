@@ -1,6 +1,6 @@
 import { connection } from '../src/database'
 
-export async function loadCourseCards (userMajorID: number) {
+export async function loadCourses (userMajorID: number) {
     let db_connection;
     try {
         // connect to database
