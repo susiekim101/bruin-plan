@@ -2,21 +2,28 @@ import Card from "../components/CourseCards/Card";
 
 
 function Quarters() {
-    return(
-        <div className="flex flex-col overflow-x-auto justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4 overflow-scroll">
-            <div className="w-auto space-y-2">
-                <Card units={5} courseName="CS 35L" courseTitle="Software Engineering Lab"/>
-                <Card units={5} courseName="CS 130" courseTitle="Computer Architecture"/>
-                <Card />
-                <Card />
-            </div>
+    const handleDragOver = (container: React.DragEvent<HTMLDivElement>) => {
+        container.preventDefault();
+    };
 
-            <button className="flex mx-auto justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5">
-                Mark all as
-            </button>
+    const handleDrop = (container: React.DragEvent<HTMLDivElement>) => {
+        container.preventDefault();
+    }
+
+
+    return(
+        <div 
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className="flex flex-col min-w-fit w-full justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4">
+            <div className="flex flex-col w-full space-y-2">
+            </div>
             
-            
-            <div className="flex justify-center items-center mt-0.5">
+            <div className="flex flex-col justify-center items-center mt-0.5">
+                <button className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap"
+                    onClick={changeClassStatus}>
+                    Mark all as
+                </button>
                 <p className="text-black font-bold">
                     Units: 15
                 </p>
@@ -25,3 +32,7 @@ function Quarters() {
     );
 }
 export default Quarters;
+
+function changeClassStatus() {
+
+};

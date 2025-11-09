@@ -12,10 +12,16 @@ type CardProps = {
 }
 
 function Card({ courseName, courseTitle, units }: CardProps) {
+    const handleDragStart = (item: React.DragEvent<HTMLDivElement>) => {
+        item.dataTransfer.setData
+    }
+    
     return (
         <>
-            <div className="
-                bg-sky-600 rounded-[20px] border border-black w-full min-w-fit h-fit flex flex-col p-3
+            <div 
+                draggable="true"
+                onDragStart={handleDragStart}
+                className="bg-sky-600 rounded-[20px] border border-black w-full min-w-fit h-fit flex flex-col p-3
             ">
                 <div className="
                     p-1 flex justify-between text-amber-300 font-bold text-[12px]
