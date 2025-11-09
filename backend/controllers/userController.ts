@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { connection } from '../src/database'
+import { connection } from '../src/database';
 
 export const sharePlan = async (req: Request, res: Response) => {
     // TODO
