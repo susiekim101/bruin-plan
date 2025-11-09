@@ -103,3 +103,12 @@ Add scraped course data
 ```
 mysql -u root -p < course_scraper.sql
 ```
+
+# Setting up MySQL Connection
+Configure your .env file
+```
+DB_HOST=YOUR_LOCAL_HOST
+DB_USER=YOUR_USER
+DB_PASSWORD=YOUR_PASSWORD
+DB_NAME="bruin_plan
+```

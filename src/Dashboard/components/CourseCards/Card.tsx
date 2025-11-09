@@ -15,7 +15,7 @@ function Card({ courseName, courseTitle, units }: CardProps) {
     return (
         <>
             <div className="
-                bg-sky-600 rounded-[20px] border border-black min-w-[295px] min-h-[130px] w-fit h-fit flex flex-col p-3
+                bg-sky-600 rounded-[20px] border border-black w-fit h-fit flex flex-col p-3
             ">
                 <div className="
                     p-1 flex justify-between text-amber-300 font-bold text-[12px]
@@ -34,7 +34,7 @@ function Card({ courseName, courseTitle, units }: CardProps) {
                         }
                     </div>
                     <div className="
-                        bg-zinc-100 text-gray-600 rounded-md text-[10px] font-normal inline-block max-w-min h-[15px]
+                        bg-zinc-100 text-gray-600 rounded-md text-[10px] font-normal inline-block h-fit ml-auto items-center
                     ">
                         <CourseClassification />
                     </div>

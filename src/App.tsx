@@ -1,12 +1,10 @@
 import './App.css'
-
+import Dashboard from './Dashboard/Dashboard'
 function App() {
 
   return (
     <>
-    <div>Temporary page.</div>
-    <div>Use this space to test your components.</div>
-    <div>Do NOT push temporary edits/dummy components to Git</div>
+      <Dashboard/>
     </>
   )
 }

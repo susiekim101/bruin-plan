@@ -8,12 +8,15 @@ type CourseStatusProps = {
 function CourseStatus({ initialStatus = 'Will Take' }: CourseStatusProps) {
     const [status, setStatus] = useState<'Will Take' | 'In Progress' | 'Taken'>(initialStatus);
     const selectRef = useRef<HTMLSelectElement>(null);
+    const spanRef = useRef<HTMLSpanElement>(null);
     const [color, setColor] = useState<string>('bg-[#D35D5D]');
     const reactId = useId();
 
     useEffect(() => {
-        if (selectRef.current) {
-            selectRef.current.value = status;
+        if (spanRef.current && selectRef.current) {
+            spanRef.current.textContent = status;
+            const newWidth = spanRef.current.offsetWidth;
+            selectRef.current.style.width = `${newWidth}px`;
         }
     }, [status]);
 
@@ -41,11 +44,15 @@ function CourseStatus({ initialStatus = 'Will Take' }: CourseStatusProps) {
                 ref={selectRef}
                 onChange={handleChange}
                 defaultValue={initialStatus}
-                className="w-auto max-w-20">
+                className="w-fit">
                 <option value="Will Take">Will Take</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Taken">Taken</option>
             </select>
+            <span
+                ref={spanRef}
+                className="absolute left-[-9999px] top-0 whitespace-pre px-3"
+            />
         </div>
     );
 };
