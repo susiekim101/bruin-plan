@@ -17,7 +17,7 @@ function Dashboard () {
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
-                        className="pl-0.5 pr-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="pl-0.5 pr-0 disabled:opacity-0"
                         onClick={handleLeftClick}
                         disabled={yearNum <= 1}> 
                         <ChevronLeft className="size-10"/>
@@ -37,7 +37,7 @@ function Dashboard () {
                         ))}</div>
                     </div>
                     <button 
-                        className="pr-0.5 pl-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="pr-0.5 pl-0 disabled:opacity-0"
                         onClick={handleRightClick}
                         disabled={yearNum >= 4}>
                         <ChevronRight className="size-10"/>
