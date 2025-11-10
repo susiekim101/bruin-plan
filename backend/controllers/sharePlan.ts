@@ -2,14 +2,12 @@
 import { connection } from "../src/database"
 
 interface SharePlanProps {
-    'user_id': number,
     'major_id': number
 }
 
-export async function sharePlan({ user_id, major_id }: SharePlanProps) {
-    const query = `INSERT IGNORE INTO Users (user_id, major_id) 
-    VALUES (?, ?, ?)`;
-    const values = [user_id, major_id, true];
+export async function sharePlan({ major_id }: SharePlanProps) {
+    // chnage isShared to true
+    const query = `UPDATE User_Plans SET is_shared = true WHERE user_id == ?`;
 
-    connection.execute(query, values);
+    connection.execute(query, major_id);
 };
