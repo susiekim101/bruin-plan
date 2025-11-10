@@ -1,4 +1,5 @@
 import { connection } from "../src/database";
+
 interface getMajorProps {
     'major': string
 }
@@ -27,5 +28,22 @@ export async function createUser({ first_name, last_name, email, password, major
     VALUES (?, ?, ?, ?, ?);`
     const user_values = [first_name, last_name, email, password, major_id];
 
-    await connection.execute(user_query, user_values);
+    try { 
+        const user_id = await connection.execute(user_query, user_values);
+        // call addToUserPlans
+        await addToUserPlans({user_id, major_id});
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+async function addToUserPlans({user_id, major_id}) {
+    const plan_query = `INSERT IGNORE INTO User_Plan (user_id, major_id) VALUES (?, ?)`;
+
+    try {
+        await connection.execute(plan_query, {user_id, major_id});
+        console.log("Succesfully added new user to User_Plan");
+    } catch (err) {
+        console.error(err);
+    }
 }
