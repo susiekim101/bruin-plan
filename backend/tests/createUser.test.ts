@@ -1,5 +1,7 @@
-const { createUser, getMajorId } = require('../controllers/createUser');
-const { connection } = require('../src/database');
+// const { createUser, getMajorId } = require('../controllers/createUser');
+// const { connection } = require('../src/database');
+import { createUser, getMajorId } from '../controllers/createUser';
+import { connection } from '../src/database';
 
 const mockUser = {
   first_name: 'Joe',
@@ -39,7 +41,7 @@ test('query to the Majors database returns a major_id', async () => {
   const result = await getMajorId(mockUser)
 
   expect(mockExecute).toHaveBeenCalledTimes(1);
-  expect(result).toBe(major_id, [mockUser.major]);
+  expect(result).toBe(major_id);
 });
 
 test('query to add user returns inserted user id', async () => {

@@ -1,6 +1,7 @@
-const { sharePlan } = require("../controllers/sharePlan");
-const { connection } = require('../src/database');
-
+// const { sharePlan } = require("../controllers/sharePlan");
+// const { connection } = require('../src/database');
+import { sharePlan } from "../controllers/sharePlan";
+import { connection } from "../src/database";
 const mockUserId = 123
 
 jest.mock('../src/database');
@@ -25,6 +26,6 @@ test('execute query once with two parameters', async () => {
     const mock_result = [mock_OkPackage, []];
     mockExecute.mockResolvedValueOnce(mock_result);
 
-    await sharePlan(mockUserId);
+    await sharePlan({user_id: mockUserId});
     expect(mockExecute).toHaveBeenCalledTimes(1);
 })
