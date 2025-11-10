@@ -116,3 +116,14 @@ Add .env to .gitignore
 ```
 *.env
 ```
+
+To run tests
+```
+npm test
+```
+
+To run backend
+```
+cd backend
+npm start
+```
