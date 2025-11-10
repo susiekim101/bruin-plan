@@ -33,6 +33,7 @@ CREATE TABLE User_Plans (
     plan_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     major_id INT,
+    is_shared BOOLEAN,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (major_id) REFERENCES Majors(major_id)
 );
