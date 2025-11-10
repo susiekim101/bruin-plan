@@ -20,7 +20,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-test('loadCourseCards should estabish connection to database', async () => {
+test('fetchCoursesByMajor should estabish connection to database', async () => {
   await fetchCoursesByMajor();
   expect(mockGetConnection).toHaveBeenCalledTimes(1);
 });
