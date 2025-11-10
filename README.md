@@ -112,3 +112,7 @@ DB_USER=YOUR_USER
 DB_PASSWORD=YOUR_PASSWORD
 DB_NAME="bruin_plan
 ```
+Add .env to .gitignore
+```
+*.env
+```
