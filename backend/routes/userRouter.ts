@@ -1,6 +1,7 @@
 
-import { Request, Response, Router } from 'express';
-import { createUser } from '../controllers/createUser';
+import type { Request, Response } from 'express';
+import { Router } from 'express';
+import { createUser } from '../controllers/createUser.ts';
 // Import other router files here
 // import userRoutes from '...'
 
@@ -14,7 +15,5 @@ userRouter.post('/createUser', async (req: Request, res: Response) => {
         res.status(500).json({message: "Failed to create user from the server"});
     }
 });
-// Add specific routes to router
-// router.use(userRoutes)
 
 export default userRouter;
