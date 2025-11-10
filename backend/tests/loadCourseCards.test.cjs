@@ -13,7 +13,7 @@ jest.mock('../src/database', () => ({
   }
 }));
 
-const { loadCourses } = require('../controllers/loadCourseCards');
+const { loadCourses } = require('../controllers/loadCourses');
 
 // Start with clean state each time
 beforeEach(() => {

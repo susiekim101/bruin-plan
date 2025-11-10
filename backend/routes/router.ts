@@ -1,14 +1,15 @@
 
 import { Router } from 'express'
-import { createUser } from '../controllers/createUser';
-import { search } from '../controllers/userController';
+import { createUser } from '../controllers/createUser.ts';
+import { loadCourses } from '../controllers/loadCourses.ts';
+
 // Import other router files here
 // import userRoutes from '...'
 
 const router = Router();
 router.use('/createUser', createUser);
-router.use('/search', search)
+router.get('/courses/:major_id', loadCourses);
 // Add specific routes to router
 // router.use(userRoutes)
 
-export default router
+export default router;
