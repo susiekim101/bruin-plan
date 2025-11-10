@@ -1,13 +1,12 @@
 
-import { Router } from 'express'
-import { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import { createUser } from '../controllers/createUser';
 // Import other router files here
 // import userRoutes from '...'
 
-const router = Router();
+const userRouter = Router();
 
-router.post('/createUser', async (req: Request, res: Response) => {
+userRouter.post('/createUser', async (req: Request, res: Response) => {
     try {
         await createUser(req.body);
         res.status(200).json({message: "Succesfully created user."});
@@ -18,4 +17,4 @@ router.post('/createUser', async (req: Request, res: Response) => {
 // Add specific routes to router
 // router.use(userRoutes)
 
-export default router
+export default userRouter;
