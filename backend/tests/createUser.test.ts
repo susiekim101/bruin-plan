@@ -1,5 +1,3 @@
-// const { createUser, getMajorId } = require('../controllers/createUser');
-// const { connection } = require('../src/database');
 import { createUser, getMajorId } from '../controllers/createUser';
 import { connection } from '../src/database';
 
