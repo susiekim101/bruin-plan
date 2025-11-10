@@ -1,10 +1,7 @@
 const { sharePlan } = require("../controllers/sharePlan");
 const { connection } = require('../src/database');
 
-const mockPlan = {
-    'user_id': 1,
-    'major_id': 1,
-}
+const mockUserId = 123
 
 jest.mock('../src/database');
 
@@ -20,7 +17,7 @@ beforeEach(() => {
     mockExecute.mockClear()
 });
 
-test('execute query once to add passed in props to database', async () => {
+test('execute query once with two parameters', async () => {
     const mock_OkPackage = {
         insertId: 1,
         affectedRows: 1
@@ -28,8 +25,6 @@ test('execute query once to add passed in props to database', async () => {
     const mock_result = [mock_OkPackage, []];
     mockExecute.mockResolvedValueOnce(mock_result);
 
-    await sharePlan(mockPlan);
+    await sharePlan(mockUserId);
     expect(mockExecute).toHaveBeenCalledTimes(1);
 })
-
-test('function returns the new user_plan id')
