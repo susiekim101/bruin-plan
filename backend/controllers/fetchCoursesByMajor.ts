@@ -4,7 +4,7 @@ type Response = express.Response;
 
 import { connection } from '../src/database.ts'
 
-export const loadCourses = async (req: Request, res: Response) => {
+export const fetchCoursesByMajor = async (req: Request, res: Response) => {
     const userMajorID = req.params.major_id;
 
     let db_connection;
