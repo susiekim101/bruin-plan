@@ -4,13 +4,6 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
-<<<<<<< HEAD
-
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
-=======
   "compilerOptions": {
     "module": "ESNext",
     "target": "ES2020",
@@ -19,6 +12,5 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "strict": true
->>>>>>> origin/main
   }
 }

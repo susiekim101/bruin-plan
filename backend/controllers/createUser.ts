@@ -1,8 +1,4 @@
 import { connection } from "../src/database.ts";
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
 interface getMajorProps {
     'major': string
 }
