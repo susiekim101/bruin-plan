@@ -4,14 +4,13 @@
 import express from 'express';
 // import mysql from 'mysql2/promise';
 import cors from 'cors';
-import userRouter from './routes/userRouter';
-import planRouter from './routes/planRouter';
+import userRouter from './routes/userRouter.ts';
+import planRouter from './routes/planRouter.ts';
 const app = express();
 const port = 3001;
 
 app.use(express.json());
 app.use(cors());
-app.use();
 
 app.use('/user', userRouter);
 app.use('/plan', planRouter);
