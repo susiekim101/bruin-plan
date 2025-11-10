@@ -55,5 +55,5 @@ test('query to add user returns inserted user id', async () => {
   mockExecute.mockResolvedValueOnce(mock_user_result);
 
   await createUser(mockUser);
-  expect(mockExecute).toHaveBeenCalledTimes(2);
+  expect(mockExecute).toHaveBeenCalledTimes(3);
 });
