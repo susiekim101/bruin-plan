@@ -18,6 +18,7 @@ function Sidebar() {
     useEffect(() => {
         const loadCourses = async () => {
             try {
+                // TODO: pass in user's major_id
                 const response = await axios.get('http://localhost:3001/courses/1');
                 setCourses(response.data.data);
                 console.log(response.data.data);

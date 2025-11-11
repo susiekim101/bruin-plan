@@ -1,5 +1,5 @@
 // Create a mock execute function
-const mockExecute = jest.fn().mockResolvedValue([[]]);
+const mockExecute = jest.fn();
 const mockRelease = jest.fn();
 const mockGetConnection = jest.fn().mockResolvedValue({
   execute: mockExecute,
@@ -13,7 +13,7 @@ jest.mock('../src/database', () => ({
   }
 }));
 
-const { fetchCoursesByMajor } = require('../controllers/fetchCoursesByMajor');
+import { fetchCoursesByMajor } from "../controllers/fetchCoursesByMajor";
 
 // Start with clean state each time
 beforeEach(() => {
@@ -21,7 +21,8 @@ beforeEach(() => {
 });
 
 test('fetchCoursesByMajor should estabish connection to database', async () => {
-  await fetchCoursesByMajor();
+  mockExecute.mockResolvedValueOnce([[]]);
+  await fetchCoursesByMajor(-1);
   expect(mockGetConnection).toHaveBeenCalledTimes(1);
 });
 
