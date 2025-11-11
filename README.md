@@ -72,7 +72,7 @@ export default defineConfig([
 ])
 ```
 
-# MySQL
+# MySQL (macOS)
 Install MySQL on macOS
 ```
 brew install mysql
@@ -102,6 +102,58 @@ mysql -u root -p < database.sql
 Add scraped course data
 ```
 mysql -u root -p < course_scraper.sql
+```
+
+# MySQL (Linux)
+Update package list.
+```
+sudo apt update
+```
+
+Install MySQL on Linux.
+```
+sudo apt install mysql-server
+```
+
+Run MySQL secure installation script (for first time).
+```
+sudo mysql_secure_installation
+```
+
+Log into MySQL
+```
+mysql -u root -p
+```
+
+If, somehow, password not set through secure installation script, do the following:
+Sign into MySQL through built-in authentication.
+```
+mysql -u root
+```
+
+Create new user with username 'username' and password 'password'.
+```
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+```
+
+Grant all privileges to the new user.
+```
+GRANT ALL PRIVILEGES ON *.* TO 'new_username'@'localhost' WITH GRANT OPTION;
+```
+
+Reload grant tables to ensure privileges are immediately active.
+```
+FLUSH PRIVILEGES;
+```
+
+Exit out of MySQL.
+```
+EXIT;
+```
+
+Log into MySQL as new user.
+```
+mysql -u new_username -p
 ```
 
 # Setting up MySQL Connection
