@@ -1,0 +1,13 @@
+{
+    "default": {
+        "formatOptions": {
+            "snippetInterface": "synchronous"
+        },
+        "paths": ["src/features/*.feature"],
+        "require": [
+            "src/support/world.ts",  
+            "src/support/hooks.ts",
+            "src/step_definitions/*"],
+        "defaultTimeout": 15000
+    }
+}
