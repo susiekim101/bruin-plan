@@ -1,0 +1,1 @@
+Feature: Logging in takes user to dashboard
