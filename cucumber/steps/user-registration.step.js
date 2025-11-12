@@ -18,37 +18,50 @@ Given('I am on the landing page', async function () {
        
 // When I click on the My Dashboard button
 When('I click on the My Dashboard button', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    await page.locator('text="My Dashboard"').click();
+    await page.locator('button[id="my-dashboard"]').click();
 });
        
 // Then I should see the Create Account dialog
 Then('I should see the Create Account dialog', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    expect(await page.locator('legend[id="registration-title"]').isVisible()).toBeTruthy();
 });
        
 // And the Email input field should be visible
 Then('the Email input field should be visible', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    expect(await page.locator('input[type="email"]').isVisible()).toBeTruthy();
 });
        
 // And the Password input field should be visible
 Then('the Password input field should be visible', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    expect(await page.locator('input[type="password"]').isVisible()).toBeTruthy();
 });
        
-// And the Major input field should be visible
-
 Then('the Major input field should be visible', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    expect(await page.locator('select[id="major-input"]').isVisible()).toBeTruthy();
 });
 
+Given('I am a returning user on the landing page', async function () {
+    await page.goto(process.env.BASE_URL);
+});
+       
+When('I click on the My Dashboard button as a returning user', async function () {
+    await page.locator('button[id="my-dashboard"]').click();
+});
+       
+Then('I should see the Already have an account? text', async function () {
+    expect(await page.locator('text="Already have an account?"').isVisible()).toBeTruthy();
+});
+       
+Then('the Log in text should be visible', async function () {
+    expect(await page.locator('text="Log in"').isVisible()).toBeTruthy();
+});
 
+Then('when I click the Log in text, the input fields change', async function () {
+    await page.locator('text="Log in"').click();
+    expect(await page.locator('text=["Create Account"]').isVisible()).toBeFalsy();
+    expect(await page.locator('select[id="major-input"]').isVisible()).toBeFalsy();
+});
+       
 After(async function () {
     await browser.close();
-
 })
