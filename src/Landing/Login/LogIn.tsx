@@ -27,6 +27,15 @@ function LogIn() {
                         <X className="w-5 h-5 cursor-pointer" onClick={handleCloseClick}/>
                     </header>
 
+                    {signup &&
+                    <>
+                        <label className="label">First Name</label>
+                        <input id="first-name" type="text" className="input" placeholder="First Name"/>
+
+                        <label className="label">Last Name</label>
+                        <input id="last-name" type="text" className="input" placeholder="Last Name"/>
+                    </>}
+
                     <label className="label">Email</label>
                     <input type="email" className="input" placeholder="Email" />
 
@@ -36,7 +45,7 @@ function LogIn() {
                     {signup && 
                     <>
                         <label className="label">Major</label>
-                        <select id="major-input" defaultValue="Select your major" className="select">
+                        <select id="major-input" defaultValue="Select your major" className="select" >
                             <option disabled={true}>Select your major</option>
                             <option>Bioengineering</option>
                             <option>Computer Science</option>
