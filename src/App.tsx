@@ -1,12 +1,18 @@
-import './App.css'
+import './App.css';
 import Dashboard from './Dashboard/Dashboard'
+import Landing from './Landing/Landing';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 function App() {
 
   return (
-    <>
-      <Dashboard/>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

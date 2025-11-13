@@ -168,3 +168,14 @@ Add .env to .gitignore
 ```
 *.env
 ```
+# Jest testing
+run tests
+```
+npm test
+```
+
+# Cucumber testing
+run cucumber tests (TDD)
+```
+npx cucumber-js test
+```

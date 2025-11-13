@@ -25,3 +25,12 @@ dist-ssr
 /backend/*.json
 
 *.env
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+cucumber-report.html
+cucumber-report.json
