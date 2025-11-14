@@ -30,23 +30,31 @@ function LogIn() {
                     {signup &&
                     <>
                         <label className="label">First Name</label>
-                        <input id="first-name" type="text" className="input" placeholder="First Name"/>
+                        <input id="first-name" type="text" className="input validator" placeholder="First Name" required/>
 
                         <label className="label">Last Name</label>
-                        <input id="last-name" type="text" className="input" placeholder="Last Name"/>
+                        <input id="last-name" type="text" className="input validator" placeholder="Last Name" required/>
                     </>}
 
                     <label className="label">Email</label>
-                    <input type="email" className="input" placeholder="Email" />
+                    <input type="email" className="input validator" placeholder="test@example.com" required/>
 
                     <label className="label">Password</label>
-                    <input type="password" className="input" placeholder="Password" />
+                    <input type="password" className="input validator peer" placeholder="Password" required minLength={8}
+                        pattern="(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[?!*._]).{8,}"/>
+                    <p className="validator-hint text-gray-700">
+                        Must be more than 8 characters, including
+                        <br/>At least one number
+                        <br/>At least one lowercase letter
+                        <br/>At least one uppercase letter
+                        <br/>At least one special character from ?!*._
+                    </p>
 
                     {signup && 
                     <>
                         <label className="label">Major</label>
-                        <select id="major-input" defaultValue="Select your major" className="select" >
-                            <option disabled={true}>Select your major</option>
+                        <select id="major-input" defaultValue="" className="select validator" required >
+                            <option disabled value="">Select your major</option>
                             <option>Bioengineering</option>
                             <option>Computer Science</option>
                             <option>Computer Science and Engineering</option>
