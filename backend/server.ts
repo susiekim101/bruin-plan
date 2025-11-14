@@ -4,16 +4,18 @@
 import express from 'express';
 // import mysql from 'mysql2/promise';
 import cors from 'cors';
-import router from './routes/router';
-
+import userRouter from './routes/userRouter.ts';
+import planRouter from './routes/planRouter.ts';
+import coursesRouter from './routes/coursesRouter.ts';
 const app = express();
 const port = 3001;
 
 app.use(express.json());
 app.use(cors());
-app.use();
 
-app.use('/api', router);
+app.use('/user', userRouter);
+app.use('/plan', planRouter);
+app.use('/courses', coursesRouter)
 
 app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`)
