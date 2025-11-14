@@ -17,10 +17,9 @@ function Dashboard () {
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
-                        className="pl-0.5 pr-0 disabled:opacity-0"
-                        onClick={handleLeftClick}
-                        disabled={yearNum <= 1}> 
-                        <ChevronLeft className="size-10"/>
+                        className="pl-0.5 pr-0 disabled:opacity-0 disabled:cursor-default"
+                        disabled={yearNum <= 1}>
+                        <ChevronLeft className="size-10 cursor-pointer" onClick={handleLeftClick}/>
                     </button>
                     <div className="relative w-full overflow-hidden flex justify-center">
                         <div className="flex transition-transform duration-400 ease-in-out w-full"
@@ -38,16 +37,15 @@ function Dashboard () {
                     </div>
                     <button 
                         className="pr-0.5 pl-0 disabled:opacity-0"
-                        onClick={handleRightClick}
                         disabled={yearNum >= 4}>
-                        <ChevronRight className="size-10"/>
+                        <ChevronRight className="size-10 cursor-pointer" onClick={handleRightClick}/>
                     </button>
                 </div>
             </div>
                 
         </div>
-        <div>
-            <Sidebar /> 
+        <div className="w-1/5">
+            <Sidebar />
         </div>
     </div>
     )
