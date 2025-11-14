@@ -1,5 +1,3 @@
-// const { sharePlan } = require("../controllers/sharePlan");
-// const { connection } = require('../src/database');
 import { sharePlan } from "../controllers/sharePlan";
 import { connection } from "../src/database";
 const mockUserId = 123
