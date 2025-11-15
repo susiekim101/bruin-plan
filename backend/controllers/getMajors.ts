@@ -1,9 +1,17 @@
 import { connection } from '../src/database.ts'
 
 export async function getMajors() {
-    const db = await connection.getConnection();
-    const query = "SELECT * FROM Majors";
-    const [rows] = await db.execute(query);
+    try {
+        // establish connection to database
+        const db = await connection.getConnection();
+        
+        // query Majors table
+        const query = "SELECT * FROM Majors";
+        const [rows] = await db.execute(query);
 
-    return rows;
+        return rows;
+    } catch (error) {
+        console.log('Error fetching data:', error)
+        return [];
+    }
 }
