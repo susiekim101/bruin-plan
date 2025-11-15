@@ -44,7 +44,7 @@ function Dashboard () {
             </div>
                 
         </div>
-        <div className="w-1/5">
+        <div className="min-w-0.5xs">
             <Sidebar />
         </div>
     </div>
