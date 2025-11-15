@@ -1,5 +1,5 @@
-import CustomCard from '../CourseCards/CustomCards';
-import CourseCard from '../CourseCards/CourseCards';
+import CustomCard from '../components/CourseCards/CustomCards';
+import CourseCard from '../components/CourseCards/CourseCards';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
