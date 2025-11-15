@@ -1,6 +1,6 @@
 import { connection } from '../src/database.ts'
 
-export async function getMajors() {
+export async function fetchMajors() {
     try {
         // establish connection to database
         const db = await connection.getConnection();

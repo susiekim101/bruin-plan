@@ -13,7 +13,7 @@ jest.mock('../src/database', () => ({
   }
 }));
 
-import { getMajors } from "../controllers/getMajors.ts";
+import { fetchMajors } from "../controllers/fetchMajors.ts";
 
 // Start with clean state each time
 beforeEach(() => {
@@ -22,13 +22,13 @@ beforeEach(() => {
 
 test('getMajors should estabish connection to database', async () => {
   mockExecute.mockResolvedValueOnce([[]]);
-  await getMajors();
+  await fetchMajors();
   expect(mockGetConnection).toHaveBeenCalledTimes(1);
 });
 
 test('query should return all majors (name, ID) in Majors table', async () => {
     mockExecute.mockResolvedValueOnce([[{major_id: 1, major_name: "TestMajor1"}, {major_id: 2, major_name: "TestMajor2"}, {major_id: 1, major_name: "TestMajor3"}]]);
-    const result = await getMajors();
+    const result = await fetchMajors();
     expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Majors');
     expect(result).toEqual([{major_id: 1, major_name: "TestMajor1"}, {major_id: 2, major_name: "TestMajor2"}, {major_id: 1, major_name: "TestMajor3"}]);
 });
