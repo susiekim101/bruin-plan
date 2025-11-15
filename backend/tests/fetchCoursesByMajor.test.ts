@@ -13,7 +13,7 @@ jest.mock('../src/database', () => ({
   }
 }));
 
-import { fetchCoursesByMajor } from "../controllers/fetchCoursesByMajor";
+import { fetchCoursesByMajor } from "../controllers/fetchCoursesByMajor.ts";
 
 // Start with clean state each time
 beforeEach(() => {
@@ -34,7 +34,7 @@ test('query with no specified major should return no courses', async () => {
 });
 
 test('query with a specified major returns all courses with that major ID', async () => {
-  mockExecute.mockResolvedValueOnce([[{major_id: 1, course_name: 'Test Course'}]])
+  mockExecute.mockResolvedValueOnce([[{major_id: 1, course_name: 'Test Course'}]]);
   const result = await fetchCoursesByMajor(1);
   expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [1]);
   expect(result).toEqual([{major_id: 1, course_name: 'Test Course'}]);
