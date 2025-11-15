@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import axios from 'axios';
 // const express = require('express');
 // const cors = require('cors');
 import { connection } from '../src/database'
@@ -9,6 +10,7 @@ import 'dotenv/config'
 
 
 jest.mock('../src/database');
+axios.defaults.baseURL = process.env.BASE_URL
 
 let server;
 let mockConnection;
@@ -114,7 +116,44 @@ describe('createUser()', () => {
 });
 
 describe("User Controller", () => {
+    const mockUser = {
+        'first_name': 'Joe',
+        'last_name': 'Bruin',
+        'email': 'test@example.com',
+        'password': 'Hello6!',
+        'major': 'Computer Science'
+    };
+
     describe("signup()", () => {
-        
-    })
-})
+        // test("rejects existing email", async () => {
+        //     const response = await axios.post('/user/signup', mockUser);
+        //     expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
+        //     expect(response.status).toBe(400);
+        //     expect(response.data).toEqual('Existing email');
+        // });
+
+        // test("create query for account and return success", async () => {
+        //     throw new Error('Test not implemented');
+        // });
+        throw new Error('Test not implemented');
+
+    });
+
+    describe("login()", () => {
+        test("rejects missing email", async () => {
+            throw new Error('Test not implemented');
+        });
+
+        test("reects missing password", async () => {
+            throw new Error('Test not implemented');
+        });
+
+        test('returns error if password is incorrect', async () => {
+            throw new Error('Test not implemented');
+        });
+
+        test('successfully authenticate and logs in user', async () => {
+            throw new Error('Test not implemented');
+        });
+    });
+});
