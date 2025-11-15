@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Sidebar from './components/Sidebar/Sidebar.tsx';
+import Sidebar from './Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import { ChevronLeft, ChevronRight } from "lucide-react";

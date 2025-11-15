@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 function SearchBar () {
-    const [ searchTerm, setSearchTerm ] = useState('')
+    const [ searchTerm, setSearchTerm ] = useState("");
 
     return (
         <input
@@ -13,4 +13,4 @@ function SearchBar () {
     )
 }
 
-export default SearchBar
+export default SearchBar;

@@ -1,6 +1,7 @@
 import CustomCard from '../components/CourseCards/CustomCards';
 import CourseCard from '../components/CourseCards/CourseCards';
 import SearchBar from './SearchBar';
+import Filter from './Filter';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -14,7 +15,6 @@ interface Course {
 
 function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
-
     useEffect(() => {
         const loadCourses = async () => {
             try {
@@ -32,9 +32,10 @@ function Sidebar() {
 
     return (
         <div className="w-full flex shrink justify-end">
-            <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+            <div className="flex gap-4 flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+                <Filter />
                 <SearchBar />
-                <div className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
+                <div className="flex flex-col gap-4 mt-2 overflow-y-auto h-full w-full">
                     {courses.map((course, index) => (
                         <CourseCard 
                             key={index}
