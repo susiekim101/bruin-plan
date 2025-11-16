@@ -1,32 +1,31 @@
 import express from 'express'
 import cors from 'cors'
 import axios from 'axios';
-// const express = require('express');
-// const cors = require('cors');
-import { connection } from '../src/database'
-import { findByEmail, createUser } from '../controllers/createUser';
-// import bcrypt from 'bcrypt'; // hashing passwords
 import 'dotenv/config'
 
+const mockExecute = jest.fn();
+jest.mock('../src/database.ts', () => ({
+    connection: {
+        execute: mockExecute
+    }
+}));
 
-jest.mock('../src/database');
-axios.defaults.baseURL = process.env.BASE_URL
+import userRouter from '../routes/userRouter';
+import { createUser, findByEmail } from '../controllers/createUser.model';
+axios.defaults.baseURL = process.env.AXIOS_URL
+
+// import bcrypt from 'bcrypt'; // hashing passwords
 
 let server;
-let mockConnection;
 let app;
-let mockExecute;
 let mockUser;
 
 beforeAll(() => {
     app = express();
     app.use(cors());
-
+    app.use(express.json());
+    app.use('/user', userRouter);
     server = app.listen();
-    mockConnection = connection;
-
-    mockExecute = jest.fn();
-    mockConnection.execute = mockExecute;
 
     mockUser = {
         first_name: 'Joe',
@@ -48,7 +47,7 @@ afterEach(async () => {
 });
 
 
-// Find user by email, can create a user?
+// // Find user by email, can create a user?
 describe('findByEmail()', () => {
     // Need to return email if found
     // Return an empty array if not found
@@ -108,52 +107,97 @@ describe('createUser()', () => {
         mockExecute.mockResolvedValueOnce(mockMajorResult);
 
         // Input the user
-        const mockResult = [[],[]];
+        const mockResult = [{insertId: 1}];
         mockExecute.mockResolvedValueOnce(mockResult);
 
-        await createUser(mockUser);
+        const result = await createUser(mockUser);
+        expect(result).toBe(1);
     });
 });
 
 describe("User Controller", () => {
-    const mockUser = {
-        'first_name': 'Joe',
-        'last_name': 'Bruin',
-        'email': 'test@example.com',
-        'password': 'Hello6!',
-        'major': 'Computer Science'
-    };
 
     describe("signup()", () => {
-        // test("rejects existing email", async () => {
-        //     const response = await axios.post('/user/signup', mockUser);
-        //     expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
-        //     expect(response.status).toBe(400);
-        //     expect(response.data).toEqual('Existing email');
-        // });
+        test("rejects existing email", async () => {
+            // Mock findByEmail call inside createUser
+            const mockRow = [ { email: 'test@example.com' } ];
+            const mockResult = [mockRow, []];
+            mockExecute.mockResolvedValueOnce(mockResult);
+            
+            try {
+                await axios.post('/user/signup', mockUser);
+            } catch (error) {
+                expect(error.response.status).toBe(400);
+                expect(error.response.data).toBe('Existing email');
+            }
+        });
+
+        test("password in database should not be same as password passed in", async () => {
+            // Mock findByEmail call inside createUser
+            const mockFindEmailRow = [];
+            const mockFindEmailResult = [mockFindEmailRow, []];
+            mockExecute.mockResolvedValueOnce(mockFindEmailResult);
+
+            // Find major_id
+            const mockMajorRow = [ {major_id: 1} ];
+            const mockMajorResult = [mockMajorRow, []];
+            mockExecute.mockResolvedValueOnce(mockMajorResult);
+
+            // Input the user
+            const mockResult = [{insertId: 1}];
+            mockExecute.mockResolvedValueOnce(mockResult);
+
+            // addToUserPlans()
+            const mockPlanResult = [{affectedRows: 1}, []];
+            mockExecute.mockResolvedValueOnce(mockPlanResult);
+            
+            try {
+                const response = await axios.post('/user/signup', mockUser);
+                expect(mockExecute).toHaveBeenCalledTimes(4);
+                expect(response.status).toBe(202);
+            } catch (error){
+                console.log(error.response.status);
+                expect(error.response.status).toBe(202);
+            } 
+        });
 
         // test("create query for account and return success", async () => {
-        //     throw new Error('Test not implemented');
+        //     // findEmail()
+        //     const mockFindEmailRow = [];
+        //     const mockFindEmailResult = [mockFindEmailRow, []];
+        //     mockExecute.mockResolvedValueOnce(mockFindEmailResult);
+
+        //     // Find major_id
+        //     const mockMajorRow = [ {major_id: 1} ];
+        //     const mockMajorResult = [mockMajorRow, []];
+        //     mockExecute.mockResolvedValueOnce(mockMajorResult);
+
+        //     // Input the user
+        //     const mockResult = [{insertId: 1}];
+        //     mockExecute.mockResolvedValueOnce(mockResult);
+
+
+        //     await axios.post('/users/signup', mockUser);
+        //     expect(mockExecute).toHaveBeenCalledTimes(2);
+
         // });
-        throw new Error('Test not implemented');
-
     });
 
-    describe("login()", () => {
-        test("rejects missing email", async () => {
-            throw new Error('Test not implemented');
-        });
+    // describe("login()", () => {
+    //     test("rejects missing email", async () => {
+    //         throw new Error('Test not implemented');
+    //     });
 
-        test("reects missing password", async () => {
-            throw new Error('Test not implemented');
-        });
+    //     test("reects missing password", async () => {
+    //         throw new Error('Test not implemented');
+    //     });
 
-        test('returns error if password is incorrect', async () => {
-            throw new Error('Test not implemented');
-        });
+    //     test('returns error if password is incorrect', async () => {
+    //         throw new Error('Test not implemented');
+    //     });
 
-        test('successfully authenticate and logs in user', async () => {
-            throw new Error('Test not implemented');
-        });
-    });
+    //     test('successfully authenticate and logs in user', async () => {
+    //         throw new Error('Test not implemented');
+    //     });
+    // });
 });

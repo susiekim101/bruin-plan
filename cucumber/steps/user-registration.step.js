@@ -15,7 +15,7 @@ Before(async function () {
 Given('I am on the landing page', async function () {
     await page.goto(process.env.BASE_URL)
 });
-       
+            
 // When I click on the My Dashboard button
 When('I click on the My Dashboard button', async function () {
     await page.locator('button[id="my-dashboard"]').click();

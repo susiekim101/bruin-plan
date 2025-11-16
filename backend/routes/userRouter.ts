@@ -1,18 +1,24 @@
 
 import type { Request, Response } from 'express';
 import { Router } from 'express';
-import { createUser } from '../controllers/createUser.ts';
-// Import other router files here
-// import userRoutes from '...'
+import { createUser } from '../controllers/createUser.model.ts';
 
 const userRouter = Router();
 
-userRouter.post('/createUser', async (req: Request, res: Response) => {
+// userRouter.post('/login', async (req: Request, res: Response) => {
+
+// });
+
+userRouter.post('/signup', async (req: Request, res: Response) => {
+    // console.log('Received post request');
     try {
         await createUser(req.body);
-        res.status(200).json({message: "Succesfully created user."});
-    } catch {
-        res.status(500).json({message: "Failed to create user from the server"});
+        res.status(201).send('Account successfully created');
+    } catch (error) {
+        if(error.message === 'Email already exists') {
+            return res.status(400).send('Existing email');
+        }
+        res.status(500).send('Server error');
     }
 });
 

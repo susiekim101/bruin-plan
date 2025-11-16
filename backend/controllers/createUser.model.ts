@@ -13,12 +13,14 @@ export async function findByEmail(email: string) {
     const [ results ] = await connection.execute(query, [email]);
     // Returns the array (row) containing the email of the user
     // [ {email: '...'} ]
+    console.log(results);
     return results;
 }
 
 export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
     const findEmail = await findByEmail(email);
     if (Array.isArray(findEmail) && findEmail.length > 0) {
+        console.log("Email already exists")
         // return new Error('Email already exists');
         throw new Error('Email already exists');
     }
@@ -35,13 +37,17 @@ export async function createUser({ first_name, last_name, email, password, major
 
     try { 
         // Insert the user into the database
-        const [user_rows] = await connection.execute(user_query, user_values);
+        const [result] = await connection.execute(user_query, user_values);
 
         // Insert user into user_plan
-        const user_id = user_rows[0].user_id;
-        return await addToUserPlans({user_id: user_id, major_id: major_id});
-    } catch(err) {
-        console.error(err);
+        const user_id = result.insertId;
+        console.log(`user_id: ${user_id}`);
+        // Returns the user_id
+        await addToUserPlans({user_id: user_id, major_id: major_id});
+        console.log("returning user_id")
+        return user_id;
+    } catch {
+        console.log("Error in creatingUser");
     }
 }
 
@@ -50,8 +56,8 @@ async function addToUserPlans({user_id, major_id}) {
 
     try {
         await connection.execute(plan_query, {user_id, major_id});
-        console.log("Succesfully added new user to User_Plan");
-    } catch (err) {
-        console.error(err);
+        return user_id
+    } catch {
+        console.log('Error in adding to user plan');
     }
 }
