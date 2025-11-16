@@ -17,13 +17,16 @@ function Dashboard () {
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
-                        className="pl-0.5 pr-0 disabled:opacity-0 disabled:cursor-default"
-                        disabled={yearNum <= 1}>
-                        <ChevronLeft className="size-10 cursor-pointer" onClick={handleLeftClick}/>
+                        className="pl-0.5 pr-0 disabled:pointer-events-none" disabled={yearNum <= 1}>
+                        <ChevronLeft 
+                            className={`size-10 cursor-pointer ${yearNum <= 1 ? 'invisible pointer-events-none' : ''}`} 
+                            onClick={handleLeftClick} 
+                            id="left-navigation"/>
                     </button>
                     <div className="relative w-full overflow-hidden flex justify-center">
                         <div className="flex transition-transform duration-400 ease-in-out w-full"
-                            style={{transform: `translateX(-${yearNum * 100}%)` }}>
+                            style={{transform: `translateX(-${yearNum * 100}%)` }}
+                            id="plan-container">
                             {[...Array(5)].map((_, idx) => (
                             <div
                                 key={idx}
@@ -36,9 +39,11 @@ function Dashboard () {
                         ))}</div>
                     </div>
                     <button 
-                        className="pr-0.5 pl-0 disabled:opacity-0"
-                        disabled={yearNum >= 4}>
-                        <ChevronRight className="size-10 cursor-pointer" onClick={handleRightClick}/>
+                        className="pr-0.5 pl-0 disabled:pointer-events-none" disabled={yearNum >= 4}>
+                        <ChevronRight 
+                            className={`size-10 cursor-pointer ${yearNum >= 4 ? 'invisible pointer-events-none' : ''}`}
+                            onClick={handleRightClick} 
+                            id="right-navigation"/>
                     </button>
                 </div>
             </div>

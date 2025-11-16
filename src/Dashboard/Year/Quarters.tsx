@@ -18,6 +18,7 @@ function Quarters() {
             onDrop={handleDrop}
             className="flex flex-col w-full justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4">
             <div className="flex flex-col shrink space-y-2">
+                
             </div>
             
             <div className="flex flex-col justify-center items-center mt-0.5">
