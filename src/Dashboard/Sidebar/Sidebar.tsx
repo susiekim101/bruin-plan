@@ -20,8 +20,14 @@ function Sidebar() {
     useEffect(() => {
         const loadCourses = async () => {
             try {
-                // TODO: pass in user's major_id
-                const response = await axios.get('http://localhost:3001/courses/1');
+                let response;
+                if (selectedMajor) {
+                    response = await axios.get(`http://localhost:3001/courses/${selectedMajor.value}`)
+                    console.log("Selected Major:", selectedMajor);
+                } else {
+                    // TODO: pass in user's major_id
+                    response = await axios.get('http://localhost:3001/courses/1');
+                }
                 setCourses(response.data.data);
                 console.log(response.data.data);
             } catch {
@@ -30,7 +36,7 @@ function Sidebar() {
         };
 
         loadCourses();
-    }, []);
+    }, [selectedMajor]);
 
     return (
         <div className="w-full flex shrink justify-end">
