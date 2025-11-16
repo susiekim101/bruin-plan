@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
+import type { OnChangeValue, ActionMeta } from 'react-select';
 import axios from 'axios';
 
 interface Major {
@@ -7,8 +8,18 @@ interface Major {
     major_name: string;
 }
 
-function Filter () {
-    const [ options, setOptions ] = useState([]);
+export interface MajorOption {
+    value: number;
+    label: string;
+}
+
+interface FilterProps {
+    selectedMajor: MajorOption | null;
+    setSelectedMajor: (major: MajorOption | null) => void;
+}
+
+function Filter ({selectedMajor, setSelectedMajor}: FilterProps) {
+    const [ options, setOptions ] = useState<MajorOption[]>([]);
 
     useEffect(() => {
         const loadMajors = async () => {
@@ -27,9 +38,21 @@ function Filter () {
         loadMajors();
     }, []);
 
+    const handleChange = (
+        selectedOption: OnChangeValue<MajorOption, false>
+    ) => {
+        setSelectedMajor(selectedOption);
+    }
+
     return (
-        <Select options={options}/>
+        <Select 
+            id="majorSelect"
+            name="major"
+            options={options}
+            onChange={handleChange}
+            value={selectedMajor}
+            placeholder="Filter courses for a different major"/>
     );
 }
 
-export default Filter
+export default Filter;
