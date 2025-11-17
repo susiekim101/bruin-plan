@@ -175,7 +175,7 @@ function LogIn() {
             </dialog>
 
             <button 
-                className="w-fit h-fit text-white py-1 px-2 text-sm border rounded-md border-blue-800 bg-blue-800 cursor-pointer" 
+                className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition"
                 onClick={handleOpenClick} 
                 id="my-dashboard"
             >
