@@ -1,5 +1,5 @@
 import { connection } from "../src/database.ts";
-
+import type { ResultSetHeader } from "mysql2";
 interface createUserProps {
     'first_name': string
     'last_name': string
@@ -8,19 +8,30 @@ interface createUserProps {
     'major': string
 }
 
+
+
 export async function findByEmail(email: string) {
-    const query = `SELECT email FROM Users WHERE email = ?`; // Prevent SQL injection
+    const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
     const [ results ] = await connection.execute(query, [email]);
     // Returns the array (row) containing the email of the user
     // [ {email: '...'} ]
-    console.log(results);
     return results;
+}
+
+async function addToUserPlans({user_id, major_id}) {
+    const plan_query = `INSERT IGNORE INTO User_Plan (user_id, major_id) VALUES (?, ?)`;
+
+    try {
+        await connection.execute(plan_query, {user_id, major_id});
+        return user_id
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
     const findEmail = await findByEmail(email);
     if (Array.isArray(findEmail) && findEmail.length > 0) {
-        console.log("Email already exists")
         // return new Error('Email already exists');
         throw new Error('Email already exists');
     }
@@ -37,27 +48,14 @@ export async function createUser({ first_name, last_name, email, password, major
 
     try { 
         // Insert the user into the database
-        const [result] = await connection.execute(user_query, user_values);
-
+        // const [result] = await connection.execute(user_query, user_values);
+    const [result] = await connection.execute<ResultSetHeader>(user_query, user_values);
         // Insert user into user_plan
         const user_id = result.insertId;
-        console.log(`user_id: ${user_id}`);
         // Returns the user_id
         await addToUserPlans({user_id: user_id, major_id: major_id});
-        console.log("returning user_id")
         return user_id;
-    } catch {
-        console.log("Error in creatingUser");
-    }
-}
-
-async function addToUserPlans({user_id, major_id}) {
-    const plan_query = `INSERT IGNORE INTO User_Plan (user_id, major_id) VALUES (?, ?)`;
-
-    try {
-        await connection.execute(plan_query, {user_id, major_id});
-        return user_id
-    } catch {
-        console.log('Error in adding to user plan');
+    } catch (err){
+        console.error(err);
     }
 }
