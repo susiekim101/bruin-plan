@@ -1,11 +1,31 @@
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
+import axios from 'axios';
+
+interface UserData {
+    first_name: string,
+    last_name: string,
+    email: string,
+    password: string,
+    major: string
+};
 
 function LogIn() {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
-    const [signup, setSignUp] = useState(true);
+    const [signup, setSignUp] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [userData, setUserData] = useState<UserData>({
+        'first_name': '',
+        'last_name': '',
+        'email': '',
+        'password': '',
+        'major': '',
+    });
+    const navigate = useNavigate();
+    const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() => {
         const formEl = formRef.current;
@@ -50,14 +70,40 @@ function LogIn() {
         }
     }
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
+    function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        const { name, value } = e.target;
+        setUserData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault();
+        setError(null);
         if(!isFormValid) {
             console.log("Form is invalid");
             return;
         }
-        console.log("Form will be submitted.");
+
+        const url: string = signup ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
+        try {
+            console.log(url);
+            await axios.post(url, userData);
+            // const response = await axios.post(url, userData);
+            // const { token } = response.data;
+            console.log("Form submit succeeded");
+            navigate('/dashboard');
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response && err.response.data === 'Existing email') {
+                setError("Account already exists");
+            } else {
+                setError("User does not exist or incorrect credentials.");
+            }
+            console.error(`Failed to sign up/log in:`, err);
+        }
     }
+
     return (
         <div className="">
             <dialog ref={dialogRef} className="p-0 rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -70,22 +116,24 @@ function LogIn() {
                     {signup && (
                         <>
                             <label className="label">First Name</label>
-                            <input id="first-name" type="text" className="input validator" placeholder="First Name" required/>
+                            <input id="first-name" type="text" className="input validator" placeholder="First Name" name="first_name" onChange={handleInputChange} required/>
 
                             <label className="label">Last Name</label>
-                            <input id="last-name" type="text" className="input validator" placeholder="Last Name" required/>
+                            <input id="last-name" type="text" className="input validator" placeholder="Last Name" name="last_name" onChange={handleInputChange} required/>
                         </>
                     )}
 
                     <label className="label">Email</label>
-                    <input type="email" className="input validator" placeholder="test@example.com" required/>
+                    <input type="email" className="input validator" placeholder="test@example.com" name="email" onChange={handleInputChange} required/>
 
                     <label className="label">Password</label>
                     <input type="password" 
                             className="input validator peer" 
                             placeholder="Password" 
                             required minLength={8}
-                            pattern="(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[?!*._]).{8,}"/>
+                            pattern="(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[?!*._]).{8,}"
+                            name="password"
+                            onChange={handleInputChange}/>
                     <p className="hidden validator-hint text-gray-700">
                         Must be more than 8 characters, including
                         <br/>At least one number
@@ -97,7 +145,7 @@ function LogIn() {
                     {signup && (
                         <>
                             <label className="label">Major</label>
-                            <select id="major-input" defaultValue="" className="select validator" required >
+                            <select id="major-input" defaultValue="" className="select validator" name="major" onChange={handleInputChange} required >
                                 <option disabled value="">Select your major</option>
                                 <option>Bioengineering</option>
                                 <option>Computer Science</option>
@@ -113,7 +161,10 @@ function LogIn() {
                     >
                             {signup ? "Create Account" : "Log In"}
                     </button>
-
+                    
+                    {error && (
+                        <p className="text-red-500">{error}</p>
+                    )}
                     <div className="flex gap-2 justify-center">
                         <p>{signup ? "Already have an account?" : "Don't have an account?"}</p>
                         <p className="cursor-pointer" onClick={() => setSignUp(!signup)}>

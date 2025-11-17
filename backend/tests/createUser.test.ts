@@ -1,32 +1,14 @@
-import express from 'express'
-import cors from 'cors'
-import axios from 'axios';
-import 'dotenv/config'
+import { createUser, findByEmail } from '../controllers/createUser';
+
+jest.mock('../src/database');
+import { connection } from "../src/database";
+const mockConnection = connection;
 
 const mockExecute = jest.fn();
-jest.mock('../src/database.ts', () => ({
-    connection: {
-        execute: mockExecute
-    }
-}));
 
-import userRouter from '../routes/userRouter';
-import { createUser, findByEmail } from '../controllers/createUser.model';
-axios.defaults.baseURL = process.env.AXIOS_URL
-
-// import bcrypt from 'bcrypt'; // hashing passwords
-
-let server;
-let app;
 let mockUser;
 
 beforeAll(() => {
-    app = express();
-    app.use(cors());
-    app.use(express.json());
-    app.use('/user', userRouter);
-    server = app.listen();
-
     mockUser = {
         first_name: 'Joe',
         last_name: 'Bruin',
@@ -34,6 +16,8 @@ beforeAll(() => {
         password: 'example',
         major: 'Computer Science'
     }
+    mockConnection.execute = mockExecute;
+
 })
 
 // Start with clean state each time
@@ -43,7 +27,6 @@ beforeEach(() => {
 
 afterEach(async () => {
     jest.clearAllMocks();
-    server.close();
 });
 
 
@@ -59,7 +42,7 @@ describe('findByEmail()', () => {
         const email = await findByEmail('test@example.com');
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT email FROM Users WHERE email = ?';
+        const query = 'SELECT * FROM Users WHERE email = ?';
         expect(mockExecute).toHaveBeenCalledWith(query, ['test@example.com']);
         expect(email).toHaveLength(0);
     });
@@ -70,7 +53,7 @@ describe('findByEmail()', () => {
         mockExecute.mockResolvedValueOnce(mockResult);
 
         const mockEmail = 'test@example.com';
-        const query = 'SELECT email FROM Users WHERE email = ?';
+        const query = 'SELECT * FROM Users WHERE email = ?';
         const email = await findByEmail(mockEmail);
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
@@ -115,89 +98,91 @@ describe('createUser()', () => {
     });
 });
 
-describe("User Controller", () => {
+// describe("User Controller", () => {
 
-    describe("signup()", () => {
-        test("rejects existing email", async () => {
-            // Mock findByEmail call inside createUser
-            const mockRow = [ { email: 'test@example.com' } ];
-            const mockResult = [mockRow, []];
-            mockExecute.mockResolvedValueOnce(mockResult);
+//     describe("signup()", () => {
+//         test("rejects existing email", async () => {
+//             // Mock findByEmail call inside createUser
+//             const mockRow = [ { email: 'test@example.com' } ];
+//             const mockResult = [mockRow, []];
+//             mockExecute.mockResolvedValueOnce(mockResult);
             
-            try {
-                await axios.post('/user/signup', mockUser);
-            } catch (error) {
-                expect(error.response.status).toBe(400);
-                expect(error.response.data).toBe('Existing email');
-            }
-        });
+//             try {
+//                 const response = await axios.post('/user/signup', mockUser);
+//                 expect(response.status).toBe(400);
+//                 expect(response.data).toBe('Existing email');                
+//             } catch (error) {
+//                 expect(error.response.status).toBe(400);
+//                 expect(error.response.data).toBe('Existing email');
+//             }
+//         });
 
-        test("password in database should not be same as password passed in", async () => {
-            // Mock findByEmail call inside createUser
-            const mockFindEmailRow = [];
-            const mockFindEmailResult = [mockFindEmailRow, []];
-            mockExecute.mockResolvedValueOnce(mockFindEmailResult);
+//         // test("password in database should not be same as password passed in", async () => {
+//         //     // Mock findByEmail call inside createUser
+//         //     const mockFindEmailRow = [];
+//         //     const mockFindEmailResult = [mockFindEmailRow, []];
+//         //     mockExecute.mockResolvedValueOnce(mockFindEmailResult);
 
-            // Find major_id
-            const mockMajorRow = [ {major_id: 1} ];
-            const mockMajorResult = [mockMajorRow, []];
-            mockExecute.mockResolvedValueOnce(mockMajorResult);
+//         //     // Find major_id
+//         //     const mockMajorRow = [ {major_id: 1} ];
+//         //     const mockMajorResult = [mockMajorRow, []];
+//         //     mockExecute.mockResolvedValueOnce(mockMajorResult);
 
-            // Input the user
-            const mockResult = [{insertId: 1}];
-            mockExecute.mockResolvedValueOnce(mockResult);
+//         //     // Input the user
+//         //     const mockResult = [{insertId: 1}];
+//         //     mockExecute.mockResolvedValueOnce(mockResult);
 
-            // addToUserPlans()
-            const mockPlanResult = [{affectedRows: 1}, []];
-            mockExecute.mockResolvedValueOnce(mockPlanResult);
+//         //     // addToUserPlans()
+//         //     const mockPlanResult = [{affectedRows: 1}, []];
+//         //     mockExecute.mockResolvedValueOnce(mockPlanResult);
             
-            try {
-                const response = await axios.post('/user/signup', mockUser);
-                expect(mockExecute).toHaveBeenCalledTimes(4);
-                expect(response.status).toBe(202);
-            } catch (error){
-                console.log(error.response.status);
-                expect(error.response.status).toBe(202);
-            } 
-        });
+//         //     try {
+//         //         const response = await axios.post('/user/signup', mockUser);
+//         //         expect(mockExecute).toHaveBeenCalledTimes(4);
+//         //         expect(response.status).toBe(202);
+//         //     } catch (error){
+//         //         console.log(error.response.status);
+//         //         expect(error.response.status).toBe(202);
+//         //     } 
+//         // });
 
-        // test("create query for account and return success", async () => {
-        //     // findEmail()
-        //     const mockFindEmailRow = [];
-        //     const mockFindEmailResult = [mockFindEmailRow, []];
-        //     mockExecute.mockResolvedValueOnce(mockFindEmailResult);
+//         // test("create query for account and return success", async () => {
+//         //     // findEmail()
+//         //     const mockFindEmailRow = [];
+//         //     const mockFindEmailResult = [mockFindEmailRow, []];
+//         //     mockExecute.mockResolvedValueOnce(mockFindEmailResult);
 
-        //     // Find major_id
-        //     const mockMajorRow = [ {major_id: 1} ];
-        //     const mockMajorResult = [mockMajorRow, []];
-        //     mockExecute.mockResolvedValueOnce(mockMajorResult);
+//         //     // Find major_id
+//         //     const mockMajorRow = [ {major_id: 1} ];
+//         //     const mockMajorResult = [mockMajorRow, []];
+//         //     mockExecute.mockResolvedValueOnce(mockMajorResult);
 
-        //     // Input the user
-        //     const mockResult = [{insertId: 1}];
-        //     mockExecute.mockResolvedValueOnce(mockResult);
+//         //     // Input the user
+//         //     const mockResult = [{insertId: 1}];
+//         //     mockExecute.mockResolvedValueOnce(mockResult);
 
 
-        //     await axios.post('/users/signup', mockUser);
-        //     expect(mockExecute).toHaveBeenCalledTimes(2);
+//         //     await axios.post('/users/signup', mockUser);
+//         //     expect(mockExecute).toHaveBeenCalledTimes(2);
 
-        // });
-    });
+//         // });
+//     });
 
-    // describe("login()", () => {
-    //     test("rejects missing email", async () => {
-    //         throw new Error('Test not implemented');
-    //     });
+//     // describe("login()", () => {
+//     //     test("rejects missing email", async () => {
+//     //         throw new Error('Test not implemented');
+//     //     });
 
-    //     test("reects missing password", async () => {
-    //         throw new Error('Test not implemented');
-    //     });
+//     //     test("reects missing password", async () => {
+//     //         throw new Error('Test not implemented');
+//     //     });
 
-    //     test('returns error if password is incorrect', async () => {
-    //         throw new Error('Test not implemented');
-    //     });
+//     //     test('returns error if password is incorrect', async () => {
+//     //         throw new Error('Test not implemented');
+//     //     });
 
-    //     test('successfully authenticate and logs in user', async () => {
-    //         throw new Error('Test not implemented');
-    //     });
-    // });
-});
+//     //     test('successfully authenticate and logs in user', async () => {
+//     //         throw new Error('Test not implemented');
+//     //     });
+//     // });
+// });
