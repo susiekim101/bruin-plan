@@ -18,6 +18,8 @@ beforeAll(() => {
     }
     mockConnection.execute = mockExecute;
 
+    mockConnection.execute = mockExecute;
+
 })
 
 // Start with clean state each time
