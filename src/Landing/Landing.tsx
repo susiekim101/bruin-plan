@@ -6,7 +6,6 @@ function Landing() {
     return (
         <div className="w-full h-screen bg-gradient-to-b from-[#709DCB] via-[#AFC6E6] to-white flex justify-center items-start overflow-hidden relative">
 
-            {/* Wave at the bottom */}
             <div className="absolute bottom-0 left-0 w-full overflow-hidden">
                 <svg 
                     viewBox="0 0 1200 120" 
@@ -24,10 +23,8 @@ function Landing() {
 
             <div className="w-11/12 max-w-7xl flex pt-16">
 
-                {/* LEFT SIDE – FULL OUTER TABLE */}
                 <div className="w-1/2 flex flex-col relative">
 
-                    {/* OUTER ROUNDED RECTANGLE */}
                     <div className="
                         w-full 
                         rounded-[30px]
@@ -38,7 +35,6 @@ function Landing() {
                         relative
                     ">
 
-                        {/* DARK BLUE GRADIENT HEADER */}
                         <div className="
                             w-full h-14 
                             bg-[#3E7BB9]
@@ -51,20 +47,14 @@ function Landing() {
                             </div>
                         </div>
 
-                        {/* TOP DIVIDER LINE */}
                         <div className="w-full h-[2px] bg-[#1E4C8F]/60"></div>
 
-                        {/* VERTICAL LINES - POSITIONED ABSOLUTELY TO SPAN ENTIRE HEIGHT */}
                         <div className="absolute top-14 left-1/3 w-[2px] h-[calc(100%-56px)] bg-gradient-to-b from-[#1E4C8F]/40 to-[#1E4C8F]/10"></div>
                         <div className="absolute top-14 left-2/3 w-[2px] h-[calc(100%-56px)] bg-gradient-to-b from-[#1E4C8F]/40 to-[#1E4C8F]/10"></div>
 
-                        {/* CONTENT AREA */}
                         <div className="flex w-full py-10 h-[500px]">
-
-                            {["Year 1", "Year 2", "Year 3"].map((year, i) => (
+                            {["Year 1", "Year 2", "Year 3"].map((year) => (
                                 <div key={year} className="flex-1 relative flex flex-col items-center">
-
-                                    {/* INNER ROUNDED CARD */}
                                     <div className="
                                         bg-[#3E7BB9]/35
                                         w-[75%]
@@ -75,19 +65,15 @@ function Landing() {
                                         px-6
                                         mt-2
                                     ">
-                                        {/* Two text bars */}
                                         <div className="w-1/2 h-3 bg-[#1962AC]/30 rounded-md"></div>
                                         <div className="w-5/6 h-3 bg-[#1962AC]/30 rounded-md"></div>
                                     </div>
-
                                 </div>
                             ))}
-
                         </div>
 
                     </div>
 
-                    {/* TEXT AND BUTTONS*/}
                     <div className="absolute top-60 left-8"> 
                         <h1 className="text-5xl font-bold text-black leading-tight">
                             Welcome to <br />
@@ -97,34 +83,31 @@ function Landing() {
                             Build your perfect 4-year plan with ease
                         </p>
 
-                        {/* BUTTONS */}
                         <div className="flex gap-4 mt-8">
-                            {/* My Dashboard (white) */}
-                            <Link
-                                to="/dashboard"
+
+                            <button
+                                onClick={() => document.querySelector("dialog")?.showModal()}
                                 className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition"
                             >
                                 My Dashboard
-                            </Link>
+                            </button>
 
-                            {/* Log In (blue) */}
-                            <button
-                                onClick={() => document.getElementById("my-dashboard")?.click()}
+                            <Link
+                                to="/share"
                                 className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-white bg-[#0353A4] hover:bg-[#023D7E] transition"
                             >
-                                Log In
-                            </button>
+                                Share Page
+                            </Link>
+
                         </div>
                     </div>
 
-                    {/* Hidden LogIn component but functional modal */}
-                    <div className="hidden">
+                    <div className="opacity-0 pointer-events-none absolute">
                         <LogIn />
                     </div>
 
                 </div>
 
-                {/* RIGHT SIDE — BEAR */}
                 <div className="w-1/2 flex justify-center items-center -mt-16"> 
                     <img 
                         src={bear}
@@ -132,7 +115,6 @@ function Landing() {
                         className="w-[700px] drop-shadow-xl"
                     />
                 </div>
-
             </div>
         </div>
     );
