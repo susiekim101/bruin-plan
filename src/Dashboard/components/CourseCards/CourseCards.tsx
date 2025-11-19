@@ -1,4 +1,5 @@
 import CourseStatus from "./CourseStatus";
+import CourseUnits from "./CourseUnits";
 
 type CourseCardProps = {
     units: number;
@@ -17,9 +18,16 @@ function CourseCard({ courseName, courseTitle, units, courseClassification }: Co
                     className="p-1 flex justify-between text-amber-300 font-bold text-[12px]
                 ">
                     <div>
-                        <p>
-                            Units: {units}
-                        </p>
+                        { units !== undefined ? (
+                            <p>
+                                Units: {units}
+                            </p>
+                            ) : (
+                                <p>
+                                    Units: {<CourseUnits />}
+                                </p>
+                            )
+                        }
                     </div>
                     <div 
                         className=" bg-zinc-100 text-gray-600 rounded-md text-[10px] font-normal inline-block h-fit ml-auto items-center
