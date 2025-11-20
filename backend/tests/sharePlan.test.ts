@@ -1,11 +1,9 @@
-// const { sharePlan } = require("../controllers/sharePlan");
-// const { connection } = require('../src/database');
 import { sharePlan } from "../controllers/sharePlan";
-import { connection } from "../src/database";
+
 const mockUserId = 123
 
 jest.mock('../src/database');
-
+import { connection } from "../src/database";
 const mockConnection = connection;
 
 const mockExecute = jest.fn();
