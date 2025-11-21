@@ -1,18 +1,25 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 
 
 function Dashboard () {
     const [yearNum, setYearNum] = useState<number>(1);
     const handleLeftClick = () => setYearNum(yearNum-1);
     const handleRightClick = () => setYearNum(yearNum+1);
-
+    const navigate = useNavigate();
+    
+    const handleLogOut = () => {
+        navigate('/');
+    }
+    
     return (
     <div className="w-full h-screen flex">
         <div className="w-4/5">
+            <LogOut className="cursor-pointer mx-3 mt-3" onClick={handleLogOut}/>
             <Header year={yearNum}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">

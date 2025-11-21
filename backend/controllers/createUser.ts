@@ -13,8 +13,6 @@ interface createUserProps {
 export async function findByEmail(email: string) {
     const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
     const [ results ] = await connection.execute(query, [email]);
-    // Returns the array (row) containing the email of the user
-    // [ {email: '...'} ]
     return results;
 }
 
