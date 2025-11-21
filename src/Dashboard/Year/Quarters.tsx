@@ -1,17 +1,9 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
+import { handleDrop, handleDragOver } from './QuarterManager'
 
 
 function Quarters() {
-    const handleDragOver = (container: React.DragEvent<HTMLDivElement>) => {
-        container.preventDefault();
-    };
-
-    const handleDrop = (container: React.DragEvent<HTMLDivElement>) => {
-        container.preventDefault();
-    }
-
-
     return(
         <div 
             onDragOver={handleDragOver}

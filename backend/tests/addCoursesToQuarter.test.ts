@@ -21,7 +21,7 @@ beforeEach(() => {
   mockExecute.mockClear()
 });
 
-test('query to add course returns inserted course id', async () => {
+test('query to addCoursesToQuarter returns inserted course id', async () => {
   mockExecute.mockResolvedValueOnce([{ insertId: 111 }]);
 
   const id = await addCoursesToQuarter({
