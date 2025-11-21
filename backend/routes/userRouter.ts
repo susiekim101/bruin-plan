@@ -13,6 +13,7 @@ userRouter.post('/login', async (req: Request, res: Response) => {
     console.log(`The user data is ${data[0]}`);
     const isPasswordCorrect = await bcrypt.compare(req.body.password, data[0].password_hash);
 
+    // Incorrect validation check
     if(!isPasswordCorrect) {
         console.log("Incorrect password");
         return res.status(403).send("Log in failed: Incorrect password");
@@ -21,12 +22,14 @@ userRouter.post('/login', async (req: Request, res: Response) => {
         console.log("User not found");
         return res.status(403).send("User not found");
     }
+    
+    // Create token (user id and email)
     const userToken = {id: data[0].user_id, email: data[0].email};
     if (!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET environment variable is not defined');
     }
-    const token = jwt.sign(userToken, process.env.JWT_SECRET as string, {expiresIn: 3600 * 24});
-    res.cookie('token', token, { httpOnly: true });
+    const token = jwt.sign(userToken, process.env.JWT_SECRET as string, {expiresIn: 60 * 15});
+    res.cookie('token', token, { httpOnly: true }); // Store the cookie
 
     return res.status(200).json({token}).send('Log in success');
 });
@@ -51,5 +54,11 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
         res.status(500).send('Server error');
     }
 });
+
+userRouter.post('/logout', async (req: Request, res: Response) => {
+    console.log("Clearing user JWT cookies");
+    res.clearCookie('token');
+    return res.status(200).json({ message: 'User logged out.'})
+})
 
 export default userRouter;

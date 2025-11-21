@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
+import axios from 'axios';
 import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 
 
@@ -12,7 +13,12 @@ function Dashboard () {
     const handleRightClick = () => setYearNum(yearNum+1);
     const navigate = useNavigate();
     
-    const handleLogOut = () => {
+    const handleLogOut = async () => {
+        try {
+            await axios.post('http://localhost:3001/user/logout');
+        } catch (err) {
+            console.error("Failed to log out, ", err);
+        }
         navigate('/');
     }
     
