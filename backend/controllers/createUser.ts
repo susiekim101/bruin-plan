@@ -1,8 +1,5 @@
 import { connection } from "../src/database.ts";
-interface getMajorProps {
-    'major': string
-}
-
+import type { ResultSetHeader } from "mysql2";
 interface createUserProps {
     'first_name': string
     'last_name': string
@@ -11,29 +8,14 @@ interface createUserProps {
     'major': string
 }
 
-export async function getMajorId({ major }: getMajorProps) {
-    const major_query = `SELECT major_id FROM Majors WHERE major_name = ?;`;
 
-    const [major_rows] = await connection.execute(major_query, [major]);
-    const major_id = major_rows[0].major_id;
 
-    return major_id;
-}
-
-export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
-    const major_id = getMajorId({ major });
-
-    const user_query = `INSERT IGNORE INTO Users (first_name, last_name, email, password_hash, major_id)
-    VALUES (?, ?, ?, ?, ?);`
-    const user_values = [first_name, last_name, email, password, major_id];
-
-    try { 
-        const user_id = await connection.execute(user_query, user_values);
-        // call addToUserPlans
-        await addToUserPlans({user_id, major_id});
-    } catch(err) {
-        console.error(err);
-    }
+export async function findByEmail(email: string) {
+    const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
+    const [ results ] = await connection.execute(query, [email]);
+    // Returns the array (row) containing the email of the user
+    // [ {email: '...'} ]
+    return results;
 }
 
 async function addToUserPlans({user_id, major_id}) {
@@ -41,8 +23,39 @@ async function addToUserPlans({user_id, major_id}) {
 
     try {
         await connection.execute(plan_query, {user_id, major_id});
-        console.log("Succesfully added new user to User_Plan");
+        return user_id
     } catch (err) {
+        console.error(err);
+    }
+}
+
+export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
+    const findEmail = await findByEmail(email);
+    if (Array.isArray(findEmail) && findEmail.length > 0) {
+        // return new Error('Email already exists');
+        throw new Error('Email already exists');
+    }
+    
+    // Get the major_id from user's major
+    const major_query = `SELECT major_id FROM Majors WHERE major_name = ?;`;
+    const [major_rows] = await connection.execute(major_query, [major]);
+    const major_id = major_rows[0].major_id;
+
+    // Define the user query
+    const user_query = `INSERT IGNORE INTO Users (first_name, last_name, email, password_hash, major_id)
+    VALUES (?, ?, ?, ?, ?);`
+    const user_values = [first_name, last_name, email, password, major_id];
+
+    try { 
+        // Insert the user into the database
+        // const [result] = await connection.execute(user_query, user_values);
+    const [result] = await connection.execute<ResultSetHeader>(user_query, user_values);
+        // Insert user into user_plan
+        const user_id = result.insertId;
+        // Returns the user_id
+        await addToUserPlans({user_id: user_id, major_id: major_id});
+        return user_id;
+    } catch (err){
         console.error(err);
     }
 }
