@@ -46,8 +46,7 @@ export async function createUser({ first_name, last_name, email, password, major
 
     try { 
         // Insert the user into the database
-        // const [result] = await connection.execute(user_query, user_values);
-    const [result] = await connection.execute<ResultSetHeader>(user_query, user_values);
+        const [result] = await connection.execute<ResultSetHeader>(user_query, user_values);
         // Insert user into user_plan
         const user_id = result.insertId;
         // Returns the user_id

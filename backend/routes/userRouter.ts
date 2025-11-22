@@ -13,14 +13,16 @@ userRouter.post('/login', async (req: Request, res: Response) => {
     console.log(`The user data is ${data[0]}`);
     const isPasswordCorrect = await bcrypt.compare(req.body.password, data[0].password_hash);
 
+    // Check if user exists
+    if(!data || data[0].length == 0) {
+        console.log("User not found");
+        return res.status(403).send("User not found");
+    }
+
     // Incorrect validation check
     if(!isPasswordCorrect) {
         console.log("Incorrect password");
         return res.status(403).send("Log in failed: Incorrect password");
-    }
-    if(!data || data[0].length == 0) {
-        console.log("User not found");
-        return res.status(403).send("User not found");
     }
     
     // Create token (user id and email)
@@ -31,7 +33,7 @@ userRouter.post('/login', async (req: Request, res: Response) => {
     const token = jwt.sign(userToken, process.env.JWT_SECRET as string, {expiresIn: 60 * 15});
     res.cookie('token', token, { httpOnly: true }); // Store the cookie
 
-    return res.status(200).json({token}).send('Log in success');
+    return res.status(200).json({token});
 });
 
 userRouter.post('/signup', async (req: Request, res: Response) => {
@@ -45,19 +47,29 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
     }
 
     try {
-        await createUser(body);
-        res.status(201).send('Account successfully created');
+        const user_id = await createUser(body);
+
+        // Create token (user id and email)
+        const userToken = {id: user_id, email: body.email};
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET environment variable is not defined');
+        }
+        const token = jwt.sign(userToken, process.env.JWT_SECRET as string, {expiresIn: 60 * 15});
+        res.cookie('token', token, { httpOnly: true }); // Store the cookie
+
+        return res.status(201).json({ token });
     } catch (error) {
         if(error.message === 'Email already exists') {
             return res.status(400).send('Existing email');
         }
-        res.status(500).send('Server error');
+        return res.status(500).send('Server error');
     }
 });
 
 userRouter.post('/logout', async (req: Request, res: Response) => {
     console.log("Clearing user JWT cookies");
     res.clearCookie('token');
+    
     return res.status(200).json({ message: 'User logged out.'})
 })
 
