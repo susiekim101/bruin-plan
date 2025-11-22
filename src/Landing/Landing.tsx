@@ -85,12 +85,7 @@ function Landing() {
 
                         <div className="flex gap-4 mt-8">
 
-                            <button
-                                onClick={() => document.querySelector("dialog")?.showModal()}
-                                className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition"
-                            >
-                                My Dashboard
-                            </button>
+                            <LogIn />
 
                             <Link
                                 to="/share"
@@ -100,10 +95,6 @@ function Landing() {
                             </Link>
 
                         </div>
-                    </div>
-
-                    <div className="opacity-0 pointer-events-none absolute">
-                        <LogIn />
                     </div>
 
                 </div>
