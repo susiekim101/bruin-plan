@@ -98,6 +98,7 @@ function LogIn() {
             console.log("Form submit succeeded");
             login();
             navigate('/dashboard');
+            return;
         } catch (err) {
             if (axios.isAxiosError(err) && err.response && err.response.data === 'Existing email') {
                 setError("Account already exists");
@@ -110,7 +111,7 @@ function LogIn() {
 
     return (
         <div className="">
-            <dialog ref={dialogRef} className="p-0 rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <dialog ref={dialogRef} className="p-0 rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
                 <form ref={formRef} onSubmit={handleSubmit} className="fieldset bg-base-200 border-base-300 rounded-box w-xs h-fit border p-4">
                     <header className="flex justify-between">
                         <legend className="text-lg" id="registration-title">{signup ? "Create Account" : "Log In"}</legend>
@@ -171,7 +172,7 @@ function LogIn() {
                     )}
                     <div className="flex gap-2 justify-center">
                         <p>{signup ? "Already have an account?" : "Don't have an account?"}</p>
-                        <p className="cursor-pointer" onClick={() => setSignUp(!signup)}>
+                        <p className="cursor-pointer hover:underline" onClick={() => setSignUp(!signup)}>
                             {signup ? "Log in" : "Sign up"}
                         </p>
                     </div>
@@ -179,7 +180,7 @@ function LogIn() {
             </dialog>
 
             <button 
-                className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition"
+                className="px-6 py-3 cursor-pointer text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition"
                 onClick={handleOpenClick} 
                 id="my-dashboard"
             >

@@ -17,10 +17,14 @@ function Dashboard () {
 
     useEffect(() => {
         console.log("Status: ", loggedIn);
-        if(!loggedIn) {
-            console.log("user not logged in: ", loggedIn);
-            navigate('/');
-        }
+        const checkStatus = () => { 
+            if(!loggedIn) {
+                console.log("user not logged in: ", loggedIn);
+                navigate('/');
+            }
+        };
+        
+        checkStatus();
     }, [loggedIn, navigate]);
 
     const handleLogOut = async () => {

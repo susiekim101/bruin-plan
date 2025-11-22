@@ -9,6 +9,7 @@ import 'dotenv/config';
 const userRouter = Router();
 
 userRouter.post('/login', async (req: Request, res: Response) => {
+    console.log('Called /login backend');
     const data = await findByEmail(req.body.email);
     console.log(`The user data is ${data[0]}`);
     const isPasswordCorrect = await bcrypt.compare(req.body.password, data[0].password_hash);
