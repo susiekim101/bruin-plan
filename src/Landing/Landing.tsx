@@ -89,9 +89,9 @@ function Landing() {
 
                             <Link
                                 to="/share"
-                                className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-white bg-[#0353A4] hover:bg-[#023D7E] transition"
+                                className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-white bg-[#0353A4] hover:bg-white hover:text-[#0353A4] transition"
                             >
-                                Share Page
+                                Public Plans
                             </Link>
 
                         </div>
