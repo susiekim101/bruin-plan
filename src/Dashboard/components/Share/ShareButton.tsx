@@ -3,7 +3,7 @@ import axios from 'axios';
 export default function ShareButton() {
     async function handleClick() {
         try{
-            await axios.post('http://localhost:3001/plan/shareplan', {user_id: 1});
+            await axios.post('http://localhost:3001/plan/shareplan', {user_id: 1}, { withCredentials: true});
             console.log("User plan shared");
         } catch {
             console.error("Failed to share user plan");
