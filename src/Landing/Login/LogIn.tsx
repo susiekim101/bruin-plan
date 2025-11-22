@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import axios from 'axios';
+import AuthenticationContext from '../../AuthenticationContext';
 
 interface UserData {
     first_name: string,
@@ -25,7 +26,7 @@ function LogIn() {
     });
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
-
+    const { login } = useContext(AuthenticationContext);
 
     useEffect(() => {
         const formEl = formRef.current;
@@ -89,10 +90,9 @@ function LogIn() {
         const url: string = signup ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
         try {
             console.log(url);
-            await axios.post(url, userData);
-            // const response = await axios.post(url, userData);
-            // const { token } = response.data;
+            await axios.post(url, userData, { withCredentials: true });
             console.log("Form submit succeeded");
+            login();
             navigate('/dashboard');
         } catch (err) {
             if (axios.isAxiosError(err) && err.response && err.response.data === 'Existing email') {

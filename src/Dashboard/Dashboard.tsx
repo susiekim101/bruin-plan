@@ -1,24 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import axios from 'axios';
 import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
-
+import { useContext } from 'react';
+import AuthenticationContext from '../AuthenticationContext.tsx';
 
 function Dashboard () {
     const [yearNum, setYearNum] = useState<number>(1);
     const handleLeftClick = () => setYearNum(yearNum-1);
     const handleRightClick = () => setYearNum(yearNum+1);
     const navigate = useNavigate();
-    
+    const { loggedIn, logout } = useContext(AuthenticationContext);
+
+    useEffect(() => {
+        console.log("Status: ", loggedIn);
+        if(!loggedIn) {
+            console.log("user not logged in: ", loggedIn);
+            navigate('/');
+        }
+    }, [loggedIn, navigate]);
+
     const handleLogOut = async () => {
         try {
-            await axios.post('http://localhost:3001/user/logout');
+            await axios.post('http://localhost:3001/user/logout', { withCredentials: true});
         } catch (err) {
             console.error("Failed to log out, ", err);
         }
+        logout();
         navigate('/');
     }
     
