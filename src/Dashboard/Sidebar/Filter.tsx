@@ -1,57 +1,22 @@
-import { useState, useEffect } from 'react';
 import Select from 'react-select';
-import type { OnChangeValue, ActionMeta } from 'react-select';
-import axios from 'axios';
-
-interface Major {
-    major_id: number;
-    major_name: string;
-}
-
-export interface MajorOption {
-    value: number;
-    label: string;
-}
+import type { MajorOption } from './Sidebar';
 
 interface FilterProps {
+    options: MajorOption[];
     selectedMajor: MajorOption | null;
-    setSelectedMajor: (major: MajorOption | null) => void;
+    handleFilter: (major: MajorOption | null) => void;
 }
 
-function Filter ({selectedMajor, setSelectedMajor}: FilterProps) {
-    const [ options, setOptions ] = useState<MajorOption[]>([]);
-
-    useEffect(() => {
-        const loadMajors = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/majors');
-                setOptions(response.data.data.map((major: Major) => ({
-                    value: major.major_id, 
-                    label: major.major_name
-                })));
-                console.log(response.data.data);
-            } catch {
-                console.error("Failed to load majors.");
-            }
-        };
-
-        loadMajors();
-    }, []);
-
-    const handleChange = (
-        selectedOption: OnChangeValue<MajorOption, false>
-    ) => {
-        setSelectedMajor(selectedOption);
-    }
+function Filter ({options, selectedMajor, handleFilter}: FilterProps) {
 
     return (
         <Select 
-            id="majorSelect"
+            id="major-select"
             name="major"
             options={options}
-            onChange={handleChange}
+            onChange={handleFilter}
             value={selectedMajor}
-            placeholder="Filter courses for a different major"/>
+            placeholder="Select another major"/>
     );
 }
 
