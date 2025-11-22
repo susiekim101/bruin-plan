@@ -26,7 +26,7 @@ function LogIn() {
     });
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
-    const { login } = useContext(AuthenticationContext);
+    const { loggedIn, login } = useContext(AuthenticationContext);
 
     useEffect(() => {
         const formEl = formRef.current;
@@ -60,6 +60,10 @@ function LogIn() {
     }, [signup])
 
     function handleOpenClick() {
+        if(loggedIn) {
+            navigate('/dashboard');
+            return;
+        }
         if(dialogRef.current) {
             dialogRef.current.showModal();
         }

@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import axios from 'axios';
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut, House } from "lucide-react";
 import { useContext } from 'react';
 import AuthenticationContext from '../AuthenticationContext.tsx';
 
@@ -32,11 +32,18 @@ function Dashboard () {
         logout();
         navigate('/');
     }
+
+    const handleHome = async() => {
+        navigate('/');
+    }
     
     return (
     <div className="w-full h-screen flex">
         <div className="w-4/5">
-            <LogOut className="cursor-pointer mx-3 mt-3" onClick={handleLogOut}/>
+            <div className="flex justify-between mx-3 mt-3 mb-2">
+            <House className="cursor-pointer" onClick={handleHome}/>
+            <LogOut className="cursor-pointer" onClick={handleLogOut}/>
+            </div>
             <Header year={yearNum}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
