@@ -14,7 +14,11 @@ interface Course {
 
 function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
+    const [ searchTerm, setSearchTerm ] = useState('');
 
+    useEffect(() => {
+
+    });
     useEffect(() => {
         const loadCourses = async () => {
             try {
