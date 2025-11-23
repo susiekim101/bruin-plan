@@ -1,11 +1,13 @@
 interface SearchBarProps {
     searchTerm: string,
-    handleSearch: () => void;
+    handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function SearchBar ({searchTerm, handleSearch}: SearchBarProps) {
+
     return (
         <input
+            id='search-bar'
             className='h-8 w-full bg-white px-2 py-1.5 rounded-2xl text-zinc-500'
             placeholder="Search"
             value={searchTerm}
@@ -14,4 +16,4 @@ function SearchBar ({searchTerm, handleSearch}: SearchBarProps) {
     )
 }
 
-export default SearchBar
+export default SearchBar;

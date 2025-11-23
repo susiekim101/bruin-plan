@@ -14,18 +14,22 @@ interface Course {
 
 function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
+    const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
 
-    useEffect(() => {
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
-    });
     useEffect(() => {
         const loadCourses = async () => {
             try {
                 // TODO: pass in user's major_id
                 const response = await axios.get('http://localhost:3001/courses/1');
                 setCourses(response.data.data);
+                setFilteredCourses(response.data.data);
                 console.log(response.data.data);
+                    
             } catch {
                 console.error("Failed to load courses");
             }
@@ -34,12 +38,27 @@ function Sidebar() {
         loadCourses();
     }, []);
 
+    useEffect(() => {
+        // If the search term is empty, display all original data
+        if (searchTerm === '') {
+            setFilteredCourses(courses);
+            return;
+        }
+
+        // Filter the original data based on the search term
+        const result = courses.filter(course =>
+            course.course_number.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        setFilteredCourses(result);
+    }, [searchTerm, courses]);
+
     return (
         <div className="w-full flex shrink justify-end">
             <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
-                <SearchBar />
-                <div className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
-                    {courses.map((course, index) => (
+                <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
+                <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
+                    {filteredCourses.map((course, index) => (
                         <CourseCard 
                             key={index}
                             courseName={course.course_number}
