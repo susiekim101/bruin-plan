@@ -1,8 +1,9 @@
-import CustomCard from '../CourseCards/CustomCards';
+// import CustomCard from '../CourseCards/CustomCards';
 import CourseCard from '../CourseCards/CourseCards';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Course {
     course_number: string,
@@ -14,16 +15,18 @@ interface Course {
 
 function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadCourses = async () => {
             try {
                 // TODO: pass in user's major_id
-                const response = await axios.get('http://localhost:3001/courses/1');
+                const response = await axios.get('http://localhost:3001/courses/1', { withCredentials: true });
                 setCourses(response.data.data);
-                console.log(response.data.data);
-            } catch {
-                console.error("Failed to load courses");
+                // console.log(response.data.data);
+            } catch (err){
+                console.error("Failed to load courses: ", err);
+                navigate('/');
             }
         };
 

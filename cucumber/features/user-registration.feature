@@ -6,14 +6,13 @@ Feature: User registration flow from landing page
     Scenario: Clicking on the My Dashboard button opens a new dialog
     Given I am on the landing page
     When I click on the My Dashboard button
-    Then I should see the Create Account dialog
+    Then I should see the Log In dialog
     And the Email input field should be visible
     And the Password input field should be visible
-    And the Major input field should be visible
 
-    Scenario: Clicking on the My Dashboard button opens a new dialog, where I have the option to sign up or log in.
+    Scenario: Clicking on the MyDashboard button as a new user opens a new dialog, where I have the option to log in or sign up.
     Given I am a returning user on the landing page
-    When I click on the My Dashboard button as a returning user
-    Then I should see the Already have an account? text
-    And the Log in text should be visible
-    And when I click the Log in text, the input fields change
+    When I click on the My Dashboard button as a new user
+    Then I should see the Don't have an account? button
+    And the Sign up text should be visible
+    And when I click the Sign up text, the input fields change.
