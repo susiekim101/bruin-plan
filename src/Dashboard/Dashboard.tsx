@@ -5,27 +5,38 @@ import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import axios from 'axios';
 import { ChevronLeft, ChevronRight, LogOut, House } from "lucide-react";
-import { useContext } from 'react';
-import AuthenticationContext from '../AuthenticationContext.tsx';
+// import { useContext } from 'react';
+// import AuthenticationContext from '../AuthenticationContext.tsx';
 
 function Dashboard () {
     const [yearNum, setYearNum] = useState<number>(1);
     const handleLeftClick = () => setYearNum(yearNum-1);
     const handleRightClick = () => setYearNum(yearNum+1);
     const navigate = useNavigate();
-    const { loggedIn, logout } = useContext(AuthenticationContext);
+    // const { loggedIn, logout } = useContext(AuthenticationContext);
 
     useEffect(() => {
-        console.log("Status: ", loggedIn);
-        const checkStatus = () => { 
-            if(!loggedIn) {
-                console.log("user not logged in: ", loggedIn);
+        // Valdiate user's tokens before logging in
+        const userVerification = async () => {
+            try {
+                await axios.get('http://localhost:3001/user/verifyUser', { withCredentials: true });
+            } catch (err) {
+                console.log("User unverified. ", err);
                 navigate('/');
             }
-        };
-        
-        checkStatus();
-    }, [loggedIn, navigate]);
+        }
+        userVerification();
+
+        // Check log in status
+        // const checkStatus = () => { 
+        //     if(!loggedIn) {
+        //         console.log("user not logged in: ", loggedIn);
+        //         navigate('/');
+        //     }
+        // };
+        // checkStatus();
+    }, [navigate]);
+
 
     const handleLogOut = async () => {
         try {
@@ -33,7 +44,7 @@ function Dashboard () {
         } catch (err) {
             console.error("Failed to log out, ", err);
         }
-        logout();
+        // logout();
         navigate('/');
     }
 
