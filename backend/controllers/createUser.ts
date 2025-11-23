@@ -11,9 +11,15 @@ interface createUserProps {
 
 
 export async function findByEmail(email: string) {
-    const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
-    const [ results ] = await connection.execute(query, [email]);
-    return results;
+    try {
+        const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
+        const [ results ] = await connection.execute(query, [email]);
+        console.log('Returning user data: ', results[0]);
+        return results;
+    } catch (err) {
+        console.error('Failed to find user by email: ', err);
+        return [];
+    }
 }
 
 async function addToUserPlans({user_id, major_id}) {

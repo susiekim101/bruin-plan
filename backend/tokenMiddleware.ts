@@ -2,8 +2,6 @@ import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import 'dotenv/config';
 
-// Extend Express Request interface to include 'user'
-
 const verifyToken = (req: Request, res: Response, next: () => void) => {
     const token = req.cookies.token;
 

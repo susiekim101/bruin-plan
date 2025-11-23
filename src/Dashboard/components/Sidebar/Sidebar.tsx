@@ -1,4 +1,4 @@
-import CustomCard from '../CourseCards/CustomCards';
+// import CustomCard from '../CourseCards/CustomCards';
 import CourseCard from '../CourseCards/CourseCards';
 import SearchBar from './SearchBar';
 import axios from 'axios';
