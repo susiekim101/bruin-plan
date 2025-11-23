@@ -16,7 +16,8 @@ function Filter ({options, selectedMajor, handleFilter}: FilterProps) {
             options={options}
             onChange={handleFilter}
             value={selectedMajor}
-            placeholder="Select another major"/>
+            placeholder="Select another major"
+        />
     );
 }
 

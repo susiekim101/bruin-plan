@@ -24,15 +24,16 @@ interface Course {
     major_id: number
 }
 
+const USERMAJOR: MajorOption = {value: 1, label: 'Computer Engineering'};
+
 function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ majorOptions, setMajorOptions ] = useState<MajorOption[]>([]);
-    const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>({value: 1, label: "Computer Engineering"});
+    const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
 
-    const handleFilter = (
-        selectedOption: OnChangeValue<MajorOption, false> | null
-    ) => {
+    const handleFilter = ( selectedOption: MajorOption | null ) => {
         setSelectedMajor(selectedOption);
+        console.log('Selected major: ', selectedMajor);
     }
 
     // load majors
@@ -46,7 +47,7 @@ function Sidebar() {
                 }));
 
                 setMajorOptions(options);
-                console.log(response.data.data);
+                console.log('Major options: ', majorOptions);
 
             } catch {
                 console.error("Failed to load majors.");
@@ -60,20 +61,21 @@ function Sidebar() {
     useEffect(() => {
         const loadCourses = async () => {
             try {
-                if (! selectedMajor)
-                    return;
+                // if no major selected, load courses for user major
+                const majorToFetch =  (selectedMajor || USERMAJOR);
+                console.log("Major being used for fetch:", majorToFetch);
 
-                const response = await axios.get(`http://localhost:3001/courses/${selectedMajor.value}`);
+                const response = await axios.get(`http://localhost:3001/courses/${majorToFetch.value}`);
+
                 setCourses(response.data.data);
-
-                console.log(response.data.data);
+                console.log('Courses: ', courses);
             } catch {
                 console.error("Failed to load courses");
             }
         };
 
         loadCourses();
-    }, [selectedMajor]);
+    }, [selectedMajor?.value]);
 
     return (
         <div className="w-full flex shrink justify-end">
