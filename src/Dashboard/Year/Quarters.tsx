@@ -1,7 +1,6 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
-import { handleDrop, handleDragOver } from './QuarterManager'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Course {
     course_number: string,
