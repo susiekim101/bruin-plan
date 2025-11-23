@@ -1,4 +1,4 @@
-import { handleDrop } from './QuarterManager.ts';
+import  handleDrop  from './Quarters.tsx';
 import { addCoursesToQuarter } from '../../../backend/controllers/addCoursesToQuarter';
 
 jest.mock('../../../backend/controllers/addCoursesToQuarter');
