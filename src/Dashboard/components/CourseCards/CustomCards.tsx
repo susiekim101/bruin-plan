@@ -4,10 +4,17 @@ import CourseClassification from './CourseClassification.tsx';
 import CourseName from './CourseName.tsx';
 import CourseTitle from './CourseTitle.tsx';
 
+
 function CustomCard() {
+
+    const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+        const payload = ""
+        event.dataTransfer.setData("application/json", payload);
+    };
+    
     return (
         <>
-            <div className="
+            <div draggable="true" onDragStart={handleDragStart} className="
                 bg-sky-600 rounded-[20px] border border-black w-fit h-fit flex flex-col p-3
             ">
                 <div className="

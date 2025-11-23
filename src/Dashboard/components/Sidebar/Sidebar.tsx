@@ -8,7 +8,7 @@ interface Course {
     course_number: string,
     course_name: string,
     course_units: number,
-    course_category: string,
+    category: string,
     major_id: number
 }
 
@@ -41,9 +41,10 @@ function Sidebar() {
                             courseName={course.course_number}
                             courseTitle={course.course_name}
                             units={course.course_units}
-                            courseClassification={course.course_category}
+                            courseClassification={course.category}
                         />
                     ))}
+                    <CustomCard />
                 </div>
             </div>
         </div>

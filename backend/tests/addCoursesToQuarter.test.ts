@@ -25,7 +25,7 @@ test('query to addCoursesToQuarter returns inserted course id', async () => {
   mockExecute.mockResolvedValueOnce([{ insertId: 111 }]);
 
   const id = await addCoursesToQuarter({
-    planId: 1, 
+    userId: 1, 
     courseId: 1,
     year: 1,
     quarter: 'Fall', 

@@ -6,12 +6,25 @@ type CourseCardProps = {
     courseName: string;
     courseTitle: string;
     courseClassification: string;
+    courseId: string;
 }
 
-function CourseCard({ courseName, courseTitle, units, courseClassification }: CourseCardProps) {
+function CourseCard({ courseName, courseTitle, units, courseClassification}: CourseCardProps) {
+    const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+        const payload = JSON.stringify({
+            course_number: courseName,
+            course_name: courseTitle,
+            course_units: units, 
+            category: courseClassification,
+        });
+
+        console.log(payload);
+        event.dataTransfer.setData("application/json", payload);
+    };
+
     return (
         <>
-            <div className="
+            <div draggable="true" onDragStart={handleDragStart} className="
                 bg-sky-600 rounded-[20px] border border-black w-full h-fit flex flex-col p-3
             ">
                 <div 
