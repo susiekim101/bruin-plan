@@ -11,64 +11,47 @@ Before(async function () {
     page = await context.newPage();
 });
 
-// Given I am on the landing page
 Given('I am on the landing page', async function () {
     await page.goto(process.env.BASE_URL)
 });
             
-// When I click on the My Dashboard button
 When('I click on the My Dashboard button', async function () {
     await page.locator('button[id="my-dashboard"]').click();
 });
        
-// Then I should see the Create Account dialog
-Then('I should see the Create Account dialog', async function () {
-    expect(await page.locator('legend[id="registration-title"]').isVisible()).toBeTruthy();
+Then('I should see the Log In dialog', async function () {
+    const registrationTitle = page.locator('legend[id="registration-title"]')
+    await expect(registrationTitle).toHaveText('Log In', { visible: true });
 });
 
-Then('the First Name input field should be visible', async function () {
-    expect(await page.locator('input[id="first-name"]').isVisible()).toBeTruthy();
-});
-      
-Then('the Last Name input field should be visible', async function () {
-    expect(await page.locator('input[id="last-name"]').isVisible()).toBeTruthy();
-// Write code here that turns the phrase above into concrete actions
-});
-       
-// And the Email input field should be visible
 Then('the Email input field should be visible', async function () {
-    expect(await page.locator('input[type="email"]').isVisible()).toBeTruthy();
+    expect(await page.locator('input[name="email"]').isVisible()).toBeTruthy();
 });
        
-// And the Password input field should be visible
 Then('the Password input field should be visible', async function () {
-    expect(await page.locator('input[type="password"]').isVisible()).toBeTruthy();
-});
-       
-Then('the Major input field should be visible', async function () {
-    expect(await page.locator('select[id="major-input"]').isVisible()).toBeTruthy();
+    expect(await page.locator('input[name="password"]').isVisible()).toBeTruthy();
 });
 
 Given('I am a returning user on the landing page', async function () {
     await page.goto(process.env.BASE_URL);
 });
        
-When('I click on the My Dashboard button as a returning user', async function () {
+When('I click on the My Dashboard button as a new user', async function () {
     await page.locator('button[id="my-dashboard"]').click();
 });
        
-Then('I should see the Already have an account?', async function () {
-    expect(await page.locator('text="Already have an account?"').isVisible()).toBeTruthy();
+Then('I should see the Don\'t have an account? button', async function () {
+    expect(await page.locator('text="Don\'t have an account?"').isVisible()).toBeTruthy();
 });
 
-Then('the Log in text should be visible', async function () {
-    expect(await page.locator('text="Log in"').isVisible()).toBeTruthy();
+Then('the Sign up text should be visible', async function () {
+    expect(await page.locator('text="Sign up"').isVisible()).toBeTruthy();
 });
 
-Then('when I click the Log in text, the input fields change', async function () {
-    await page.locator('text="Log in"').click();
-    expect(await page.locator('text=["Create Account"]').isVisible()).toBeFalsy();
-    expect(await page.locator('select[id="major-input"]').isVisible()).toBeFalsy();
+Then('when I click the Sign up text, the input fields change.', async function () {
+    await page.locator('text="Sign up"').click();
+    expect(await page.locator('text=["Sign up"]').isVisible()).toBeFalsy();
+    expect(await page.locator('select[id="major-input"]').isVisible()).toBeTruthy();
 });
 
 After(async function () {

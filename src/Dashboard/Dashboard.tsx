@@ -1,18 +1,60 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import Sidebar from './Sidebar/Sidebar.tsx';
+=======
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from './components/Sidebar/Sidebar.tsx';
+>>>>>>> origin/main
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import axios from 'axios';
+import { ChevronLeft, ChevronRight, LogOut, House } from "lucide-react";
+import { useContext } from 'react';
+import AuthenticationContext from '../AuthenticationContext.tsx';
 
 function Dashboard () {
     const [yearNum, setYearNum] = useState<number>(1);
     const handleLeftClick = () => setYearNum(yearNum-1);
     const handleRightClick = () => setYearNum(yearNum+1);
+    const navigate = useNavigate();
+    const { logout } = useContext(AuthenticationContext);
 
+    useEffect(() => {
+        // Valdiate user's tokens before logging in
+        const userVerification = async () => {
+            try {
+                await axios.get('http://localhost:3001/user/verifyUser', { withCredentials: true });
+            } catch (err) {
+                console.log("User unverified. ", err);
+                navigate('/');
+            }
+        }
+        userVerification();
+    }, [navigate]);
+
+
+    const handleLogOut = async () => {
+        try {
+            await axios.post('http://localhost:3001/user/logout', { withCredentials: true});
+        } catch (err) {
+            console.error("Failed to log out, ", err);
+        }
+        logout();
+        navigate('/');
+    }
+
+    const handleHome = async() => {
+        navigate('/');
+    }
+    
     return (
     <div className="w-full h-screen flex">
         <div className="w-4/5">
+            <div className="flex justify-between mx-3 mt-3 mb-2">
+            <House className="cursor-pointer" onClick={handleHome}/>
+            <LogOut className="cursor-pointer" onClick={handleLogOut}/>
+            </div>
             <Header year={yearNum}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
