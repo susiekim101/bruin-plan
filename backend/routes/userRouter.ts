@@ -88,5 +88,14 @@ userRouter.get('/verifyUser', verifyToken, async (req: Request, res: Response) =
     res.status(200).json({ message: 'User verified.' })
 })
 
+userRouter.get('/major-id', verifyToken, async (req: Request, res, Response) => {
+    const major_id = res.locals.user.major_id;
+    try {
+        return res.status(200).json({message: `Fetched user's major ID.`, data: major_id});
+    } catch {
+        return res.status(500).json({message: "Failed to fetch user's major ID."});
+    }
+})
+
 
 export default userRouter;
