@@ -1,6 +1,7 @@
 import './App.css';
 import Dashboard from './Dashboard/Dashboard'
 import Landing from './Landing/Landing';
+import Public from './Public/Public';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthenticationContext from './AuthenticationContext';
 import { useState } from 'react';
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/public" element={<Public/>}/>
         </Routes>
       </BrowserRouter>
     </AuthenticationContext.Provider>
