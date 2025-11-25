@@ -1,5 +1,6 @@
 import { CodeXml } from 'lucide-react';
 import { useRef } from 'react';
+import FullPlan from './FullPlan';
 
 interface PlanCardProps {
     "major": string
@@ -33,7 +34,7 @@ function PlanCard( { major }: PlanCardProps) {
             </div>
 
             <dialog ref={dialogRef}>
-                { /* IMPORT DIALOG COMPONENT HERE. PASS IN { handleCloseClick } FOR CLOSING DIALOG LOGIC */ }
+                <FullPlan handleCloseClick={handleCloseClick}/>
             </dialog>
         </>
     );
