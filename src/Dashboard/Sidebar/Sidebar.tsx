@@ -1,10 +1,5 @@
-<<<<<<< HEAD:src/Dashboard/Sidebar/Sidebar.tsx
-import CustomCard from '../components/CourseCards/CustomCards';
-import CourseCard from '../components/CourseCards/CourseCards';
-=======
 // import CustomCard from '../CourseCards/CustomCards';
-import CourseCard from '../CourseCards/CourseCards';
->>>>>>> origin/main:src/Dashboard/components/Sidebar/Sidebar.tsx
+import CourseCard from '../components/CourseCards/CourseCards';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -20,16 +15,13 @@ interface Course {
 
 function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
-<<<<<<< HEAD:src/Dashboard/Sidebar/Sidebar.tsx
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
-=======
     const navigate = useNavigate();
->>>>>>> origin/main:src/Dashboard/components/Sidebar/Sidebar.tsx
 
     useEffect(() => {
         const loadCourses = async () => {
@@ -37,18 +29,11 @@ function Sidebar() {
                 // TODO: pass in user's major_id
                 const response = await axios.get('http://localhost:3001/courses/1', { withCredentials: true });
                 setCourses(response.data.data);
-<<<<<<< HEAD:src/Dashboard/Sidebar/Sidebar.tsx
                 setFilteredCourses(response.data.data);
                 console.log(response.data.data);
-                    
-            } catch {
-                console.error("Failed to load courses");
-=======
-                // console.log(response.data.data);
             } catch (err){
                 console.error("Failed to load courses: ", err);
                 navigate('/');
->>>>>>> origin/main:src/Dashboard/components/Sidebar/Sidebar.tsx
             }
         };
 
