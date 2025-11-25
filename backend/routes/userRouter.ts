@@ -88,4 +88,5 @@ userRouter.get('/verifyUser', verifyToken, async (req: Request, res: Response) =
     res.status(200).json({ message: 'User verified.' })
 })
 
+
 export default userRouter;

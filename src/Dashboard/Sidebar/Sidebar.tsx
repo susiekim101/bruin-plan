@@ -27,7 +27,7 @@ function Sidebar() {
         const loadCourses = async () => {
             try {
                 // TODO: pass in user's major_id
-                const response = await axios.get('http://localhost:3001/courses/1', { withCredentials: true });
+                const response = await axios.get('http://localhost:3001/courses/major', { withCredentials: true });
                 setCourses(response.data.data);
                 setFilteredCourses(response.data.data);
                 console.log(response.data.data);
