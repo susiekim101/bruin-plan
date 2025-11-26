@@ -95,7 +95,7 @@ userRouter.get('/major', verifyToken, async (req: Request, res, Response) => {
     const major_name = result[0].major_name;
     const major_info = {'major_name': major_name, 'major_id': major_id};
     try {
-        return res.status(200).json({message: `Fetched user's major ID.`, data: major_info});
+        return res.status(200).json({message: `Fetched user's major: `, data: major_info});
     } catch {
         return res.status(500).json({message: "Failed to fetch user's major ID."});
     }
