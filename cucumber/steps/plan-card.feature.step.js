@@ -21,19 +21,20 @@ When('they have Select a major selected,', async function () {
 });
          
 Then('they should see all the course cards', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
-});
-       Then('all the Plan cards will have their major', async function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
-         });
-       
-         Then('all the plan cards will have an icon representing its major', async function () {
-           // Write code here that turns the phrase above into concrete actions
-           return 'pending';
-         });
+    expect(await page.locator('PlanCard[text="Computer Science"]'))
+    expect(await page.locator('PlanCard[text="Computer Science and Engineering"]'))
 
+});
+
+When('they have {string} selected', async function (major) {
+    await page.locator('select[name="filter-major"]').click();
+    await page.selectOption('#filter-major', `${major}`);
+});
+
+Then('they should only course cards for {string}', async function (major) {
+    expect(await page.locator(`PlanCard[text=${major}]`));
+    expect(await page.locator(`PlanCard[text="${major == "Computer Science" ? "Bioengineering": "Computer Science"}"]`));
+});
 
 After({ tags: "@planCard"}, async function () {
     await browser.close();

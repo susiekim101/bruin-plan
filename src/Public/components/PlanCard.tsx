@@ -1,5 +1,5 @@
-import { CodeXml } from 'lucide-react';
-import { useRef } from 'react';
+import { CodeXml, Microscope, MonitorCog, Computer } from 'lucide-react';
+import { useRef, type ReactElement } from 'react';
 import FullPlan from './FullPlan';
 
 interface PlanCardProps {
@@ -20,16 +20,32 @@ function PlanCard( { major }: PlanCardProps) {
             dialogRef.current.close();
         }
     }
+
+    const majorIcon: () => ReactElement = () => {
+        switch (major) {
+            case "Bioengineering":
+                return <Microscope className="w-15 h-15 text-yellow-500"/>
+            case "Computer Science":
+                return <CodeXml className="w-15 h-15 text-yellow-500"/>
+            case "Computer Engineering":
+                return <MonitorCog className="w-15 h-15 text-yellow-500"/>
+            case "Computer Science and Engineering":
+                return <Computer className="w-15 h-15 text-yellow-500"/>
+            default:
+                return <></>
+        }
+    }
+
     return (
         <>
-            <div className="p-2 flex flex-col justify-between items-center rounded-xl gap-3 bg-blue-800 transition-transform duration-300 hover:scale-105 cursor-pointer"
+            <div className="h-full flex flex-col p-2 rounded-xl gap-2 bg-blue-800 transition-transform duration-300 hover:scale-[1.05] cursor-pointer"
                 onClick={handleOpenClick}>
-                <div className="flex justify-center items-center aspect-square border border-black rounded-xl w-full bg-gray-100">
-                    <CodeXml className="w-15 h-15 text-yellow-500"/>
+                <div className="flex justify-center items-center aspect-square rounded-xl w-full bg-gray-100">
+                    { majorIcon() }
                 </div>
 
-                <div>
-                    <p className="text-white text-center">{major}</p>
+                <div className="h-full flex flex-col text-center justify-center">
+                    <p className="text-white">{major}</p>
                 </div>
             </div>
 

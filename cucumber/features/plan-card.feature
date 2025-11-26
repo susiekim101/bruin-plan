@@ -8,5 +8,15 @@ Feature: Plan cards that are clickable buttons from the public page. Once clicke
     Given a user is on the public page
     When they have Select a major selected,
     Then they should see all the course cards
-    And all the Plan cards will have their major
-    And all the plan cards will have an icon representing its major
+
+    Scenario Outline: Users select specific major to see cards of only that major
+    Given a user is on the public page
+    When they have "<major>" selected
+    Then they should only course cards for "<major>"
+
+    Examples:
+    | major                             |
+    | Bioengineering                    |
+    | Computer Science                  |
+    | Computer Science and Engineering  |
+    | Computer Engineering              |

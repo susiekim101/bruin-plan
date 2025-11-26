@@ -1,19 +1,26 @@
 import LogIn from '../Landing/Login/LogIn';
-import PlanCard from './components/PlanCard';
+// import PlanCard from './components/PlanCard';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { House } from 'lucide-react';
 import PlanCardGrid from './components/PlanCardGrid';
 
 function Public() {
     const navigate = useNavigate();
+    const [filter, setFilter] = useState("");
 
     const dummyData = [
         { userId: 1, major: "Computer Science"},
-        { userId: 2, major: "Bioenegineering"},
+        { userId: 2, major: "Bioengineering"},
         { userId: 3, major: "Computer Science and Engineering"},
         { userId: 4, major: "Computer Engineering"},
         { userId: 5, major: "Computer Science"},
     ]
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setFilter(e.target.value);
+    };
+
     return (
     <div className="p-3 flex flex-col gap-3 justify-center items-center">
         <div className="w-full flex justify-between">
@@ -29,18 +36,20 @@ function Public() {
 
         <div className="flex flex-col mt-10 gap-1 justify-center items-center">
             <label className="text-sm">Filter plans by major</label>
-            <select id="filter-major" name="filter-major" className="w-2xs text-sm border border-gray-500 rounded-md">
-                <option selected>Select a major</option>
-                <option value="Bioengineering">Bionengineering</option>
+            <select id="filter-major" name="filter-major" 
+            className="w-2xs text-sm border border-gray-500 rounded-md" 
+            defaultValue={"Select a major"} 
+            onChange={handleChange}>
+                <option value="">Select a major</option>
+                <option value="Bioengineering">Bioengineering</option>
                 <option value="Computer Science">Computer Science</option>
                 <option value="Computer Engineering">Computer Engineering</option>
                 <option value="Computer Science and Engineering">Computer Science and Engineering</option>
             </select>
         </div>
 
-        <div className="mx-30 w-100% border border-black">
-            <PlanCardGrid planCards={dummyData}/>
-            <PlanCard major="Computer Science"/>
+        <div className="mx-30 w-100% w-full py-10 px-20">
+            <PlanCardGrid planCards={dummyData} filter={filter}/>
         </div>
     </div>
     );

@@ -14,7 +14,6 @@ export async function findByEmail(email: string) {
     try {
         const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
         const [ results ] = await connection.execute(query, [email]);
-        console.log('Returning user data: ', results[0]);
         return results;
     } catch (err) {
         console.error('Failed to find user by email: ', err);
