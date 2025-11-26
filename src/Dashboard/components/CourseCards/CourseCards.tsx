@@ -10,7 +10,7 @@ type CourseCardProps = {
 function CourseCard({ courseName, courseTitle, units, courseClassification }: CourseCardProps) {
     return (
         <>
-            <div className="
+            <div data-testid="course-card-root" className="
                 bg-sky-600 rounded-[20px] border border-black w-full h-fit flex flex-col p-3
             ">
                 <div 
