@@ -25,3 +25,10 @@ test('getMajorName should estabish connection to database', async () => {
   await getMajorName();
   expect(mockGetConnection).toHaveBeenCalledTimes(1);
 });
+
+test('getMajorName should query database with "SELECT major_name FROM Majors WHERE major_id = ?"', async () => {
+  mockExecute.mockResolvedValueOnce([[]]);
+  const major_id = 1;
+  await getMajorName(major_id);
+  expect(mockExecute).toHaveBeenCalledWith('SELECT major_name FROM Majors WHERE major_id = ?', [major_id]);
+});
