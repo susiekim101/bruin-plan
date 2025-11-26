@@ -1,4 +1,4 @@
-import { connection } from '../src/database.ts'
+import { connection } from '../src/database.ts';
 
 export async function fetchCoursesByMajor (userMajorID: number) {
     try {
