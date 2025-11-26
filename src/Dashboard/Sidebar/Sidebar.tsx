@@ -81,6 +81,11 @@ function Sidebar() {
     return (
         <div className="w-full flex shrink justify-end">
             <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+                <div className="w-fit py-1 px-2 flex flex-col justify-items-center items-center">
+                    <p className="text-gray-200 font-bold text-sm"> 
+                        Major: {userMajor?.major_name}
+                    </p>
+                </div>
                 <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
                 <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                     {filteredCourses.map((course, index) => (
