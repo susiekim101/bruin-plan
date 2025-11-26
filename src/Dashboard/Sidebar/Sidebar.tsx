@@ -56,20 +56,18 @@ function Sidebar() {
     }, [searchTerm, courses]);
 
     return (
-        <div className="w-full flex shrink justify-end">
-            <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
-                <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
-                <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
-                    {filteredCourses.map((course, index) => (
-                        <CourseCard 
-                            key={index}
-                            courseName={course.course_number}
-                            courseTitle={course.course_name}
-                            units={course.course_units}
-                            courseClassification={course.course_category}
-                        />
-                    ))}
-                </div>
+        <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
+            <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
+                {filteredCourses.map((course, index) => (
+                    <CourseCard 
+                        key={index}
+                        courseName={course.course_number}
+                        courseTitle={course.course_name}
+                        units={course.course_units}
+                        courseClassification={course.course_category}
+                    />
+                ))}
             </div>
         </div>
     );

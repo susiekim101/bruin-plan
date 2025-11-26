@@ -83,7 +83,7 @@ function Dashboard () {
             </div>
                 
         </div>
-        <div>
+        <div className="w-full">
             <Sidebar /> 
         </div>
     </div>
