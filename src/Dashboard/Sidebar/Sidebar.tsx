@@ -32,6 +32,7 @@ function Sidebar() {
                 setFilteredCourses(response.data.data);
                 console.log(response.data.data);
             } catch (err){
+                await axios.post('http://localhost:3001/user/logout', { withCredentials: true});
                 console.error("Failed to load courses: ", err);
                 navigate('/');
             }

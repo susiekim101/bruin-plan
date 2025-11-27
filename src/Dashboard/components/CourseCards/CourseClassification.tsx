@@ -37,10 +37,10 @@ function CourseClassification({ initialClassification = 'Major', }: CourseClassi
                 <option value="Tech Breadth">Tech Breadth</option>
                 <option value="Sci Tech">Sci Tech</option>
             </select>
-            <span
+            {/* <span
                 ref={spanRef}
                 className="absolute left-[-9999px] top-0 whitespace-pre px-2.5"
-            />
+            /> */}
         </div>
     );
 };

@@ -50,7 +50,7 @@ function Dashboard () {
             <House className="cursor-pointer" onClick={handleHome}/>
             <LogOut className="cursor-pointer" onClick={handleLogOut}/>
             </div>
-            <Header year={yearNum}/>
+            <Header year={yearNum} units={180}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
