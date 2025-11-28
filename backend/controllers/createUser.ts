@@ -16,7 +16,7 @@ export async function findByEmail(email: string) {
         const [ results ] = await connection.execute(query, [email]);
         return results;
     } catch (err) {
-        console.error('Failed to find user by email: ', err);
+        console.log('Failed to find user by email: ', err);
         return [];
     }
 }

@@ -5,6 +5,8 @@ interface SharePlanProps {
     'user_id': number
 }
 
+
+
 export async function sharePlan({ user_id }: SharePlanProps) {
     // change isShared to true
     try { 

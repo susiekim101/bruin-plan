@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express'
-import { sharePlan } from '../controllers/sharePlan.ts';
+import { sharePlan} from '../controllers/sharePlan.ts';
 
 const planRouter = Router()
 
@@ -12,7 +12,6 @@ planRouter.post('/sharePlan', async ( req: Request, res: Response) => {
         res.status(500).json({message: "Failed to share plan"});
     }
 });
-
 
 export default planRouter;
 

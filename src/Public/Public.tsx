@@ -9,14 +9,6 @@ function Public() {
     const navigate = useNavigate();
     const [filter, setFilter] = useState("");
 
-    const dummyData = [
-        { userId: 1, major: "Computer Science"},
-        { userId: 2, major: "Bioengineering"},
-        { userId: 3, major: "Computer Science and Engineering"},
-        { userId: 4, major: "Computer Engineering"},
-        { userId: 5, major: "Computer Science"},
-    ]
-
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFilter(e.target.value);
     };
@@ -49,7 +41,7 @@ function Public() {
         </div>
 
         <div className="mx-30 w-100% w-full py-10 px-20">
-            <PlanCardGrid planCards={dummyData} filter={filter}/>
+            <PlanCardGrid filter={filter}/>
         </div>
     </div>
     );
