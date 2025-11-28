@@ -95,9 +95,57 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
     return (
         <>
             <X onClick={handleCloseClick}/>
-            { /* WRITE THE CODE HERE */ }
-            { /* USE DATA FROM planItems TO DISPLAY ON SCREEN */ }
-        </>
+            <div className="p-6 bg-white rounded-xl shadow-lg w-full max-w-4xl mx-auto">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold text-[#1A3A73]">4-Year Plan Overview</h2>
+                </div>
+
+                {(() => {
+                    const years: Record<number, Record<string, PlanItems[]>> = {};
+
+                    for(let y = 1; y <= 4; y++) {
+                        years[y] = { 'Fall': [], 'Winter': [], 'Spring': [], 'Summer': [] };
+                    }
+
+                    planItems.forEach(item => {
+                        if ( !years[item.academic_year]) return;
+                        years[item.academic_year][item.quarter].push(item);
+                    });
+
+                    const quarterOrder = ['Fall', 'Winter', 'Spring', 'Summer'];
+
+                    return (
+                        <div className="grid grid-cols-1 gap-6">
+                            {Object.entries(years).map(([year, quarters]) => (
+                                <div key={year} className="border rounded-xl p-4 shadow-sm bg-[#F8FAFC]">
+                                    <h3 className="text-xl font-semibold text-[#1A3A73] mb-2">Year {year}</h3>
+
+                                    <div className="grid grid-cols-4 gap-4">
+                                        {quarterOrder.map(quarter => (
+                                            <div key={quarter} className="bg-white border rounded-lg p-3 shadow-sm">
+                                                <h4 className="font-semibold text-[#3B5CAD] mb-2">{quarter}</h4>
+
+                                                {quarters[quarter].length === 0 ? (
+                                                    <p className="text-sm text-gray-400 italic">No Courses</p>
+                                                ) : (
+                                                    quarters[quarter].map(item => (
+                                                        <div key={item.plan_item_id} className="p-2 mb-2 rounded-lg bg-[#E8F0FE]">
+                                                            <p className="font-medium text-sm">Course ID: {item.course_id}</p>
+                                                            <p className="text-xs text-gray-600">Status: {item.status}</p>
+                                                         </div>
+                                    ))
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+})()}
+
+        </div>
+    </>
     );
 }
 
