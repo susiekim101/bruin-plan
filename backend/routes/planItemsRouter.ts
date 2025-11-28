@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express'
-import { getAllPublicPlans, getMajorById } from '../controllers/fetchPlanItems';
+import { getAllPublicPlans, getMajorById, getPlanItems } from '../controllers/fetchPlanItems';
 
 const planItemsRouter = Router();
 
@@ -18,8 +18,8 @@ planItemsRouter.get("/getAllPublicPlans", async ( req: Request, res: Response ) 
     }
 })
 
-planItemsRouter.get('/getMajorById/:id', async( req: Request, res: Response ) => {
-    const majorId = Number(req.params.id);
+planItemsRouter.get('/getMajorById/:major_id', async( req: Request, res: Response ) => {
+    const majorId = Number(req.params.major_id);
     try {
         const row = await getMajorById({ major_id: majorId });
         if(!row || row[0].length == 0) {
@@ -34,5 +34,19 @@ planItemsRouter.get('/getMajorById/:id', async( req: Request, res: Response ) =>
 
     }
 });
+
+planItemsRouter.get('/getPlanItems/:plan_id', async( req: Request, res: Response) => {
+    const plan_id = Number(req.params.major_id);
+    try {
+        const response = await getPlanItems({plan_id: plan_id});
+        if(!response) {
+            res.status(403).send("Plan not found.");
+        }
+        res.status(200).json({planItems: response});
+    } catch (err) {
+        console.error(`Failed to fetch all plan items: `, err);
+        res.status(500).json({message: "Failed to fetch plan items"});
+    }
+})
 
 export default planItemsRouter;

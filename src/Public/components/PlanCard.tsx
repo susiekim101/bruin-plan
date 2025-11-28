@@ -3,10 +3,11 @@ import { useRef, type ReactElement } from 'react';
 import FullPlan from './FullPlan';
 
 interface PlanCardProps {
-    "major": string
+    plan_id: number,
+    major: string
 }
 
-function PlanCard( { major }: PlanCardProps) {
+function PlanCard( { plan_id, major }: PlanCardProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
 
     const handleOpenClick = () => {
@@ -50,7 +51,7 @@ function PlanCard( { major }: PlanCardProps) {
             </div>
 
             <dialog ref={dialogRef}>
-                <FullPlan handleCloseClick={handleCloseClick}/>
+                <FullPlan plan_id={plan_id} handleCloseClick={handleCloseClick}/>
             </dialog>
         </>
     );

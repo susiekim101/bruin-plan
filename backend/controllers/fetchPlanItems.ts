@@ -1,7 +1,11 @@
 import { connection } from "../src/database.ts"
 
 interface getMajorByIdProps {
-    'major_id': number
+    major_id: number
+}
+
+interface getPlanItemsProps {
+    plan_id: number
 }
 
 export async function getAllPublicPlans() {
@@ -19,9 +23,20 @@ export async function getMajorById({ major_id }: getMajorByIdProps) {
     try {
         const query = `SELECT major_name FROM Majors WHERE major_id = ?`;
         const [rows] = await connection.execute(query, [ major_id ]);
-        console.log(rows);
+        console.log(`getMajorById(${major_id}) returned ${rows}`);
         return rows;
     } catch (err) {
-        console.error(err);
+        console.error(`getMajorById(${major_id}) threw an error: ${err}`);
+    }
+}
+
+export async function getPlanItems({ plan_id }: getPlanItemsProps) {
+    try {
+        const query = `SELECT * FROM Plan_Items WHERE plan_id = ?`;
+        const [rows] = await connection.execute(query, [ plan_id ]);
+        console.log(`getPlanItems(${plan_id}) returned ${rows}`);
+        return rows;
+    } catch (err) {
+        console.error(`getPlanTiems(${plan_id} threw an error: ), ${err}`);
     }
 }
