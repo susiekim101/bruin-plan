@@ -25,7 +25,7 @@ function CourseCard({ courseId, courseName, courseTitle, units, courseClassifica
 
     return (
         <>
-            <div draggable="true" onDragStart={handleDragStart} className="
+            <div draggable="true" onDragStart={handleDragStart} data-testid="course-card-root" className="
                 bg-sky-600 rounded-[20px] border border-black w-full h-fit flex flex-col p-3
             ">
                 <div 

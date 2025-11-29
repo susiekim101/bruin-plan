@@ -2,6 +2,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { createUser, findByEmail } from '../controllers/createUser.ts';
+import { getMajorName } from '../controllers/getMajorName.ts'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import verifyToken from '../tokenMiddleware.ts';
@@ -87,5 +88,18 @@ userRouter.get('/verifyUser', verifyToken, async (req: Request, res: Response) =
     console.log("User verified.");
     res.status(200).json({ message: 'User verified.' })
 })
+
+userRouter.get('/major', verifyToken, async (req: Request, res, Response) => {
+    const major_id = res.locals.user.major_id;
+    const result = await getMajorName(major_id);
+    const major_name = result[0].major_name;
+    const major_info = {'major_name': major_name, 'major_id': major_id};
+    try {
+        return res.status(200).json({message: `Fetched user's major: `, data: major_info});
+    } catch {
+        return res.status(500).json({message: "Failed to fetch user's major ID."});
+    }
+})
+
 
 export default userRouter;
