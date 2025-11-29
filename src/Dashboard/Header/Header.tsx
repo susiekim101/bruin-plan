@@ -7,7 +7,7 @@ interface HeaderProps {
 export default function Header({year}: HeaderProps) {
 
     return (
-        <div className="w-full flex justify-between items-center px-3 my-3">
+        <div className="w-full flex justify-between items-center px-3">
             <TotalUnits units={10}/>
             <p className="text-4xl text-sky-800 font-bold">Year {year}</p>
             <Share/>

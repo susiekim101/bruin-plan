@@ -1,19 +1,14 @@
-import CustomCard from '../components/CourseCards/CustomCards';
+// import CustomCard from '../CourseCards/CustomCards';
 import CourseCard from '../components/CourseCards/CourseCards';
 import SearchBar from './SearchBar';
-import Filter from './Filter';
+import Major from '../components/Major/Major'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import type { OnChangeValue } from 'react-select';
+import { useNavigate } from 'react-router-dom';
 
 interface Major {
-    major_id: number;
-    major_name: string;
-}
-
-export interface MajorOption {
-    value: number;
-    label: string;
+    major_name: string,
+    major_id: number
 }
 
 interface Course {
@@ -24,79 +19,79 @@ interface Course {
     major_id: number
 }
 
-const USERMAJOR: MajorOption = {value: 1, label: 'Computer Engineering'};
-
 function Sidebar() {
+    const [ userMajor, setUserMajor ] = useState<Major>();
     const [ courses, setCourses ] = useState<Course[]>([]);
-    const [ majorOptions, setMajorOptions ] = useState<MajorOption[]>([]);
-    const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
+    const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
+    const [ searchTerm, setSearchTerm ] = useState('');
 
-    const handleFilter = ( selectedOption: MajorOption | null ) => {
-        setSelectedMajor(selectedOption);
-        console.log('Selected major: ', selectedMajor);
-    }
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+    const navigate = useNavigate();
 
-    // load majors
     useEffect(() => {
-        const loadMajors = async () => {
+        const loadMajor = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/majors');
-                const options = response.data.data.map((major: Major) => ({
-                    value: major.major_id, 
-                    label: major.major_name
-                }));
-
-                setMajorOptions(options);
-                console.log('Major options: ', majorOptions);
-
-            } catch {
-                console.error("Failed to load majors.");
+                const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
+                setUserMajor(response.data.data);
+                console.log(response.data.data);
+            } catch (err){
+                console.error("Failed to load major: ", err);
+                navigate('/');
             }
-        };
+        }
+        loadMajor();
+    }, []);
 
-        loadMajors();
-    }, [])
-
-    // load courses for specified major
     useEffect(() => {
         const loadCourses = async () => {
+            if (! userMajor )
+                return;
+
             try {
-                // if no major selected, load courses for user major
-                const majorToFetch =  (selectedMajor || USERMAJOR);
-                console.log("Major being used for fetch:", majorToFetch);
-
-                const response = await axios.get(`http://localhost:3001/courses/${majorToFetch.value}`);
-
+                const userMajorID = userMajor.major_id;
+                const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
                 setCourses(response.data.data);
-                console.log('Courses: ', courses);
-            } catch {
-                console.error("Failed to load courses");
+                setFilteredCourses(response.data.data);
+                console.log(response.data.data);
+            } catch (err){
+                console.error("Failed to load courses: ", err);
+                navigate('/');
             }
         };
 
         loadCourses();
-    }, [selectedMajor?.value]);
+    }, [userMajor?.major_id]);
+
+    useEffect(() => {
+        // If the search term is empty, display all original data
+        if (searchTerm === '') {
+            setFilteredCourses(courses);
+            return;
+        }
+
+        // Filter the original data based on the search term
+        const result = courses.filter(course =>
+            course.course_number.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        setFilteredCourses(result);
+    }, [searchTerm, courses]);
 
     return (
-        <div className="w-full flex shrink justify-end">
-            <div className="flex gap-4 flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
-                <Filter 
-                    options={majorOptions} 
-                    selectedMajor={selectedMajor} 
-                    handleFilter={handleFilter}
-                />
-                <SearchBar />
-                <div className="flex flex-col gap-4 mt-2 overflow-y-auto h-full w-full">
-                    {courses.map((course, index) => (
-                        <CourseCard 
-                            key={index}
-                            courseName={course.course_number}
-                            courseTitle={course.course_name}
-                            units={course.course_units}
-                            courseClassification={course.course_category}
-                        />
-                    ))}
-                </div>
+        <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
+            <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
+                {filteredCourses.map((course, index) => (
+                    <CourseCard 
+                        key={index}
+                        courseName={course.course_number}
+                        courseTitle={course.course_name}
+                        units={course.course_units}
+                        courseClassification={course.course_category}
+                    />
+                ))}
             </div>
         </div>
     );
