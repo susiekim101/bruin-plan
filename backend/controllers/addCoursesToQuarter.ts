@@ -1,4 +1,4 @@
-import type { ResultSetHeader } from "mysql2/promise";
+// import type { ResultSetHeader } from "mysql2/promise";
 import { connection } from "../src/database.ts";
 
 interface addCourseProps {
@@ -13,39 +13,37 @@ interface getPlanIdProps {
 }
 
 export async function getPlanId({ userId }: getPlanIdProps) {
-    console.log("user id given to plan id: ", userId);
+    // console.log("user id given to plan id: ", userId);
     const query = `SELECT plan_id FROM User_Plans WHERE user_id = ?`;
-    const [plan_id_arr] = await connection.execute<any>(query, [userId]);
-    if (plan_id_arr.length > 0) {
-        console.log("user id passed in: ", userId);
-        const planId = plan_id_arr[0].plan_id;
-        console.log("user's plan id:", planId);
-        console.log("type of plan_id:", typeof planId, planId);
-        return planId;
-    }
-    else {
-        console.error('Failed to find plan_id: ');
-        return;
+    try {
+      const [ results ] = await connection.execute(query, [ userId ]);
+      return results;
+    } catch (err) {
+      console.error("Failed to fetch planId: ", err);
+      return [];
     }
 }
 
 
 export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarterName }: addCourseProps) {
-    console.log("userId that adds course", userId);
-    const planId = await getPlanId({ userId: userId });
-    console.log("adding course with: ", planId, courseId, yearIndex, quarterName);
+  // console.log("userId that adds course", userId);
 
-  const insertQuery = `
+  const results = await getPlanId({ userId: userId });
+  if(!results || results[0].length == 0)  {
+    throw new Error('Cannot find planId');
+  }
+  const planId = results[0].plan_id;
+
+  const query = `
     INSERT INTO Plan_Items (plan_id, course_id, year, quarter, status)
-    VALUES (?, ?, ?, ?, 'Planned');
-  `;
+    VALUES (?, ?, ?, ?, 'Planned');`;
 
-  const [result] = await connection.execute<ResultSetHeader>(insertQuery, [
+  await connection.execute(query, [
     planId,
     courseId,
     yearIndex,
     quarterName
   ]);
 
-  return result.insertId;
+  // return result.insertId;
 }
