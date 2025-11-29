@@ -40,6 +40,7 @@ function Sidebar() {
 
     const navigate = useNavigate();
 
+    // Fetch user's major
     useEffect(() => {
         const loadUserMajor = async () => {
             try {
@@ -54,6 +55,7 @@ function Sidebar() {
         loadUserMajor();
     }, []);
 
+    // Fetch all majors for Filter component
     useEffect(() => {
         const loadAllMajors = async () => {
             try {
@@ -79,12 +81,16 @@ function Sidebar() {
         loadAllMajors();
     }, [userMajor?.major_id]);
 
+    // Fetch all courses for a given major
     useEffect(() => {
         const loadCourses = async () => {
+
+            // Return if userMajor hasn't been loaded
             if (! userMajor )
                 return;
 
             if ( selectedMajor ) {
+                // Display courses for selectedMajor (different from userMajor)
                 try {
                     const selectedMajorID = selectedMajor.value;
                     const response = await axios.get(`http://localhost:3001/courses/${selectedMajorID}`, { withCredentials: true });
@@ -96,6 +102,7 @@ function Sidebar() {
                     navigate('/');
                 }
             } else {
+                // Display courses for userMajor
                 try {
                     const userMajorID = userMajor.major_id;
                     const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
@@ -112,14 +119,15 @@ function Sidebar() {
         loadCourses();
     }, [userMajor?.major_id, selectedMajor?.value]);
 
+    // Display courses whose course codes match search term
     useEffect(() => {
-        // If the search term is empty, display all original data
+        // If the search term is empty, display all courses
         if (searchTerm === '') {
             setFilteredCourses(courses);
             return;
         }
 
-        // Filter the original data based on the search term
+        // Filter the courses based on the search term
         const result = courses.filter(course =>
             course.course_number.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -129,13 +137,20 @@ function Sidebar() {
 
     return (
         <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
-            {userMajor && <Major majorName={userMajor.major_name}/>}
+            { userMajor && 
+                <Major
+                    majorName={userMajor.major_name}
+                />
+            }
             <Filter 
                 selectedOption={selectedMajor}
                 majorOptions={majors}
                 handleChange={handleFilter}
             />
-            <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
+            <SearchBar 
+                searchTerm={searchTerm} 
+                handleSearch={handleSearch}
+            />
             <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                 {filteredCourses.map((course, index) => (
                     <CourseCard 

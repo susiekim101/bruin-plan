@@ -5,7 +5,7 @@ jest.mock('../src/database.ts', () => ({
 }));
 
 import { connection } from "../src/database.ts";
-import { getMajorName } from "../controllers/getMajorName.ts";
+import { getUserMajorByName } from "../controllers/getUserMajorByName.ts";
 
 const mockExecute = connection.execute as jest.Mock;
 
@@ -15,7 +15,7 @@ beforeEach(() => {
 
 test('getMajorName should estabish connection to database', async () => {
   mockExecute.mockResolvedValueOnce([[], []]);
-  await getMajorName(1);
+  await getUserMajorByName(1);
   expect(mockExecute).toHaveBeenCalledTimes(1);
 });
 
@@ -32,7 +32,7 @@ test('getMajorName should return major_name associated with major_id', async () 
   mockExecute.mockResolvedValueOnce(mockResult);
 
   const mockMajorID = 1;
-  const result = await getMajorName(mockMajorID);
+  const result = await getUserMajorByName(mockMajorID);
   expect(result).toEqual(
             expect.arrayContaining([expect.objectContaining({major_name: 'Test Major'})])
         );

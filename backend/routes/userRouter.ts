@@ -2,7 +2,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { createUser, findByEmail } from '../controllers/createUser.ts';
-import { getMajorName } from '../controllers/getMajorName.ts'
+import { getUserMajorByName } from '../controllers/getUserMajorByName.ts'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import verifyToken from '../tokenMiddleware.ts';
@@ -91,7 +91,7 @@ userRouter.get('/verifyUser', verifyToken, async (req: Request, res: Response) =
 
 userRouter.get('/major', verifyToken, async (req: Request, res, Response) => {
     const major_id = res.locals.user.major_id;
-    const result = await getMajorName(major_id);
+    const result = await getUserMajorByName(major_id);
     const major_name = result[0].major_name;
     const major_info = {'major_name': major_name, 'major_id': major_id};
     try {
