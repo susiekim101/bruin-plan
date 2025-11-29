@@ -17,7 +17,7 @@ function Filter ({majorOptions, selectedOption, handleChange} : FilterProps) {
         <Select<MajorOption>
             name='filter'
             className='pb-3 text-sm'
-            placeholder='Select a different major'
+            placeholder='Select a major'
             value={selectedOption}
             options={majorOptions}
             onChange={handleChange}
