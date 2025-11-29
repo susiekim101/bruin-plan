@@ -2,12 +2,9 @@ import { connection } from '../src/database.ts'
 
 export async function fetchMajors() {
     try {
-        // establish connection to database
-        const db = await connection.getConnection();
-        
         // query Majors table
         const query = "SELECT * FROM Majors";
-        const [rows] = await db.execute(query);
+        const [rows] = await connection.execute(query);
 
         return rows;
     } catch (error) {
