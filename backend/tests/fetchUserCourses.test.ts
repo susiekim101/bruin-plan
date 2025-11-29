@@ -13,6 +13,7 @@ jest.mock('../src/database', () => ({
   }
 }));
 
+import { getPlanId } from "../controllers/addCoursesToQuarter.ts";
 import { fetchUserCourses } from "../controllers/fetchUserCourses.ts";
 
 // Start with clean state each time
@@ -22,20 +23,14 @@ beforeEach(() => {
 
 test('fetchUserCourses should estabish connection to database', async () => {
   mockExecute.mockResolvedValueOnce([[]]);
-  await fetchUserCourses(-1);
+  await fetchUserCourses({userId: -1, yearIndex: -1, quarterName: 'Fall' });
   expect(mockGetConnection).toHaveBeenCalledTimes(1);
 });
 
 
-test('query with no specified major should return no courses', async () => {
-  const result = await fetchCoursesByMajor(-1);
-  expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [-1]);
+test('query with a userId, yearIndex, and quarterName should return no courses', async () => {
+  const result = await fetchUserCourses({ userId: 3, yearIndex: 1, quarterName: 'Fall' });
+  expect(mockExecute).toHaveBeenCalledWith('SELECT course_id FROM Plan_Items WHERE plan_id = ? AND year = ? AND quarter = ?;', [18, 1, 'Fall']);
   expect(result).toEqual([]);
 });
 
-test('query with a specified major returns all courses with that major ID', async () => {
-  mockExecute.mockResolvedValueOnce([[{major_id: 1, course_name: 'Test Course'}]])
-  const result = await fetchCoursesByMajor(1);
-  expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [1]);
-  expect(result).toEqual([{major_id: 1, course_name: 'Test Course'}]);
-});

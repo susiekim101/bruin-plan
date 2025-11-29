@@ -70,7 +70,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year />
+                                    <Year yearIndex={yearNum}/>
                                 </div>
                             </div>
                         ))}</div>

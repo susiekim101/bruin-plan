@@ -1,7 +1,6 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 interface Course {
@@ -24,7 +23,7 @@ type handleDropProps = {
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
 }
 
-export function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
+function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
     let droppedCourse;
     if (courseJson === "") {
         droppedCourse = {
@@ -43,7 +42,8 @@ export function handleDropLogic({courseJson, userId, yearIndex, quarterName} : h
 
     if (userId !== null && droppedCourse.course_id !== null) {
         console.log("goes to add course");
-        fetch("http://localhost:3001/quarter/add-course", {
+        console.log(droppedCourse.course_id);
+        fetch(`http://localhost:3001/quarter/add-course/${userId}/${droppedCourse.course_id}/${yearIndex}/${quarterName}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -51,7 +51,7 @@ export function handleDropLogic({courseJson, userId, yearIndex, quarterName} : h
             body: JSON.stringify({
                 userId: userId,
                 courseId: droppedCourse.course_id,
-                yearIndex: 1,
+                yearIndex: yearIndex,
                 quarterName: quarterName
             })
         })
@@ -68,14 +68,11 @@ export function handleDropLogic({courseJson, userId, yearIndex, quarterName} : h
 
 function Quarters({yearIndex, quarterName} : quarterProps) {
     const [courses, setCourses ] = useState<Course[]>([]);
-    const [userId, setUserId] = useState<number | null>(null);
-    const navigate = useNavigate();
-    
+    //const [userId, setUserId] = useState<number | null>(null);
+    const userId = 3;
     // TO-DO: fetch userID from backend
     // pass in default right now
-    useEffect(() => {
-        setUserId(1);
-    }, []);
+    
     
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -136,18 +133,25 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
     }
 
     useEffect(() => {
+        if (!userId) {
+            console.log("no user id: ", userId);
+            return;
+        }
+
         const loadCourses = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/quarter/${userId}/1/${quarterName}`, { withCredentials: true });
-                setCourses(response.data.data);
-                console.log(response.data.data);
-            } catch (err){
-                console.error("Failed to load courses: ", err);
+                const res = await axios.get(
+                    `http://localhost:3001/quarter/${userId}/${yearIndex}/${quarterName}`
+                );
+                setCourses(res.data.data);
+            } catch (err) {
+                console.error("Failed to load courses:", err);
             }
         };
 
         loadCourses();
-    }, []);
+    }, [userId, yearIndex, quarterName]);
+
 
     const isEmptyCourse = (course: Course) => 
         course.course_number === "" &&
