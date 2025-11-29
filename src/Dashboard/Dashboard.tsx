@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './components/Sidebar/Sidebar.tsx';
+import Sidebar from './Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import axios from 'axios';
@@ -50,7 +50,7 @@ function Dashboard () {
             <House className="cursor-pointer" onClick={handleHome}/>
             <LogOut className="cursor-pointer" onClick={handleLogOut}/>
             </div>
-            <Header year={yearNum}/>
+            <Header year={yearNum} units={180}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
@@ -86,8 +86,8 @@ function Dashboard () {
             </div>
                 
         </div>
-        <div className="min-w-0.5xs">
-            <Sidebar />
+        <div className="w-full">
+            <Sidebar /> 
         </div>
     </div>
     )

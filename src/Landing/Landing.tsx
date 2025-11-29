@@ -85,10 +85,10 @@ function Landing() {
 
                         <div className="flex gap-4 mt-8">
 
-                            <LogIn />
+                            <LogIn textStyle="text-lg" px={6} py={3}/>
 
                             <Link
-                                to="/share"
+                                to="/public"
                                 className="px-6 py-3 text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-white bg-[#0353A4] hover:bg-white hover:text-[#0353A4] transition"
                             >
                                 Public Plans
