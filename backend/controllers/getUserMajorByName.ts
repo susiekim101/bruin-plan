@@ -6,7 +6,7 @@ export async function getUserMajorByName(userMajorID: Number) {
         const query = `SELECT major_name FROM Majors WHERE major_id = ?`;
         const [result] = await connection.execute(query, [userMajorID]);
 
-        console.log('Fetched major name: ', result);
+        console.log(`Fetched user's major: `, result);
         
         return result;
     } catch (error) {

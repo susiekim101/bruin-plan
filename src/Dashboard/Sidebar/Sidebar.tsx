@@ -31,6 +31,7 @@ function Sidebar() {
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
+        console.log('Search by: ', event.target.value);
     };
 
     const handleFilter = (option: MajorOption | null) => {
@@ -46,7 +47,7 @@ function Sidebar() {
             try {
                 const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
                 setUserMajor(response.data.data);
-                console.log(response.data.data);
+                console.log("Loaded user's major: ", response.data.data);
             } catch (err){
                 console.error("Failed to load user's major: ", err);
                 navigate('/');
@@ -96,7 +97,7 @@ function Sidebar() {
                     const response = await axios.get(`http://localhost:3001/courses/${selectedMajorID}`, { withCredentials: true });
                     setCourses(response.data.data);
                     setFilteredCourses(response.data.data);
-                    console.log(response.data.data);
+                    console.log(`Displaying courses for selected major ${selectedMajor.value}`, response.data.data);
                 } catch (err){
                     console.error(`Failed to load courses for selected major ${selectedMajor.value}`, err);
                     navigate('/');
@@ -108,9 +109,9 @@ function Sidebar() {
                     const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
                     setCourses(response.data.data);
                     setFilteredCourses(response.data.data);
-                    console.log(response.data.data);
+                    console.log(`Displaying courses for user's major ${userMajor.major_name}: `, response.data.data);
                 } catch (err){
-                    console.error("Failed to load courses: ", err);
+                    console.error(`Failed to load courses for user's major ${userMajor.major_name}: `, err);
                     navigate('/');
                 }
             }
