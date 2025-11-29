@@ -41,8 +41,8 @@ function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDr
     // setCourses(prev => [...prev, droppedCourse]);
 
     if (userId !== null && droppedCourse.course_id !== null) {
-        console.log("goes to add course");
-        console.log(droppedCourse.course_id);
+        // console.log("goes to add course");
+        // console.log(droppedCourse.course_id);
         fetch(`http://localhost:3001/quarter/add-course/${userId}/${droppedCourse.course_id}/${yearIndex}/${quarterName}`, {
             method: "POST",
             headers: {
@@ -69,7 +69,7 @@ function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDr
 function Quarters({yearIndex, quarterName} : quarterProps) {
     const [courses, setCourses ] = useState<Course[]>([]);
     //const [userId, setUserId] = useState<number | null>(null);
-    const userId = 3;
+    const userId = 19;
     // TO-DO: fetch userID from backend
     // pass in default right now
     
