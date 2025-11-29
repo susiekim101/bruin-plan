@@ -1,7 +1,8 @@
 // import CustomCard from '../CourseCards/CustomCards';
-import CourseCard from '../components/CourseCards/CourseCards';
-import SearchBar from './SearchBar';
-import Major from '../components/Major/Major'
+import CourseCard from '../components/CourseCards/CourseCards.tsx';
+import SearchBar from './SearchBar.tsx';
+import Major from '../components/Major/Major.tsx'
+import MajorOptions from './Filter.tsx'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +25,8 @@ function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
+    const [ selectedMajor, setSelectedMajor ] = useState<Major>();
+    const [ majors, setMajors ] = useState();
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -31,17 +34,31 @@ function Sidebar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const loadMajor = async () => {
+        const loadUserMajor = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
                 setUserMajor(response.data.data);
                 console.log(response.data.data);
             } catch (err){
-                console.error("Failed to load major: ", err);
+                console.error("Failed to load user's major: ", err);
                 navigate('/');
             }
         }
-        loadMajor();
+        loadUserMajor();
+    }, []);
+
+    useEffect(() => {
+        const loadAllMajors = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/majors', { withCredentials: true });
+                setMajors(response.data.data);
+                console.log(response.data.data);
+            } catch (err) {
+                console.error("Failed to load all majors: ", err);
+                navigate('/');
+            }
+        }
+        loadAllMajors();
     }, []);
 
     useEffect(() => {
