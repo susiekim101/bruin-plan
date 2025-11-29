@@ -30,7 +30,7 @@ describe('getAllPublicPlans()', () => {
         const plans = await getAllPublicPlans();
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT (plan_id, major_id) FROM User_Plans WHERE is_shared = 1';
+        const query = 'SELECT plan_id, major_id FROM User_Plans WHERE is_shared = 1';
         expect(mockExecute).toHaveBeenCalledWith(query);
         expect(plans).toHaveLength(2);
     });
@@ -44,7 +44,7 @@ describe('getAllPublicPlans()', () => {
         const plans = await getAllPublicPlans();
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT (plan_id, major_id) FROM User_Plans WHERE is_shared = 1';
+        const query = 'SELECT plan_id, major_id FROM User_Plans WHERE is_shared = 1';
         expect(mockExecute).toHaveBeenCalledWith(query);
         expect(plans).toHaveLength(0);
     });
@@ -85,12 +85,10 @@ describe('getMajorById()', () => {
 describe('getPlanItems()', () => {
     test('getPlanItems() returns an object representing all planItems for plan_id', async () => {
         const mockRows = [{
-                plan_item_id: 2001,
-                plan_id: 10,
-                course_id: 1001,
-                academic_year: 1,
-                quarter: 'Fall',
-                status: 'Completed'
+                course_number: "MATH 32A",
+                course_name: "Calculus",
+                year: 'Fall',
+                quarter: 'Completed'
             }
         ];
         const mockResult = [mockRows, []];
@@ -101,7 +99,7 @@ describe('getPlanItems()', () => {
         const planId = 1;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT * FROM Plan_Items WHERE plan_id = ?';
+        const query = 'SELECT c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?';
         expect(mockExecute).toHaveBeenCalledWith(query, [planId]);
         expect(planItems).toStrictEqual(mockRows);
     });
@@ -116,7 +114,7 @@ describe('getPlanItems()', () => {
         const plan_id = 5;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT * FROM Plan_Items WHERE plan_id = ?';
+        const query = 'SELECT c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?';
         expect(mockExecute).toHaveBeenCalledWith(query, [plan_id]);
         expect(planItems).toStrictEqual([]);
     })
