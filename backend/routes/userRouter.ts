@@ -88,4 +88,11 @@ userRouter.get('/verifyUser', verifyToken, async (req: Request, res: Response) =
     res.status(200).json({ message: 'User verified.' })
 })
 
+userRouter.get('/currUserId', verifyToken, async (req: Request, res: Response) => {
+    const token = req.cookies.token;
+    const user = jwt.verify(token, process.env.JWT_SECRET as string);
+    const userData = user as { id: number, email: number};
+    res.status(200).json({ user_id: userData.id });
+})
+
 export default userRouter;
