@@ -1,8 +1,9 @@
 // import CustomCard from '../CourseCards/CustomCards';
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
 import SearchBar from './SearchBar.tsx';
-import Major from '../components/Major/Major.tsx'
-import MajorOptions from './Filter.tsx'
+import Major from '../components/Major/Major.tsx';
+import Filter from './Filter.tsx';
+import type { MajorOption } from './Filter.tsx';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,12 +26,18 @@ function Sidebar() {
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
-    const [ selectedMajor, setSelectedMajor ] = useState<Major>();
-    const [ majors, setMajors ] = useState();
+    const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
+    const [ majors, setMajors ] = useState<MajorOption[]>([]);
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
+
+    const handleFilter = (option: MajorOption | null) => {
+        setSelectedMajor(option);
+        console.log('Selected major: ', option);
+    };
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,8 +58,12 @@ function Sidebar() {
         const loadAllMajors = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/majors', { withCredentials: true });
-                setMajors(response.data.data);
-                console.log(response.data.data);
+                const allMajors = response.data.data.map(major => ({
+                    value: major.major_id,
+                    label: major.major_name
+                }))
+                setMajors(allMajors);
+                console.log(allMajors);
             } catch (err) {
                 console.error("Failed to load all majors: ", err);
                 navigate('/');
@@ -98,6 +109,12 @@ function Sidebar() {
 
     return (
         <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+            {userMajor && <Major majorName={userMajor.major_name}/>}
+            <Filter 
+                selectedOption={selectedMajor}
+                majorOptions={majors}
+                handleChange={handleFilter}
+            />
             <SearchBar searchTerm={searchTerm} handleSearch={handleSearch}/>
             <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                 {filteredCourses.map((course, index) => (

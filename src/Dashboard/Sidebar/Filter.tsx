@@ -1,22 +1,29 @@
 // import React, { useState } from 'react'
 import Select from 'react-select'
 
-interface MajorOptions {
+export interface MajorOption {
     value: number,
     label: string
 }
 
 interface FilterProps {
-    options: MajorOptions[]
+    majorOptions: MajorOption[],
+    selectedOption: MajorOption | null,
+    handleChange: (opt: MajorOption | null) => void
 }
 
-function Filter () {
+function Filter ({majorOptions, selectedOption, handleChange} : FilterProps) {
     return (
-        <Select
+        <Select<MajorOption>
+            name='filter'
+            className='pb-3'
+            value={selectedOption}
+            options={majorOptions}
+            onChange={handleChange}
             isSearchable={true}
             isClearable={true}
         />
     );
 }
 
-export default Filter
+export default Filter;
