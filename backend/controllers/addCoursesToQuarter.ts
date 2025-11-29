@@ -13,19 +13,19 @@ interface getPlanIdProps {
 }
 
 export async function getPlanId({ userId }: getPlanIdProps) {
-    console.log("user id given to plan id: ", userId);
-    const query = `SELECT plan_id FROM User_Plans WHERE user_id = ?`;
-    const [plan_id_arr] = await connection.execute<any>(query, [userId]);
-    if (plan_id_arr.length > 0) {
+    try {
+        console.log("user id given to plan id: ", userId);
+        const query = `SELECT plan_id FROM User_Plans WHERE user_id = ?`;
+        const [plan_id_arr] = await connection.execute<any>(query, [userId]);
         console.log("user id passed in: ", userId);
         const planId = plan_id_arr[0].plan_id;
         console.log("user's plan id:", planId);
         console.log("type of plan_id:", typeof planId, planId);
         return planId;
-    }
-    else {
-        console.error('Failed to find plan_id: ');
-        return;
+
+    } catch (err) {
+        console.error('Failed to find plan_id: ', err);
+        throw new Error("No plan found and failed to create a new one");
     }
 }
 
