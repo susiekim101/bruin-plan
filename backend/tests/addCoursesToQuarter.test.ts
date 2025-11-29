@@ -22,14 +22,22 @@ beforeEach(() => {
 });
 
 test('query to addCoursesToQuarter returns inserted course id', async () => {
+  mockExecute.mockResolvedValueOnce([{ plan_id: 12 }]);
   mockExecute.mockResolvedValueOnce([{ insertId: 111 }]);
 
   const id = await addCoursesToQuarter({
     userId: 1, 
     courseId: 1,
-    year: 1,
-    quarter: 'Fall', 
+    yearIndex: 1,
+    quarterName: 'Fall', 
   });
+
+  expect(mockExecute).toHaveBeenCalledTimes(2);
+
+  expect(mockExecute.mock.calls[0]).toEqual([
+    expect.any(String),
+    [1]
+  ]);
 
   expect(mockExecute).toHaveBeenCalledWith(
     expect.any(String), 

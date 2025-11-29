@@ -96,7 +96,7 @@ function LogIn() {
             console.log(url);
             await axios.post(url, userData, { withCredentials: true });
             console.log("Form submit succeeded");
-            login();
+            console.log(userData);
             navigate('/dashboard');
             return;
         } catch (err) {

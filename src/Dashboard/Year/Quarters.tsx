@@ -1,12 +1,15 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface Course {
-    course_number: string,
-    course_name: string,
-    course_units: number,
-    category: string,
+    course_id: number | null;
+    course_number: string;
+    course_name: string;
+    course_units: number;
+    category: string;
 }
 
 type quarterProps = {
@@ -14,33 +17,137 @@ type quarterProps = {
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
 }
 
+type handleDropProps = {
+    courseJson: string;
+    userId: number | null;
+    yearIndex: number;
+    quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
+}
 
+export function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
+    let droppedCourse;
+    if (courseJson === "") {
+        droppedCourse = {
+            "course_id": null,
+            "course_number": "", 
+            "course_name": "",
+            "course_units": 0, 
+            "category": ""
+        }
+    }
+    else {
+        droppedCourse = JSON.parse(courseJson);
+    }
+
+    // setCourses(prev => [...prev, droppedCourse]);
+
+    if (userId !== null && droppedCourse.course_id !== null) {
+        console.log("goes to add course");
+        fetch("http://localhost:3001/quarter/add-course", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                userId: userId,
+                courseId: droppedCourse.course_id,
+                yearIndex: 1,
+                quarterName: quarterName
+            })
+        })
+        .then(res => res.json())
+        .then(data => console.log("Saved:", data))
+        .catch(err => console.error(err));
+    }
+    else {
+        console.log("something is null");
+        console.log(userId);
+        console.log(droppedCourse.course_id);
+    }
+}
 
 function Quarters({yearIndex, quarterName} : quarterProps) {
     const [courses, setCourses ] = useState<Course[]>([]);
+    const [userId, setUserId] = useState<number | null>(null);
+    const navigate = useNavigate();
+    
+    // TO-DO: fetch userID from backend
+    // pass in default right now
+    useEffect(() => {
+        setUserId(1);
+    }, []);
+    
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
+        removeCourse();
     }
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    function handleDrop (event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
         const itemId = event.dataTransfer.getData("application/json");
         console.log(itemId);
-        
+
+        handleDropLogic({courseJson: itemId, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
+        /*
+        let droppedCourse;
         if (itemId === "") {
-            setCourses(prev => [...prev, {
+            droppedCourse = {
+                "course_id": null,
                 "course_number": "", 
                 "course_name": "",
                 "course_units": 0, 
                 "category": ""
-            }]);
+            }
         }
         else {
-            const droppedCourse: Course = JSON.parse(itemId);
-            setCourses(prev => [...prev, droppedCourse]);
+            droppedCourse = JSON.parse(itemId);
         }
+
+        setCourses(prev => [...prev, droppedCourse]);
+
+       if (userId !== null && droppedCourse.course_id !== null) {
+            fetch("http://localhost:3001/quarter/add-course", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    userId,
+                    courseId: droppedCourse.course_id,
+                    yearIndex,
+                    quarterName
+                })
+            })
+            .then(res => res.json())
+            .then(data => console.log("Saved:", data))
+            .catch(err => console.error(err));
+        }
+        else {
+            console.log("something is null");
+            console.log(userId);
+            console.log(droppedCourse.course_id);
+        }
+        */
     }
+
+    const removeCourse = () => {
+
+    }
+
+    useEffect(() => {
+        const loadCourses = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/quarter/${userId}/1/${quarterName}`, { withCredentials: true });
+                setCourses(response.data.data);
+                console.log(response.data.data);
+            } catch (err){
+                console.error("Failed to load courses: ", err);
+            }
+        };
+
+        loadCourses();
+    }, []);
 
     const isEmptyCourse = (course: Course) => 
         course.course_number === "" &&
@@ -60,6 +167,7 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
                     ) : (
                         <CourseCard
                             key={index}
+                            courseId={course.course_id}
                             courseName={course.course_number}
                             courseTitle={course.course_name}
                             units={course.course_units}
@@ -67,6 +175,7 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
                         />
                     )
                 ))}
+
             </div>
             
             <div className="flex flex-col justify-center items-center mt-0.5">

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Course {
+    course_id: number,
     course_number: string,
     course_name: string,
     course_units: number,
@@ -41,6 +42,7 @@ function Sidebar() {
                     {courses.map((course, index) => (
                         <CourseCard 
                             key={index}
+                            courseId={course.course_id}
                             courseName={course.course_number}
                             courseTitle={course.course_name}
                             units={course.course_units}

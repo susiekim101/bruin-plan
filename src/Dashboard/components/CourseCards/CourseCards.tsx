@@ -2,16 +2,17 @@ import CourseStatus from "./CourseStatus";
 import CourseUnits from "./CourseUnits";
 
 type CourseCardProps = {
+    courseId: number | null;
     units: number;
     courseName: string;
     courseTitle: string;
     courseClassification: string;
-    courseId: string;
 }
 
-function CourseCard({ courseName, courseTitle, units, courseClassification}: CourseCardProps) {
+function CourseCard({ courseId, courseName, courseTitle, units, courseClassification}: CourseCardProps) {
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
         const payload = JSON.stringify({
+            course_id: courseId, 
             course_number: courseName,
             course_name: courseTitle,
             course_units: units, 
