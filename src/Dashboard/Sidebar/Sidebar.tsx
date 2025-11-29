@@ -61,36 +61,56 @@ function Sidebar() {
                 const allMajors = response.data.data.map(major => ({
                     value: major.major_id,
                     label: major.major_name
-                }))
-                setMajors(allMajors);
-                console.log(allMajors);
+                }));
+                
+                if (userMajor) {
+                        const allMajorsExceptUserMajor = allMajors.filter(major =>
+                        Number(major.value) != Number(userMajor.major_id)
+                    );
+
+                    setMajors(allMajorsExceptUserMajor);
+                    console.log("All majors except user's major: ", allMajorsExceptUserMajor);
+                }
             } catch (err) {
                 console.error("Failed to load all majors: ", err);
                 navigate('/');
             }
         }
         loadAllMajors();
-    }, []);
+    }, [userMajor?.major_id]);
 
     useEffect(() => {
         const loadCourses = async () => {
             if (! userMajor )
                 return;
 
-            try {
-                const userMajorID = userMajor.major_id;
-                const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
-                setCourses(response.data.data);
-                setFilteredCourses(response.data.data);
-                console.log(response.data.data);
-            } catch (err){
-                console.error("Failed to load courses: ", err);
-                navigate('/');
+            if ( selectedMajor ) {
+                try {
+                    const selectedMajorID = selectedMajor.value;
+                    const response = await axios.get(`http://localhost:3001/courses/${selectedMajorID}`, { withCredentials: true });
+                    setCourses(response.data.data);
+                    setFilteredCourses(response.data.data);
+                    console.log(response.data.data);
+                } catch (err){
+                    console.error(`Failed to load courses for selected major ${selectedMajor.value}`, err);
+                    navigate('/');
+                }
+            } else {
+                try {
+                    const userMajorID = userMajor.major_id;
+                    const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
+                    setCourses(response.data.data);
+                    setFilteredCourses(response.data.data);
+                    console.log(response.data.data);
+                } catch (err){
+                    console.error("Failed to load courses: ", err);
+                    navigate('/');
+                }
             }
         };
 
         loadCourses();
-    }, [userMajor?.major_id]);
+    }, [userMajor?.major_id, selectedMajor?.value]);
 
     useEffect(() => {
         // If the search term is empty, display all original data
