@@ -1,9 +1,15 @@
 // import CustomCard from '../CourseCards/CustomCards';
 import CourseCard from '../components/CourseCards/CourseCards';
 import SearchBar from './SearchBar';
+import Major from '../components/Major/Major'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+interface Major {
+    major_name: string,
+    major_id: number
+}
 
 interface Course {
     course_number: string,
@@ -14,6 +20,7 @@ interface Course {
 }
 
 function Sidebar() {
+    const [ userMajor, setUserMajor ] = useState<Major>();
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
@@ -24,10 +31,27 @@ function Sidebar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const loadCourses = async () => {
+        const loadMajor = async () => {
             try {
-                // TODO: pass in user's major_id
-                const response = await axios.get('http://localhost:3001/courses/1', { withCredentials: true });
+                const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
+                setUserMajor(response.data.data);
+                console.log(response.data.data);
+            } catch (err){
+                console.error("Failed to load major: ", err);
+                navigate('/');
+            }
+        }
+        loadMajor();
+    }, []);
+
+    useEffect(() => {
+        const loadCourses = async () => {
+            if (! userMajor )
+                return;
+
+            try {
+                const userMajorID = userMajor.major_id;
+                const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
                 setCourses(response.data.data);
                 setFilteredCourses(response.data.data);
                 console.log(response.data.data);
@@ -38,7 +62,7 @@ function Sidebar() {
         };
 
         loadCourses();
-    }, []);
+    }, [userMajor?.major_id]);
 
     useEffect(() => {
         // If the search term is empty, display all original data

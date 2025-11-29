@@ -1,33 +1,27 @@
-// Create a mock execute function
-const mockExecute = jest.fn();
-const mockRelease = jest.fn();
-const mockGetConnection = jest.fn().mockResolvedValue({
-  execute: mockExecute,
-  release: mockRelease
-});
-
-// Create a mock connection from my database
-jest.mock('../src/database', () => ({
+jest.mock('../src/database.ts', () => ({
   connection: {
-    getConnection: mockGetConnection
+    execute: jest.fn(),
   }
 }));
 
+import { connection } from "../src/database.ts";
 import { fetchCoursesByMajor } from "../controllers/fetchCoursesByMajor";
 
-// Start with clean state each time
+const mockExecute = connection.execute as jest.Mock;
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 test('fetchCoursesByMajor should estabish connection to database', async () => {
-  mockExecute.mockResolvedValueOnce([[]]);
+  mockExecute.mockResolvedValueOnce([[], []]);
   await fetchCoursesByMajor(-1);
-  expect(mockGetConnection).toHaveBeenCalledTimes(1);
+  expect(mockExecute).toHaveBeenCalledTimes(1);
 });
 
 
 test('query with no specified major should return no courses', async () => {
+  mockExecute.mockResolvedValueOnce([[], []]);
   const result = await fetchCoursesByMajor(-1);
   expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [-1]);
   expect(result).toEqual([]);
