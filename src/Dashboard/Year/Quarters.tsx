@@ -55,48 +55,47 @@ async function handleDropLogic({courseJson, userId, yearIndex, quarterName} : ha
 
 function Quarters({yearIndex, quarterName} : quarterProps) {
     const [courses, setCourses ] = useState<Course[]>([]);
-    const userId = 19;
+    const userId = 3;
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         // removeCourse();
     }
 
-    function handleDrop (event: React.DragEvent<HTMLDivElement>) {
+    async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
 
         event.preventDefault();
         const itemId = event.dataTransfer.getData("application/json");
 
-        handleDropLogic({courseJson: itemId, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
+        await handleDropLogic({courseJson: itemId, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
+
+        loadCourses();
     }
 
     const removeCourse = () => {
 
     }
 
-    useEffect(() => {
-        if (!userId) {
-            // console.log("no user id: ", userId);
-            return;
+    const loadCourses = async () => {
+        if (!userId) return;
+
+        try {
+            const userData = {
+                userId,
+                yearIndex,
+                quarterName
+            };
+
+            const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
+            console.log(`Successfully loaded courses for ${quarterName}`, result.data.allCourses);
+            setCourses(result.data.allCourses);
+        } catch (err) {
+            console.error("Failed to load courses:", err);
+            setCourses([]);
         }
+    };
 
-        const loadCourses = async () => {
-            try {
-                const userData = {
-                    userId: userId,
-                    yearIndex: yearIndex,
-                    quarterName: quarterName
-                };
-
-                const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
-                console.log(`Successfully loaded courses for ${quarterName}`, result.data.allCourses);
-                setCourses(result.data.allCourses);
-            } catch (err) {
-                console.error("Failed to load courses:", err);
-                console.log(`Could not load courses userId: ${userId} quarterName: ${quarterName}`)
-                setCourses([]);
-            }
-        };
+    useEffect(() => {
         loadCourses();
     }, [quarterName, yearIndex]);
 
