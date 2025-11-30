@@ -32,7 +32,7 @@ export async function getMajorById({ major_id }: getMajorByIdProps) {
 
 export async function getPlanItems({ plan_id }: getPlanItemsProps) {
     try {
-        const query = `SELECT pi.plan_item_id c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?`;
+        const query = `SELECT pi.plan_item_id, c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?`;
         const [rows] = await connection.execute(query, [ plan_id ]);
         return rows;
     } catch (err) {
