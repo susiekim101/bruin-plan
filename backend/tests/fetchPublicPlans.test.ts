@@ -99,7 +99,7 @@ describe('getPlanItems()', () => {
         const planId = 1;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?';
+        const query = 'SELECT pi.plan_item_id, c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?';
         expect(mockExecute).toHaveBeenCalledWith(query, [planId]);
         expect(planItems).toStrictEqual(mockRows);
     });
@@ -114,7 +114,7 @@ describe('getPlanItems()', () => {
         const plan_id = 5;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
-        const query = 'SELECT c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?';
+        const query = 'SELECT pi.plan_item_id, c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?';
         expect(mockExecute).toHaveBeenCalledWith(query, [plan_id]);
         expect(planItems).toStrictEqual([]);
     })
