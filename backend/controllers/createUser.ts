@@ -7,6 +7,10 @@ interface createUserProps {
     'password': string
     'major': string
 }
+interface addToUserPlanProps {
+    user_id: number,
+    major_id: number
+}
 
 /* Matches the email address to the email field in the Users database and returns the User data */
 export async function findByEmail(email: string) {
@@ -22,7 +26,7 @@ export async function findByEmail(email: string) {
 }
 
 /* Creates a new field in User_Plans that assigns a new plan_id to user when user first signs up */
-async function addToUserPlans({user_id, major_id}) {
+async function addToUserPlans({user_id, major_id} : addToUserPlanProps) {
     const plan_query = `INSERT IGNORE INTO User_Plans (user_id, major_id) VALUES (?, ?)`;
     console.log(`userId: ${user_id}, major_id: ${major_id}`)
 
@@ -45,7 +49,7 @@ export async function createUser({ first_name, last_name, email, password, major
     
     // Get the major_id from user's major
     const major_query = `SELECT major_id FROM Majors WHERE major_name = ?;`;
-    const [major_rows] = await connection.execute(major_query, [major]);
+    const [major_rows] : any = await connection.execute(major_query, [major]);
     const major_id = major_rows[0].major_id;
 
     // Define the user query
