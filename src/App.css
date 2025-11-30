@@ -5,21 +5,21 @@
 }
 
 @font-face {
-  font-family: "Comic Relief";
+  font-family: "Quicksand";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/ComicRelief-Regular.ttf") format("truetype");
+  src: url("/fonts/Quicksand-Regular.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "Comic Relief";
+  font-family: "Quicksand";
   font-style: bold;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/ComicRelief-Bold.ttf") format("truetype");
+  src: url("/fonts/Quicksand-Bold.ttf") format("truetype");
 }
 
 :root {
-   font-family: "Comic Relief"
+   font-family: "Quicksand"
 }
