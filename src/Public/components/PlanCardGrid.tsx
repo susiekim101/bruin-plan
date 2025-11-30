@@ -19,14 +19,6 @@ interface RawPlan {
 function PlanCardGrid({ filter }: PlanCardGridProps) {
     const [ allPlans, setAllPlans] = useState<Plan[]>([]);
 
-    const dummyData = [
-        { plan_id: 1, major: "Computer Science"},
-        { plan_id: 2, major: "Bioengineering"},
-        { plan_id: 3, major: "Computer Science and Engineering"},
-        { plan_id: 4, major: "Computer Engineering"},
-        { plan_id: 5, major: "Computer Science"},
-    ]
-
     /* The useEffect sets up all public plans to render. The get request to /getAllPublicPlans will return an array of Plan objects that holds { plan_id, major_id }. 
     We want an objet with the properties { plan_id, major_name } so we map through the response and fetch the major_name from /getMajorById
     We send a GET request to retrieve this data from the backend instead of creating a dictionary in the frontend to follow Informaiton Hiding — We don't want to make
@@ -55,7 +47,7 @@ function PlanCardGrid({ filter }: PlanCardGridProps) {
                 setAllPlans(plans); 
             } catch (err) {
                 console.error("Could not fetch plans from frontend", err);
-                setAllPlans([]); // TODO: REMOVE WHEN FIXED.
+                setAllPlans([]);
             }
         }
         fetchAllPlans();
