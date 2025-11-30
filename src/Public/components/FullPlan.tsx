@@ -10,7 +10,7 @@ type FullPlanProps = {
 type PlanItems = {
     plan_item_id: number,
     course_number: string,
-    course_title: string,
+    course_name: string,
     year: number,
     quarter: string,
 }
@@ -23,7 +23,7 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
             try {
                 const response = await axios.get(`http://localhost:3001/planItems/getPlanItems/${plan_id}`);
                 const fetchedItems = response.data.planItems;
-
+                console.log(fetchedItems);
                 setPlanItems(fetchedItems);
             } catch (err) {
                 console.error(err);
@@ -31,7 +31,7 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
             }
         };
         fetchPlanItems();
-    });
+    }, [plan_id]);
 
     return (
     <>
@@ -61,6 +61,7 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
 
                     return (
                         <div className="grid grid-cols-1 gap-6">
+
                             {Object.entries(years).map(([year, quarters]) => (
                                 <div key={year} className="border rounded-xl p-4 shadow-sm bg-amber-200">
                                     <h3 className="text-xl font-semibold text-blue-800 mb-2">Year {year}</h3>
@@ -69,14 +70,13 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
                                         {quarterOrder.map(quarter => (
                                             <div key={quarter} className="bg-yellow-50 border rounded-lg p-3 shadow-sm">
                                                 <h4 className="font-semibold text-blue-800 mb-2">{quarter}</h4>
-
                                                 {quarters[quarter].length === 0 ? (
                                                     <p className="text-sm text-gray-400 italic">No Courses</p>
                                                 ) : (
                                                     quarters[quarter].map(item => (
                                                         <div key={item.plan_item_id} className="p-2 mb-2 rounded-lg bg-blue-200">
                                                             <p className="font-medium text-sm">{item.course_number}</p>
-                                                            <p className="text-xs text-gray-600">{item.course_title}</p>
+                                                            <p className="text-xs text-gray-600">{item.course_name}</p>
                                                          </div>
                                                      ))
                                                 )}
