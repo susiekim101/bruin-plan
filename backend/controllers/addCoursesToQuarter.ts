@@ -26,8 +26,6 @@ export async function getPlanId({ userId }: getPlanIdProps) {
 
 
 export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarterName }: addCourseProps) {
-  // console.log("userId that adds course", userId);
-
   const results = await getPlanId({ userId: userId });
   if(!results || results[0].length == 0)  {
     throw new Error('Cannot find planId');
@@ -44,6 +42,4 @@ export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarter
     yearIndex,
     quarterName
   ]);
-
-  // return result.insertId;
 }

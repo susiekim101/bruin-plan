@@ -5,46 +5,31 @@ import { fetchUserCourses } from '../controllers/fetchUserCourses.ts';
 
 const quarterRouter = Router();
 
-// quarterRouter.post('/add-course/:userId/:courseId/:yearIndex/:quarterName', async (req: Request, res: Response) => {
-//     console.log("passed in to add course:", req.body);
-//     try {
-//         const {userId, courseId, yearIndex, quarterName} = req.body;
-//         console.log("gets here");
-//         await addCoursesToQuarter({
-//             userId,
-//             courseId,
-//             yearIndex,
-//             quarterName
-//         });
-//         console.log("course added");
-
-//         res.status(200).json({ message: "Course added" });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ error: "Failed to add course." });
-//     }
-// });
-
 quarterRouter.post('/addCourse', async (req: Request, res: Response) => {
+    const {userId, courseId, yearIndex, quarterName} = req.body;
+
     try {
-        
+        await addCoursesToQuarter({ userId, courseId, yearIndex, quarterName });
+        res.status(200).json({ message: "Course added" });
+    } catch (err) {
+        console.error(`Could not add course for userId: ${userId}`, err);
+        res.status(500).json({ error: "Failed to add course. "});
     }
 })
 
-quarterRouter.get("/:userId/:yearIndex/:quarterName", async (req, res) => {
-    // console.log("backed received: ", req.params);
-    // console.log("user id being set: ", Number(req.params.userId));
-    const userId = Number(req.params.userId);
-    const yearIndex = Number(req.params.yearIndex);
-    const quarterName = req.params.quarterName;
+quarterRouter.post("/getCourses", async (req: Request, res: Response) => {
+    const userId = Number(req.body.userId);
+    const yearIndex = Number(req.body.yearIndex);
+    const quarterName = String(req.body.quarterName);
 
     try {
-        const courses = await fetchUserCourses({userId, yearIndex, quarterName});
-        return res.status(200).json({message: `Fetched courses with major_id = ${userId}.`, data: courses});
+        const result = await fetchUserCourses({ userId, yearIndex, quarterName });
+        if(!result) {
+            return res.status(403).json({ message: "No fetched courses for this user." });
+        }
+        return res.status(200).json({ allCourses: result });
     } catch {
-        return res.status(500).json({message: "Failed to fetch courses."});
+        return res.status(500).json({ message: "Could not fetch courses for this user." });
     }
-});
-
-
+})
 export default quarterRouter;
