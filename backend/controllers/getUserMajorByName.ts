@@ -1,15 +1,12 @@
 import { connection } from '../src/database.ts';
 
-export async function getMajorName(userMajorID: Number) {
+export async function getUserMajorByName(userMajorID: Number) {
     try {
-        // Connect to db in database.ts
-        // const db = await connection.getConnection();
-
         // Query Majors table for major_name with major_id == userMajorID
         const query = `SELECT major_name FROM Majors WHERE major_id = ?`;
         const [result] = await connection.execute(query, [userMajorID]);
 
-        console.log('Fetched major name: ', result);
+        console.log(`Fetched user's major: `, result);
         
         return result;
     } catch (error) {
