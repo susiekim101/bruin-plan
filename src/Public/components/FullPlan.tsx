@@ -95,7 +95,7 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
                     className="absolute top-4 right-4 cursor-pointer text-gray-600 hover:text-black"
                 />
 
-                    <h2 className="text-2xl font-bold text-blue-800">4-Year Plan Overview</h2>
+                    <h2 className="text-2xl mb-2 font-bold text-blue-800">4-Year Plan Overview</h2>
 
                 {(() => {
                     const years: Record<number, Record<string, PlanItems[]>> = {};
@@ -105,8 +105,8 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
                     }
 
                     planItems.forEach(item => {
-                        if ( !years[item.academic_year]) return;
-                        years[item.academic_year][item.quarter].push(item);
+                        if ( !years[item.year]) return;
+                        years[item.year][item.quarter].push(item);
                     });
 
                     const quarterOrder = ['Fall', 'Winter', 'Spring', 'Summer'];
@@ -114,21 +114,21 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
                     return (
                         <div className="grid grid-cols-1 gap-6">
                             {Object.entries(years).map(([year, quarters]) => (
-                                <div key={year} className="border rounded-xl p-4 shadow-sm bg-gray-50">
+                                <div key={year} className="border rounded-xl p-4 shadow-sm bg-amber-200">
                                     <h3 className="text-xl font-semibold text-blue-800 mb-2">Year {year}</h3>
 
                                     <div className="grid grid-cols-4 gap-4">
                                         {quarterOrder.map(quarter => (
-                                            <div key={quarter} className="bg-white border rounded-lg p-3 shadow-sm">
+                                            <div key={quarter} className="bg-yellow-50 border rounded-lg p-3 shadow-sm">
                                                 <h4 className="font-semibold text-blue-800 mb-2">{quarter}</h4>
 
                                                 {quarters[quarter].length === 0 ? (
                                                     <p className="text-sm text-gray-400 italic">No Courses</p>
                                                 ) : (
                                                     quarters[quarter].map(item => (
-                                                        <div key={item.plan_item_id} className="p-2 mb-2 rounded-lg bg-blue-100">
-                                                            <p className="font-medium text-sm">Course ID: {item.course_id}</p>
-                                                            <p className="text-xs text-gray-600">Status: {item.status}</p>
+                                                        <div key={item.plan_item_id} className="p-2 mb-2 rounded-lg bg-blue-200">
+                                                            <p className="font-medium text-sm">{item.course_number}</p>
+                                                            <p className="text-xs text-gray-600">{item.course_title}</p>
                                                          </div>
                                                      ))
                                                 )}

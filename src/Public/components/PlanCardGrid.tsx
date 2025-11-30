@@ -50,7 +50,7 @@ function PlanCardGrid({ filter }: PlanCardGridProps) {
                 setAllPlans(plans); 
             } catch (err) {
                 console.error("Could not fetch plans from frontend", err);
-                setAllPlans(dummyData); // TODO: REMOVE WHEN FIXED.
+                setAllPlans([]); // TODO: REMOVE WHEN FIXED.
             }
         }
         fetchAllPlans();
