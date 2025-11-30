@@ -23,7 +23,7 @@ type handleDropProps = {
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
 }
 
-function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
+async function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
     let droppedCourse;
     if (courseJson === "") {
         droppedCourse = {
@@ -38,94 +38,36 @@ function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDr
         droppedCourse = JSON.parse(courseJson);
     }
 
-    // setCourses(prev => [...prev, droppedCourse]);
-
     if (userId !== null && droppedCourse.course_id !== null) {
-        // console.log("goes to add course");
-        // console.log(droppedCourse.course_id);
-        fetch(`http://localhost:3001/quarter/add-course/${userId}/${droppedCourse.course_id}/${yearIndex}/${quarterName}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                userId: userId,
-                courseId: droppedCourse.course_id,
-                yearIndex: yearIndex,
-                quarterName: quarterName
-            })
-        })
-        .then(res => res.json())
-        .then(data => console.log("Saved:", data))
-        .catch(err => console.error(err));
-    }
-    else {
-        console.log("something is null");
-        console.log(userId);
-        console.log(droppedCourse.course_id);
+        const courseData = {
+            userId: userId,
+            courseId: droppedCourse.course_id,
+            yearIndex: yearIndex,
+            quarterName: quarterName
+        };
+        try {
+            await axios.post(`http://localhost:3001/quarter/addCourse`, courseData);
+        } catch (err) {
+            console.error(`Could not add dropped course to database: `, err);
+        }
     }
 }
 
 function Quarters({yearIndex, quarterName} : quarterProps) {
     const [courses, setCourses ] = useState<Course[]>([]);
-    //const [userId, setUserId] = useState<number | null>(null);
     const userId = 19;
-    // TO-DO: fetch userID from backend
-    // pass in default right now
-    
-    
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        removeCourse();
+        // removeCourse();
     }
 
     function handleDrop (event: React.DragEvent<HTMLDivElement>) {
+
         event.preventDefault();
         const itemId = event.dataTransfer.getData("application/json");
-        console.log(itemId);
 
         handleDropLogic({courseJson: itemId, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
-        /*
-        let droppedCourse;
-        if (itemId === "") {
-            droppedCourse = {
-                "course_id": null,
-                "course_number": "", 
-                "course_name": "",
-                "course_units": 0, 
-                "category": ""
-            }
-        }
-        else {
-            droppedCourse = JSON.parse(itemId);
-        }
-
-        setCourses(prev => [...prev, droppedCourse]);
-
-       if (userId !== null && droppedCourse.course_id !== null) {
-            fetch("http://localhost:3001/quarter/add-course", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    userId,
-                    courseId: droppedCourse.course_id,
-                    yearIndex,
-                    quarterName
-                })
-            })
-            .then(res => res.json())
-            .then(data => console.log("Saved:", data))
-            .catch(err => console.error(err));
-        }
-        else {
-            console.log("something is null");
-            console.log(userId);
-            console.log(droppedCourse.course_id);
-        }
-        */
     }
 
     const removeCourse = () => {
@@ -134,23 +76,29 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
 
     useEffect(() => {
         if (!userId) {
-            console.log("no user id: ", userId);
+            // console.log("no user id: ", userId);
             return;
         }
 
         const loadCourses = async () => {
             try {
-                const res = await axios.get(
-                    `http://localhost:3001/quarter/${userId}/${yearIndex}/${quarterName}`
-                );
-                setCourses(res.data.data);
+                const userData = {
+                    userId: userId,
+                    yearIndex: yearIndex,
+                    quarterName: quarterName
+                };
+
+                const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
+                console.log(`Successfully loaded courses for ${quarterName}`, result.data.allCourses);
+                setCourses(result.data.allCourses);
             } catch (err) {
                 console.error("Failed to load courses:", err);
+                console.log(`Could not load courses userId: ${userId} quarterName: ${quarterName}`)
+                setCourses([]);
             }
         };
-
         loadCourses();
-    }, [userId, yearIndex, quarterName]);
+    }, [quarterName, yearIndex]);
 
 
     const isEmptyCourse = (course: Course) => 

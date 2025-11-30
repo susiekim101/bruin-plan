@@ -44,6 +44,4 @@ export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarter
     yearIndex,
     quarterName
   ]);
-
-  // return result.insertId;
 }
