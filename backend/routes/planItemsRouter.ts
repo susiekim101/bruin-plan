@@ -11,10 +11,10 @@ planItemsRouter.get("/getAllPublicPlans", async ( req: Request, res: Response ) 
             console.log("No public plans");
             return res.status(403).json({ plans: [] });
         }
-        res.status(200).json({ plans: row });
+        return res.status(200).json({ plans: row });
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: "Failed to get all public plans"});
+        return res.status(500).json({message: "Failed to get all public plans"});
     }
 })
 
@@ -30,7 +30,7 @@ planItemsRouter.get('/getMajorById/:major_id', async( req: Request, res: Respons
         res.status(200).json({ major_name: row[0].major_name })
     } catch (err) {
         console.error(err);
-        res.status(500).json({message: "Failed to retreive major name by ID"});
+        return res.status(500).json({message: "Failed to retreive major name by ID"});
 
     }
 });
@@ -40,12 +40,12 @@ planItemsRouter.get('/getPlanItems/:plan_id', async( req: Request, res: Response
     try {
         const response = await getPlanItems({plan_id: plan_id});
         if(!response) {
-            res.status(403).send("Plan not found.");
+            return res.status(403).send("Plan not found.");
         }
-        res.status(200).json({planItems: response});
+        return res.status(200).json({planItems: response});
     } catch (err) {
         console.error(`Failed to fetch all plan items: `, err);
-        res.status(500).json({message: "Failed to fetch plan items"});
+        return res.status(500).json({message: "Failed to fetch plan items"});
     }
 });
 

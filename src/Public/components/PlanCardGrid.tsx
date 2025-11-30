@@ -11,6 +11,11 @@ interface Plan {
     major: string
 }
 
+interface RawPlan {
+    plan_id: number,
+    major_id: number,
+}
+
 function PlanCardGrid({ filter }: PlanCardGridProps) {
     const [ allPlans, setAllPlans] = useState<Plan[]>([]);
 
@@ -33,7 +38,7 @@ function PlanCardGrid({ filter }: PlanCardGridProps) {
                 const response = await axios.get('http://localhost:3001/planItems/getAllPublicPlans');
                 const rawPlans = response.data.plans; // [ {plan_id, major_id}]
 
-                const planPromises = rawPlans.map(async (plan: Plan) => {
+                const planPromises = rawPlans.map(async (plan: RawPlan) => {
                     try {
                         const majorResponse = await axios.get(`http://localhost:3001/planItems/getMajorById/${plan.major_id}`);
                         const major = majorResponse.data.major_name;
