@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express'
-import { getAllPublicPlans, getMajorById, getPlanItems } from '../controllers/fetchPlanItems';
+import { getAllPublicPlans, getMajorById, getPlanItems } from '../controllers/fetchPlanItems.ts';
 
 const planItemsRouter = Router();
 
@@ -36,7 +36,7 @@ planItemsRouter.get('/getMajorById/:major_id', async( req: Request, res: Respons
 });
 
 planItemsRouter.get('/getPlanItems/:plan_id', async( req: Request, res: Response) => {
-    const plan_id = Number(req.params.major_id);
+    const plan_id = Number(req.params.plan_id);
     try {
         const response = await getPlanItems({plan_id: plan_id});
         if(!response) {
@@ -47,6 +47,6 @@ planItemsRouter.get('/getPlanItems/:plan_id', async( req: Request, res: Response
         console.error(`Failed to fetch all plan items: `, err);
         res.status(500).json({message: "Failed to fetch plan items"});
     }
-})
+});
 
 export default planItemsRouter;
