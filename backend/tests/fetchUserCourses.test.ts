@@ -5,7 +5,7 @@ jest.mock('../src/database.ts', () => ({
 }));
 
 import { connection } from "../src/database.ts";
-import { fetchUserCourses } from "../controllers/fetchUserCourses.ts";
+import { fetchUserCourses, fetchAllUserCourses } from "../controllers/fetchUserCourses.ts";
 
 const mockExecute = connection.execute as jest.Mock;
 
@@ -78,4 +78,12 @@ test('query with a userId, yearIndex, and quarterName should return no courses',
       category: 'Major'
     }
   ]);
+});
+
+test('fetchAllUserCourses should establish connection to database', async () => {
+  mockExecute.mockResolvedValueOnce([[], []]);
+
+  await fetchAllUserCourses({ userId: 1});
+
+  expect(mockExecute).toHaveBeenCalledTimes(1);
 });
