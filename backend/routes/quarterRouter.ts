@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { addCoursesToQuarter } from "../controllers/addCoursesToQuarter.ts";
-import { fetchUserCourses } from '../controllers/fetchUserCourses.ts';
+import { fetchUserCourses, fetchAllUserCourses } from '../controllers/fetchUserCourses.ts';
 import { removeCoursesFromQuarter } from '../controllers/removeCoursesFromQuarter.ts';
 
 const quarterRouter = Router();
@@ -43,6 +43,16 @@ quarterRouter.post("/removeCourses", async (req: Request, res: Response) => {
     } catch (err) {
         console.error(`Could not remove course for userId: ${userId}`, err);
         res.status(500).json({ error: "Failed to remove course. "});
+    }
+})
+
+quarterRouter.get("/planned-courses/:user_id", async (req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id);
+    try {
+        const userCourses = fetchAllUserCourses(user_id);
+        return res.status(200).json({message: `Fetched all courses in plan for user ${user_id}.`, data: userCourses});
+    } catch {
+        return res.status(500).json({message: "Failed to fetch all course in plan."});
     }
 })
 export default quarterRouter;
