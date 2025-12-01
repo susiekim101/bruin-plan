@@ -25,13 +25,13 @@ function PlanCard( { plan_id, major }: PlanCardProps) {
     const majorIcon: () => ReactElement = () => {
         switch (major) {
             case "Bioengineering":
-                return <Microscope className="w-15 h-15 text-yellow-500"/>
+                return <Microscope className="w-15 h-15 text-yellow-200"/>
             case "Computer Science":
-                return <CodeXml className="w-15 h-15 text-yellow-500"/>
+                return <CodeXml className="w-15 h-15 text-yellow-200"/>
             case "Computer Engineering":
-                return <MonitorCog className="w-15 h-15 text-yellow-500"/>
+                return <MonitorCog className="w-15 h-15 text-yellow-200"/>
             case "Computer Science and Engineering":
-                return <Computer className="w-15 h-15 text-yellow-500"/>
+                return <Computer className="w-15 h-15 text-yellow-200"/>
             default:
                 return <></>
         }
@@ -41,7 +41,7 @@ function PlanCard( { plan_id, major }: PlanCardProps) {
         <>
             <div className="h-full flex flex-col p-2 rounded-xl gap-2 bg-blue-800 transition-transform duration-300 hover:scale-[1.05] cursor-pointer"
                 onClick={handleOpenClick}>
-                <div className="flex justify-center items-center aspect-square rounded-xl w-full bg-gray-100">
+                <div className="flex justify-center items-center aspect-square rounded-xl w-full bg-blue-200">
                     { majorIcon() }
                 </div>
 
