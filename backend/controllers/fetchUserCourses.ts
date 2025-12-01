@@ -46,4 +46,5 @@ export async function fetchAllUserCourses({ userId }: fetchUserCoursesProps) {
     const plan_id = results[0].plan_id;
 
     const [rows] = await connection.execute(query, [plan_id]);
+    return rows;
 }

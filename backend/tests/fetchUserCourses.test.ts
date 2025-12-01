@@ -95,14 +95,71 @@ test(`fetchAllUserCourses should query database with
         SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
         FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
         WHERE plan_id = ?`, async () => {
+  
+  const plan_id = 1;
+
   mockExecute
-    .mockResolvedValueOnce([[{ plan_id: 1 }], []])
+    .mockResolvedValueOnce([[{ plan_id: plan_id }], []])
     .mockResolvedValueOnce([[], []]);
 
   await fetchAllUserCourses({ userId: 4});
-  const plan_id = 1;
   expect(mockExecute.mock.calls[1]).toEqual([
                   `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
                     FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
                     WHERE plan_id = ?`, [plan_id]]);
-})
+});
+
+
+test('fetchAllUserCourses should return all courses of a given plan_id', async () => {
+  const plan_id = 1;
+  mockExecute
+    .mockResolvedValueOnce([[{ plan_id: plan_id }], []])
+    .mockResolvedValueOnce([[
+        { 
+          course_id: 1,
+          course_number: 'TEST 1',
+          course_name: 'Test Course 1',
+          course_units: 1,
+          category: 'Major'
+        },
+        { 
+          course_id: 2,
+          course_number: 'TEST 2',
+          course_name: 'Test Course 2',
+          course_units: 1,
+          category: 'Major'
+        },
+        { 
+          course_id: 1,
+          course_number: 'TEST 3',
+          course_name: 'Test Course 3',
+          course_units: 1,
+          category: 'Major'
+        }
+    ], []]);
+  
+  const result = await fetchAllUserCourses({ userId: 4});
+  expect(result).toEqual([
+    { 
+      course_id: 1,
+      course_number: 'TEST 1',
+      course_name: 'Test Course 1',
+      course_units: 1,
+      category: 'Major'
+    },
+    { 
+      course_id: 2,
+      course_number: 'TEST 2',
+      course_name: 'Test Course 2',
+      course_units: 1,
+      category: 'Major'
+    },
+    { 
+      course_id: 1,
+      course_number: 'TEST 3',
+      course_name: 'Test Course 3',
+      course_units: 1,
+      category: 'Major'
+    }
+  ]);
+});
