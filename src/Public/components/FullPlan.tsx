@@ -63,12 +63,12 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
                         <div className="grid grid-cols-1 gap-6">
 
                             {Object.entries(years).map(([year, quarters]) => (
-                                <div key={year} className="border rounded-xl p-4 shadow-sm bg-amber-200">
+                                <div key={year} className="border rounded-xl p-4 shadow-sm bg-amber-100">
                                     <h3 className="text-xl font-semibold text-blue-800 mb-2">Year {year}</h3>
 
                                     <div className="grid grid-cols-4 gap-4">
                                         {quarterOrder.map(quarter => (
-                                            <div key={quarter} className="bg-yellow-50 border rounded-lg p-3 shadow-sm">
+                                            <div key={quarter} className="bg-amber-50 border rounded-lg p-3 shadow-sm">
                                                 <h4 className="font-semibold text-blue-800 mb-2">{quarter}</h4>
                                                 {quarters[quarter].length === 0 ? (
                                                     <p className="text-sm text-gray-400 italic">No Courses</p>
