@@ -31,3 +31,7 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
         return [];
     }
 }
+
+export async function fetchAllUserCourses({ userId }: fetchUserCoursesProps) {
+    const [rows] = await connection.execute();
+}
