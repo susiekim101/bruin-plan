@@ -132,7 +132,7 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
                     
                     // Remove courses already in user's planner
                     const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
-                        ! userCourses.some(userCourse => majorCourse.course_id === userCourse.course_id));
+                        ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
                     
                     setCourses(coursesNotPlanned);
                     setFilteredCourses(coursesNotPlanned);
@@ -151,7 +151,7 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
                     
                     // Remove courses already in user's planner
                     const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
-                        ! userCourses.some(userCourse => majorCourse.course_id === userCourse.course_id));
+                        ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
 
                     setCourses(coursesNotPlanned);
                     setFilteredCourses(coursesNotPlanned);
