@@ -85,7 +85,7 @@ test('fetchAllUserCourses should establish connection to database', async () => 
     .mockResolvedValueOnce([[{ plan_id: 1 }], []])
     .mockResolvedValueOnce([[], []]);
 
-  await fetchAllUserCourses({ userId: 4});
+  await fetchAllUserCourses(4);
 
   expect(mockExecute).toHaveBeenCalledTimes(2);
 });
@@ -102,11 +102,11 @@ test(`fetchAllUserCourses should query database with
     .mockResolvedValueOnce([[{ plan_id: plan_id }], []])
     .mockResolvedValueOnce([[], []]);
 
-  await fetchAllUserCourses({ userId: 4});
+  await fetchAllUserCourses(4);
   expect(mockExecute.mock.calls[1]).toEqual([
                   `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
-                    FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
-                    WHERE plan_id = ?`, [plan_id]]);
+                        FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
+                        WHERE plan_id = ?`, [plan_id]]);
 });
 
 
@@ -138,7 +138,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
         }
     ], []]);
   
-  const result = await fetchAllUserCourses({ userId: 4});
+  const result = await fetchAllUserCourses(4);
   expect(result).toEqual([
     { 
       course_id: 1,
