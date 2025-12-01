@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useId } from 'react';
 
 type CourseStatusProps = {
-    initialStatus?: 'Will Take' | 'In Progress' | 'Taken';
+    initialStatus?: 'Planned' | 'In Progress' | 'Taken';
 };
 
 
-function CourseStatus({ initialStatus = 'Will Take' }: CourseStatusProps) {
-    const [status, setStatus] = useState<'Will Take' | 'In Progress' | 'Taken'>(initialStatus);
+function CourseStatus({ initialStatus = 'Planned' }: CourseStatusProps) {
+    const [status, setStatus] = useState<'Planned' | 'In Progress' | 'Taken'>(initialStatus);
     const selectRef = useRef<HTMLSelectElement>(null);
     const spanRef = useRef<HTMLSpanElement>(null);
     const [color, setColor] = useState<string>('bg-[#D35D5D]');
@@ -21,7 +21,7 @@ function CourseStatus({ initialStatus = 'Will Take' }: CourseStatusProps) {
     }, [status]);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const newStatus = event.target.value as 'Will Take' | 'In Progress' | 'Taken';
+        const newStatus = event.target.value as 'Planned' | 'In Progress' | 'Taken';
         setStatus(newStatus);
         setColor(
             newStatus === 'Taken'
@@ -45,7 +45,7 @@ function CourseStatus({ initialStatus = 'Will Take' }: CourseStatusProps) {
                 onChange={handleChange}
                 defaultValue={initialStatus}
                 className="w-fit">
-                <option value="Will Take">Will Take</option>
+                <option value="Planned">Planned</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Taken">Taken</option>
             </select>

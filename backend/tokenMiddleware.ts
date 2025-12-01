@@ -1,7 +1,18 @@
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 import 'dotenv/config';
 import { findByEmail } from "./controllers/createUser.ts";
+
+interface UserPayload extends JwtPayload{
+    id: number,
+    email: string,
+}
+
+interface UserPayload extends JwtPayload{
+    id: number,
+    email: string,
+}
 
 const verifyToken = async (req: Request, res: Response, next: () => void) => {
     const token = req.cookies.token;
@@ -11,7 +22,7 @@ const verifyToken = async (req: Request, res: Response, next: () => void) => {
     }
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+        const payload = jwt.verify(token, process.env.JWT_SECRET as string) as UserPayload;
         const user_email = payload.email;
         // console.log("User email:", user_email);
         const user_info = await findByEmail(user_email);

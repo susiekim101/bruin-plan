@@ -1,6 +1,6 @@
 import { connection } from '../src/database.ts';
 
-export async function getUserMajorByName(userMajorID: Number) {
+export async function getUserMajorByName(userMajorID: number) {
     try {
         // Query Majors table for major_name with major_id == userMajorID
         const query = `SELECT major_name FROM Majors WHERE major_id = ?`;
