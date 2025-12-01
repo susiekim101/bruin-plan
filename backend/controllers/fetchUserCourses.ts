@@ -7,15 +7,19 @@ interface fetchUserCoursesProps {
     quarterName: string;
 }
 
+interface PlanIdResult {
+    plan_id: number,
+}
+
 export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetchUserCoursesProps) {
     try {
         const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
                     FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
                     WHERE plan_id = ? AND year = ? AND quarter = ?`;
 
-        const results : any = await getPlanId({userId: userId});
-        if(!results || results[0].length == 0) {
-        throw new Error('Cannot fetch user courses');
+        const results: PlanIdResult[] = await getPlanId({userId: userId});
+        if(!results || results.length == 0) {
+            throw new Error('Cannot fetch user courses');
         }
         const plan_id = results[0].plan_id;
 
