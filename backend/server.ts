@@ -26,7 +26,8 @@ app.use(cookieParser());
 app.use('/user', userRouter);
 app.use('/plan', planRouter);
 app.use('/courses', coursesRouter);
-app.use('/quarter', quarterRouter);app.use('/majors', majorsRouter);
+app.use('/quarter', quarterRouter);
+app.use('/majors', majorsRouter);
 
 app.listen(port, () => {
     console.log(`Server running on port http://localhost:${port}`)
