@@ -14,6 +14,10 @@ interface Major {
     major_id: number
 }
 
+interface UserMajor {
+    value: string,
+    label: string
+}
 interface Course {
     course_id: number,
     course_number: string,
@@ -68,13 +72,13 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
         const loadAllMajors = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/majors', { withCredentials: true });
-                const allMajors = response.data.data.map(major => ({
+                const allMajors = response.data.data.map((major: Major) => ({
                     value: major.major_id,
                     label: major.major_name
                 }));
                 
                 if (userMajor) {
-                        const allMajorsExceptUserMajor = allMajors.filter(major =>
+                        const allMajorsExceptUserMajor = allMajors.filter((major: UserMajor) =>
                         Number(major.value) != Number(userMajor.major_id)
                     );
 
@@ -142,10 +146,6 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
 
         setFilteredCourses(result);
     }, [searchTerm, courses]);
-
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();

@@ -3,21 +3,18 @@ import Dashboard from './Dashboard/Dashboard'
 import Landing from './Landing/Landing';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthenticationContext from './AuthenticationContext';
-import { useState } from 'react';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-
   const login = () => {
-    setLoggedIn(true);
+    localStorage.setItem('loggedIn', 'true');
   }
 
   const logout = () => {
-    setLoggedIn(false);
+    localStorage.setItem('loggedIn', 'false');
   }
 
   return (
-    <AuthenticationContext.Provider value={{loggedIn, login, logout}}>
+    <AuthenticationContext.Provider value={{login, logout}}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing/>}/>

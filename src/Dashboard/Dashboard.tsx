@@ -28,10 +28,17 @@ function Dashboard () {
     useEffect(() => {
         // Valdiate user's tokens before logging in
         const userVerification = async () => {
+            // console.log(`Logged in status: ${loggedIn}`);
+            if(localStorage.getItem('loggedIn') == 'false') {
+                navigate('/');
+                return;
+            }
             try {
+
                 await axios.get('http://localhost:3001/user/verifyUser', { withCredentials: true });
             } catch (err) {
                 console.log("User unverified. ", err);
+                localStorage.setItem('loggedIn', 'false');
                 navigate('/');
             }
         }
@@ -53,11 +60,11 @@ function Dashboard () {
 
     const handleLogOut = async () => {
         try {
+            logout();
             await axios.post('http://localhost:3001/user/logout', { withCredentials: true});
         } catch (err) {
             console.error("Failed to log out, ", err);
         }
-        logout();
         navigate('/');
     }
 
@@ -87,9 +94,9 @@ function Dashboard () {
                 yearIndex: year,
                 quarterName: quarter
             };
-            console.log("user data being send to get courses", userData);
+            // console.log("user data being send to get courses", userData);
             const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
-            console.log(`Successfully loaded courses for ${quarter}`, result.data.allCourses);
+            // console.log(`Successfully loaded courses for ${quarter}`, result.data.allCourses);
             setAllCourses(prev => ({
                 ...prev,
                 [`${year}-${quarter}`]: result.data.allCourses,

@@ -20,7 +20,7 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
         const plan_id = results[0].plan_id;
 
         const [rows] = await connection.execute(query, [plan_id, yearIndex, quarterName]);
-        console.log(rows);
+        // console.log(rows);
         return rows;
     } catch (error) {
         console.log('Error fetching data:', error)
