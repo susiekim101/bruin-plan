@@ -1,5 +1,5 @@
 import { connection } from "../src/database.ts";
-import type { ResultSetHeader } from "mysql2";
+import type { RowDataPacket, ResultSetHeader } from "mysql2";
 interface createUserProps {
     'first_name': string
     'last_name': string
@@ -7,9 +7,24 @@ interface createUserProps {
     'password': string
     'major': string
 }
+interface addToUserPlanProps {
+    user_id: number,
+    major_id: number
+}
 
+interface MajorRows extends RowDataPacket {
+    major_id: number,
+}
 
-
+/* Matches the email address to the email field in the Users database and returns the User data 
+Return: An array of an single object that holds information about specified User
+    [ {
+        'first_name': string
+        'last_name': string
+        'email': string
+        'password': string
+        'major': string
+    } ]*/
 export async function findByEmail(email: string) {
     try {
         const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
@@ -21,27 +36,35 @@ export async function findByEmail(email: string) {
     }
 }
 
-async function addToUserPlans({user_id, major_id}) {
-    const plan_query = `INSERT IGNORE INTO User_Plan (user_id, major_id) VALUES (?, ?)`;
+/* Creates a new field in User_Plans that assigns a new plan_id to user when user first signs up 
+No return value. */
+async function addToUserPlans({user_id, major_id} : addToUserPlanProps) {
+    const plan_query = `INSERT IGNORE INTO User_Plans (user_id, major_id) VALUES (?, ?)`;
+    console.log(`userId: ${user_id}, major_id: ${major_id}`)
 
     try {
-        await connection.execute(plan_query, {user_id, major_id});
-        return user_id
+        await connection.execute(plan_query, [ user_id, major_id ]);
+        console.log(`Executing addToUserPlans`)
     } catch (err) {
         console.error(err);
     }
 }
 
+/* Checks whether the email already exists, i.e. the user already has an account. If they don't, then create a new
+field in the Users database with user's data. Once successfully created an account, assign a new plan_id to user
+by calling addToUserPlans. 
+Return:
+    user_id: number
+*/
 export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
     const findEmail = await findByEmail(email);
     if (Array.isArray(findEmail) && findEmail.length > 0) {
-        // return new Error('Email already exists');
         throw new Error('Email already exists');
     }
     
     // Get the major_id from user's major
     const major_query = `SELECT major_id FROM Majors WHERE major_name = ?;`;
-    const [major_rows] = await connection.execute(major_query, [major]);
+    const [major_rows] = await connection.execute<MajorRows[]>(major_query, [major]);
     const major_id = major_rows[0].major_id;
 
     // Define the user query
@@ -50,11 +73,8 @@ export async function createUser({ first_name, last_name, email, password, major
     const user_values = [first_name, last_name, email, password, major_id];
 
     try { 
-        // Insert the user into the database
         const [result] = await connection.execute<ResultSetHeader>(user_query, user_values);
-        // Insert user into user_plan
         const user_id = result.insertId;
-        // Returns the user_id
         await addToUserPlans({user_id: user_id, major_id: major_id});
         return user_id;
     } catch (err){

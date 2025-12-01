@@ -57,7 +57,7 @@ export default function ShareButton({units}: ShareButtonProps) {
                 <button onClick={handleCloseClick} className="bg-yellow-400 rounded-2xl px-2 py-1 cursor-pointer text-slate-700">Close</button>
             </dialog>
 
-            <button onClick={units >= 180 ? handleClick : handleOpenClick} className="w-fit text-white py-1 px-2 text-sm border rounded-md border-blue-800 bg-blue-800 cursor-pointer">Share</button>
+            <button onClick={units >= 180 ? handleClick : handleOpenClick} className="w-fit text-white py-1 px-2 text-sm border rounded-md border-blue-800 bg-blue-800 cursor-pointer transition duration-300 hover:scale-110">Share</button>
         </div>
     )
 }

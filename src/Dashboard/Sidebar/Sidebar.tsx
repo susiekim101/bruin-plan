@@ -7,21 +7,32 @@ import type { MajorOption } from './Filter.tsx';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import removeCourseLogic from '../Year/removeCourseLogic';
 
 interface Major {
     major_name: string,
     major_id: number
 }
 
+interface UserMajor {
+    value: string,
+    label: string
+}
 interface Course {
+    course_id: number,
     course_number: string,
     course_name: string,
     course_units: number,
-    course_category: string,
+    category: string,
     major_id: number
 }
 
-function Sidebar() {
+type sideBarProps = {
+    userId: number | null;
+    loadQuarterCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
+}
+
+function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
     const [ userMajor, setUserMajor ] = useState<Major>();
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
@@ -61,13 +72,13 @@ function Sidebar() {
         const loadAllMajors = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/majors', { withCredentials: true });
-                const allMajors = response.data.data.map(major => ({
+                const allMajors = response.data.data.map((major: Major) => ({
                     value: major.major_id,
                     label: major.major_name
                 }));
                 
                 if (userMajor) {
-                        const allMajorsExceptUserMajor = allMajors.filter(major =>
+                        const allMajorsExceptUserMajor = allMajors.filter((major: UserMajor) =>
                         Number(major.value) != Number(userMajor.major_id)
                     );
 
@@ -136,8 +147,45 @@ function Sidebar() {
         setFilteredCourses(result);
     }, [searchTerm, courses]);
 
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    }
+
+    const removeFromSidebar = (courseId: number) => {
+        setCourses(prev => prev.filter(c => c.course_id !== courseId));
+        setFilteredCourses(prev => prev.filter(c => c.course_id !== courseId));
+    };
+    
+    async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+        const payload = JSON.parse(event.dataTransfer.getData("application/json"));
+        const courseObj : Course = JSON.parse(payload.courseJson);
+        await removeCourseLogic({courseJson: payload.courseJson, userId: userId, yearIndex: payload.sourceYearIndex, quarterName: payload.sourceQuarterName});
+        loadQuarterCourses(payload.sourceYearIndex, payload.sourceQuarterName);
+        if (!userMajor || !courseObj) {
+            return;
+        }
+        setCourses(prev => [
+            {
+                ...courseObj,
+                major_id: userMajor.major_id
+            },
+            ...prev
+        ]);
+        setFilteredCourses(prev => [
+            {
+                ...courseObj,
+                major_id: userMajor.major_id
+            },
+            ...prev
+        ]);
+    }
+
     return (
-        <div className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
+        <div
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
             { userMajor && 
                 <Major
                     majorName={userMajor.major_name}
@@ -156,10 +204,12 @@ function Sidebar() {
                 {filteredCourses.map((course, index) => (
                     <CourseCard 
                         key={index}
+                        courseId={course.course_id}
                         courseName={course.course_number}
                         courseTitle={course.course_name}
                         units={course.course_units}
-                        courseClassification={course.course_category}
+                        courseClassification={course.category}
+                        removeFromSidebar={removeFromSidebar}
                     />
                 ))}
             </div>

@@ -7,6 +7,7 @@ import userRouter from './routes/userRouter.ts';
 import planRouter from './routes/planRouter.ts';
 import coursesRouter from './routes/coursesRouter.ts';
 import planItemsRouter from './routes/planItemsRouter.ts';
+import quarterRouter from './routes/quarterRouter.ts';
 import majorsRouter from './routes/majorsRouter.ts';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use('/user', userRouter);
 app.use('/plan', planRouter);
 app.use('/courses', coursesRouter);
+app.use('/quarter', quarterRouter);
 app.use('/planItems', planItemsRouter);
 app.use('/majors', majorsRouter);
 

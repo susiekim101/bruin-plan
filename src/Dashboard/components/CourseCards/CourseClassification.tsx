@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect, useId} from 'react';
 
 type CourseClassificationProps = {
-    initialClassification?: 'Major' | 'Elective' | 'Gen Ed' | 'Tech Breadth' | 'Sci Tech';
+    initialClassification?: 'Elective' | 'Gen Ed' | 'Tech Breadth' | 'Sci Tech';
 };
 
-function CourseClassification({ initialClassification = 'Major', }: CourseClassificationProps) {
-    const [classification, setClassification] = useState<'Major' | 'Elective' | 'Gen Ed' | 'Tech Breadth' | 'Sci Tech'>(initialClassification);
+function CourseClassification({ initialClassification = 'Elective', }: CourseClassificationProps) {
+    const [classification, setClassification] = useState<'Elective' | 'Gen Ed' | 'Tech Breadth' | 'Sci Tech'>(initialClassification);
     const selectRef = useRef<HTMLSelectElement>(null);
     const spanRef = useRef<HTMLSpanElement>(null);
     const reactId = useId();
@@ -19,7 +19,7 @@ function CourseClassification({ initialClassification = 'Major', }: CourseClassi
     }, [classification]);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const newClassification = event.target.value as 'Major' | 'Elective' | 'Gen Ed' | 'Tech Breadth' | 'Sci Tech';
+        const newClassification = event.target.value as 'Elective' | 'Gen Ed' | 'Tech Breadth' | 'Sci Tech';
         setClassification(newClassification);
     };
 
@@ -31,7 +31,6 @@ function CourseClassification({ initialClassification = 'Major', }: CourseClassi
                 onChange={handleChange} 
                 defaultValue={initialClassification} 
                 className={`w-fit`}>
-                <option value="Major">Major</option>
                 <option value="Elective">Elective</option>
                 <option value="Gen Ed">Gen Ed</option>
                 <option value="Tech Breadth">Tech Breadth</option>

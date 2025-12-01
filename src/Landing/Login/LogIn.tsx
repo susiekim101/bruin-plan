@@ -32,7 +32,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
     });
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
-    const { loggedIn, login } = useContext(AuthenticationContext);
+    const { login } = useContext(AuthenticationContext);
 
     useEffect(() => {
         const formEl = formRef.current;
@@ -66,7 +66,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
     }, [signup])
 
     function handleOpenClick() {
-        if(loggedIn) {
+        if(localStorage.getItem('loggedIn') == 'true') {
             navigate('/dashboard');
             return;
         }
@@ -99,11 +99,11 @@ function LogIn({ textStyle, px, py }: LogInProps) {
 
         const url: string = signup ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
         try {
-            console.log(url);
+            // console.log(url);
             await axios.post(url, userData, { withCredentials: true });
-            console.log("Form submit succeeded");
-            login();
+            // console.log("Form submit succeeded");
             navigate('/dashboard');
+            login();
             return;
         } catch (err) {
             if (axios.isAxiosError(err) && err.response && err.response.data === 'Existing email') {
