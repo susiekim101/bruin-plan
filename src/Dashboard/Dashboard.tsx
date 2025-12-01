@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
@@ -18,6 +18,7 @@ interface Course {
 
 function Dashboard () {
     const [yearNum, setYearNum] = useState<number>(1);
+    const dialogRef = useRef<HTMLDialogElement>(null);
     const handleLeftClick = () => setYearNum(yearNum-1);
     const handleRightClick = () => setYearNum(yearNum+1);
     const navigate = useNavigate();
@@ -57,6 +58,15 @@ function Dashboard () {
         loadQuarterCourses(1, "Summer");
     }, [userId]);
 
+    const handleOpenClick = () => {
+        if(dialogRef.current)
+            dialogRef.current.showModal();
+    }
+
+    const handleCloseClick = () => {
+        if(dialogRef.current)
+            dialogRef.current.close();
+    }
 
     const handleLogOut = async () => {
         try {
@@ -108,10 +118,15 @@ function Dashboard () {
     
     return (
     <div className="w-full h-screen flex">
+        <dialog ref={dialogRef} className="py-5 p-10 text-center bg-cyan-700 text-white rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
+            <p className="text-xl font-bold mb-5">Log out?</p>
+            <button onClick={handleCloseClick} className="bg-yellow-400 rounded-2xl px-2 py-1 mr-5 cursor-pointer text-slate-700 transition duration-300 hover:bg-red-500 hover:scale-105">Cancel</button>
+            <button onClick={handleLogOut} className="bg-yellow-400 rounded-2xl px-2 py-1 mr-5 cursor-pointer text-slate-700 transition duration-300 hover:bg-green-500 hover:scale-105">Yes</button>
+        </dialog>
         <div className="w-4/5">
             <div className="flex justify-between mx-3 mt-3 mb-2">
-            <House className="cursor-pointer" onClick={handleHome}/>
-            <LogOut className="cursor-pointer" onClick={handleLogOut}/>
+            <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleHome}/>
+            <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleOpenClick}/>
             </div>
             <Header year={yearNum}/>
             <div>
