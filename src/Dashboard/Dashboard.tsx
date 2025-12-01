@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './components/Sidebar/Sidebar.tsx';
+import Sidebar from './Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import axios from 'axios';
@@ -98,7 +98,7 @@ function Dashboard () {
             </div>
                 
         </div>
-        <div>
+        <div className="w-full">
             <Sidebar /> 
         </div>
     </div>
