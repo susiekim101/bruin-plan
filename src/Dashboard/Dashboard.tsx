@@ -8,6 +8,14 @@ import { ChevronLeft, ChevronRight, LogOut, House } from "lucide-react";
 import { useContext } from 'react';
 import AuthenticationContext from '../AuthenticationContext.tsx';
 
+interface Course {
+    course_id: number | null;
+    course_number: string;
+    course_name: string;
+    course_units: number;
+    category: string;
+}
+
 function Dashboard () {
     const [yearNum, setYearNum] = useState<number>(1);
     const handleLeftClick = () => setYearNum(yearNum-1);
@@ -42,6 +50,29 @@ function Dashboard () {
     const handleHome = async() => {
         navigate('/');
     }
+
+    const userId = 3;
+    const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
+
+    async function loadQuarterCourses (year: number, quarter: 'Fall' | 'Winter' | 'Spring' | 'Summer') {
+        if (!userId) return;
+    
+        try {
+            const userData = {
+                userId: userId,
+                yearIndex: year,
+                quarterName: quarter
+            };
+            const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
+            console.log(`Successfully loaded courses for ${quarter}`, result.data.allCourses);
+            setAllCourses(prev => ({
+                ...prev,
+                [`${year}-${quarter}`]: result.data.allCourses,
+            }));
+        } catch (err) {
+            console.error("Failed to load courses:", err);
+        }
+    };
     
     return (
     <div className="w-full h-screen flex">
@@ -70,7 +101,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year yearIndex={yearNum}/>
+                                    <Year yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
                                 </div>
                             </div>
                         ))}</div>
@@ -87,7 +118,7 @@ function Dashboard () {
                 
         </div>
         <div className="w-full">
-            <Sidebar /> 
+            <Sidebar loadQuarterCourses={loadQuarterCourses} /> 
         </div>
     </div>
     )

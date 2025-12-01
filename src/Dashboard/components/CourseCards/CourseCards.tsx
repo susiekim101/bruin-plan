@@ -2,16 +2,17 @@ import CourseStatus from "./CourseStatus";
 import CourseUnits from "./CourseUnits";
 
 type CourseCardProps = {
-    courseId: number | null;
+    courseId: number;
     units: number;
     courseName: string;
     courseTitle: string;
     courseClassification: string;
     yearIndex?: number;
     quarterName?: 'Fall' | 'Winter' | 'Spring' | 'Summer';
+    removeFromSidebar?: (courseId: number) => void;
 }
 
-function CourseCard({ courseId, courseName, courseTitle, units, courseClassification, yearIndex, quarterName}: CourseCardProps) {
+function CourseCard({ courseId, courseName, courseTitle, units, courseClassification, yearIndex, quarterName, removeFromSidebar}: CourseCardProps) {
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
         const payload = {
             courseJson: JSON.stringify({
@@ -21,12 +22,17 @@ function CourseCard({ courseId, courseName, courseTitle, units, courseClassifica
                 course_units: units, 
                 category: courseClassification,
             }),
-            sourceYearIndex: yearIndex ?? null,
-            sourceQuarterName: quarterName ?? null
+            sourceYearIndex: yearIndex !== undefined ? yearIndex : null,
+            sourceQuarterName: quarterName !== undefined ? quarterName : null
+
         };
 
         console.log(payload);
         event.dataTransfer.setData("application/json", JSON.stringify(payload));
+
+        if (!quarterName && removeFromSidebar) {
+            removeFromSidebar(courseId);
+        }
     };
 
     return (

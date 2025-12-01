@@ -16,11 +16,11 @@ type quarterProps = {
     yearIndex: number;
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
     courses: Course[];
-    userId: number;
     loadCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
 }
 
-function Quarters({yearIndex, quarterName, courses, userId, loadCourses} : quarterProps) {
+function Quarters({yearIndex, quarterName, courses, loadCourses} : quarterProps) {
+    const userId = 3;
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     }
@@ -54,7 +54,7 @@ function Quarters({yearIndex, quarterName, courses, userId, loadCourses} : quart
             className="flex flex-col w-full justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4 overflow-y-scroll">
             <div className="flex flex-col shrink space-y-2">
                 {courses.map((course, index) => (
-                    isEmptyCourse(course) ? (
+                    (isEmptyCourse(course) || course.course_id === null) ? (
                         <CustomCard key={index} />
                     ) : (
                         <CourseCard
@@ -83,4 +83,5 @@ function Quarters({yearIndex, quarterName, courses, userId, loadCourses} : quart
         </div>
     );
 }
+
 export default Quarters;

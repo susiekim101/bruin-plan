@@ -18,6 +18,7 @@ function CustomCard({yearIndex, quarterName} : customCardProps) {
             sourceQuarterName: quarterName ?? null
         };
         event.dataTransfer.setData("application/json", JSON.stringify(payload));
+
     };
     
     return (
