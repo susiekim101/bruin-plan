@@ -1,6 +1,6 @@
 // test: course shows up in a specific quarter in a user's plan
 import { connection } from '../src/database';
-import { addCoursesToQuarter } from '../controllers/addCoursesToQuarter';
+import { removeCoursesFromQuarter } from '../controllers/removeCoursesFromQuarter';
 
 // create a fixture for database
 jest.mock('../src/database');
@@ -21,11 +21,12 @@ beforeEach(() => {
   mockExecute.mockClear()
 });
 
-test('query to addCoursesToQuarter returns inserted course id', async () => {
-  mockExecute.mockResolvedValueOnce([[{ plan_id: 18 }], []]);
-  mockExecute.mockResolvedValueOnce([{ insertId: 111 }]);
+test('query to removeCoursesFromQuarter returns removed course id', async () => {
+  mockExecute
+  .mockResolvedValueOnce([[{ plan_id: 18 }], []]) // getPlanId
+  .mockResolvedValueOnce([{ affectedRows: 1 }]);
 
-  const id = await addCoursesToQuarter({
+  const id = await removeCoursesFromQuarter({
     userId: 3, 
     courseId: 1,
     yearIndex: 1,
@@ -44,5 +45,5 @@ test('query to addCoursesToQuarter returns inserted course id', async () => {
     [18, 1, 1, 'Fall']
   );
 
-  expect(id).toBe(111);
+  expect(id).toBe(1);
 });

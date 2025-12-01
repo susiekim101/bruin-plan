@@ -4,12 +4,20 @@ import CourseClassification from './CourseClassification.tsx';
 import CourseName from './CourseName.tsx';
 import CourseTitle from './CourseTitle.tsx';
 
+type customCardProps = {
+    yearIndex?: number;
+    quarterName?: 'Fall' | 'Winter' | 'Spring' | 'Summer';
+}
 
-function CustomCard() {
+function CustomCard({yearIndex, quarterName} : customCardProps) {
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-        const payload = ""
-        event.dataTransfer.setData("application/json", payload);
+        const payload = {
+            courseJson: "",
+            sourceYearIndex: yearIndex ?? null,
+            sourceQuarterName: quarterName ?? null
+        };
+        event.dataTransfer.setData("application/json", JSON.stringify(payload));
     };
     
     return (

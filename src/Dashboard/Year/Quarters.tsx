@@ -1,7 +1,8 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
+import handleDropLogic from "./handleDropLogic";
+import removeCourseLogic from "./removeCourseLogic";
 
 interface Course {
     course_id: number | null;
@@ -14,89 +15,28 @@ interface Course {
 type quarterProps = {
     yearIndex: number;
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
+    courses: Course[];
+    userId: number;
+    loadCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
 }
 
-type handleDropProps = {
-    courseJson: string;
-    userId: number | null;
-    yearIndex: number;
-    quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
-}
-
-async function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
-    let droppedCourse;
-    if (courseJson === "") {
-        droppedCourse = {
-            "course_id": null,
-            "course_number": "", 
-            "course_name": "",
-            "course_units": 0, 
-            "category": ""
-        }
-    }
-    else {
-        droppedCourse = JSON.parse(courseJson);
-    }
-
-    if (userId !== null && droppedCourse.course_id !== null) {
-        const courseData = {
-            userId: userId,
-            courseId: droppedCourse.course_id,
-            yearIndex: yearIndex,
-            quarterName: quarterName
-        };
-        try {
-            await axios.post(`http://localhost:3001/quarter/addCourse`, courseData);
-        } catch (err) {
-            console.error(`Could not add dropped course to database: `, err);
-        }
-    }
-}
-
-function Quarters({yearIndex, quarterName} : quarterProps) {
-    const [courses, setCourses ] = useState<Course[]>([]);
-    const userId = 3;
-
+function Quarters({yearIndex, quarterName, courses, userId, loadCourses} : quarterProps) {
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        // removeCourse();
     }
 
     async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
-
         event.preventDefault();
-        const itemId = event.dataTransfer.getData("application/json");
+        const payload = JSON.parse(event.dataTransfer.getData("application/json"));
 
-        await handleDropLogic({courseJson: itemId, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
+        await removeCourseLogic({courseJson: payload.courseJson, userId: userId, yearIndex: payload.sourceYearIndex, quarterName: payload.sourceQuarterName});
 
-        loadCourses();
+        await handleDropLogic({courseJson: payload.courseJson, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
+        loadCourses(payload.sourceYearIndex, payload.sourceQuarterName);
+        loadCourses(yearIndex, quarterName);
     }
-
-    const removeCourse = () => {
-
-    }
-
-    const loadCourses = async () => {
-        if (!userId) return;
-
-        try {
-            const userData = {
-                userId,
-                yearIndex,
-                quarterName
-            };
-
-            const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
-            console.log(`Successfully loaded courses for ${quarterName}`, result.data.allCourses);
-            setCourses(result.data.allCourses);
-        } catch (err) {
-            console.error("Failed to load courses:", err);
-            setCourses([]);
-        }
-    };
-
     useEffect(() => {
-        loadCourses();
+        loadCourses(yearIndex, quarterName);
     }, [quarterName, yearIndex]);
 
 
@@ -105,6 +45,7 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
         course.course_name === "" &&
         course.course_units === 0 &&
         course.category === "";
+
 
     return(
         <div 
@@ -123,6 +64,8 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
                             courseTitle={course.course_name}
                             units={course.course_units}
                             courseClassification={course.category}
+                            yearIndex={yearIndex}
+                            quarterName={quarterName}
                         />
                     )
                 ))}
@@ -130,8 +73,7 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
             </div>
             
             <div className="flex flex-col justify-center items-center mt-0.5">
-                <button className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap"
-                    onClick={changeClassStatus}>
+                <button className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
                     Mark all as
                 </button>
                 <p className="text-black font-bold">
@@ -142,7 +84,3 @@ function Quarters({yearIndex, quarterName} : quarterProps) {
     );
 }
 export default Quarters;
-
-function changeClassStatus() {
-
-};

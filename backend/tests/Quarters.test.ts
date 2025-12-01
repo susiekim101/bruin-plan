@@ -1,17 +1,40 @@
-import  { handleDropLogic }  from '../../src/Dashboard/Year/Quarters.tsx';
-import { addCoursesToQuarter } from '../controllers/addCoursesToQuarter.ts';
+import axios from 'axios';
+import handleDropLogic from '../../src/Dashboard/Year/handleDropLogic';
 
-jest.mock('../controllers/addCoursesToQuarter');
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-test('dropping course into quarter container adds it to user\'s plan', async () =>  {
-    // create a mock add id for 
-    const mockAdd = addCoursesToQuarter as jest.Mock;
-    mockAdd.mockResolvedValue(111);
-    const mockCourseJson = `("course_id":1,"course_number":"CHEM 20A","course_name":"Chemical Structure","course_units":4,"category":"Major"}`
+describe('handleDropLogic', () => {
+    test('adds course to quarter', async () => {
 
-    const id = handleDropLogic({courseJson: mockCourseJson, userId: 1, yearIndex: 1, quarterName: 'Fall'});
+        mockedAxios.post.mockResolvedValue({
+            data: 111
+        });
 
-    expect(mockAdd).toHaveBeenCalledWith({ userId: 1, courseId: 1, year: 1, quarter: 'Fall' });
-    expect(manager.quarters[1].Fall).toContainEqual({ id: 111, courseId: 1 });
-    expect(id).toBe(111);
-})
+        const fakeCourse = {
+            course_id: 1,
+            course_number: "COM SCI 1",
+            course_name: "Intro",
+            course_units: 4,
+            category: "Major"
+        };
+
+        await handleDropLogic(
+            {
+                courseJson: JSON.stringify(fakeCourse),
+                userId: 1,
+                yearIndex: 1,
+                quarterName: 'Fall'}
+        );
+
+        expect(mockedAxios.post).toHaveBeenCalledWith(
+            'http://localhost:3001/quarter/addCourse',
+            {
+                userId: 1,
+                courseId: 1,
+                yearIndex: 1,
+                quarterName: 'Fall'
+            }
+        );
+    });
+});

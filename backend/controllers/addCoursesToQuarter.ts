@@ -1,4 +1,3 @@
-// import type { ResultSetHeader } from "mysql2/promise";
 import { connection } from "../src/database.ts";
 
 interface addCourseProps {
@@ -16,7 +15,7 @@ export async function getPlanId({ userId }: getPlanIdProps) {
     // console.log("user id given to plan id: ", userId);
     const query = `SELECT plan_id FROM User_Plans WHERE user_id = ?`;
     try {
-      const [ results ] = await connection.execute(query, [ userId ]);
+      const [ results ] : any = await connection.execute(query, [ userId ]);
       return results;
     } catch (err) {
       console.error("Failed to fetch planId: ", err);
@@ -26,10 +25,9 @@ export async function getPlanId({ userId }: getPlanIdProps) {
 
 
 export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarterName }: addCourseProps) {
-  // console.log("userId that adds course", userId);
 
   const results: any = await getPlanId({ userId: userId });
-  if(!results || results[0].length == 0)  {
+  if (!results || results.length == 0 || results[0].length == 0)  {
     throw new Error('Cannot find planId');
   }
   const planId = results[0].plan_id;
@@ -38,10 +36,11 @@ export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarter
     INSERT INTO Plan_Items (plan_id, course_id, year, quarter, status)
     VALUES (?, ?, ?, ?, 'Planned');`;
 
-  await connection.execute(query, [
+  const [insertResult] : any = await connection.execute(query, [
     planId,
     courseId,
     yearIndex,
     quarterName
   ]);
+  return insertResult.insertId;
 }

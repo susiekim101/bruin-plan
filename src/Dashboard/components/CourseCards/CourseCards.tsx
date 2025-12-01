@@ -7,20 +7,26 @@ type CourseCardProps = {
     courseName: string;
     courseTitle: string;
     courseClassification: string;
+    yearIndex?: number;
+    quarterName?: 'Fall' | 'Winter' | 'Spring' | 'Summer';
 }
 
-function CourseCard({ courseId, courseName, courseTitle, units, courseClassification}: CourseCardProps) {
+function CourseCard({ courseId, courseName, courseTitle, units, courseClassification, yearIndex, quarterName}: CourseCardProps) {
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-        const payload = JSON.stringify({
-            course_id: courseId, 
-            course_number: courseName,
-            course_name: courseTitle,
-            course_units: units, 
-            category: courseClassification,
-        });
+        const payload = {
+            courseJson: JSON.stringify({
+                course_id: courseId, 
+                course_number: courseName,
+                course_name: courseTitle,
+                course_units: units, 
+                category: courseClassification,
+            }),
+            sourceYearIndex: yearIndex ?? null,
+            sourceQuarterName: quarterName ?? null
+        };
 
         console.log(payload);
-        event.dataTransfer.setData("application/json", payload);
+        event.dataTransfer.setData("application/json", JSON.stringify(payload));
     };
 
     return (
