@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import 'dotenv/config';
 import { findByEmail } from "./controllers/createUser.ts";
-import { JwtPayload } from "jsonwebtoken";
 
 interface UserPayload extends JwtPayload{
     id: number,
