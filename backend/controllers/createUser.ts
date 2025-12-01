@@ -9,7 +9,18 @@ interface createUserProps {
 }
 
 
-
+/*
+Finds the user row in the Users table with specific email.
+Input: User's email as a string
+Output: Array of a single User object [{ 
+    'user_id': int,
+    'first_name': string,
+    'last_name': string,
+    'email': string,
+    'password_hash': string,
+    'major_id': int
+}]
+*/
 export async function findByEmail(email: string) {
     try {
         const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
@@ -19,6 +30,19 @@ export async function findByEmail(email: string) {
     } catch (err) {
         console.log('Failed to find user by email: ', err);
         return [];
+    }
+}
+
+export async function getUserId(email: string) {
+    try {
+        const result = findByEmail(email);
+        if(!result || result[0].length == 0) {
+            console.log('Failed to find user_id by email.');
+            return;
+        }
+        return result[0].user_id;
+    } catch {
+        console.log('Failed to find user_id by email.');
     }
 }
 
