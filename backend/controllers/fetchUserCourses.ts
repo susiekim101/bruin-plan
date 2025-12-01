@@ -32,7 +32,7 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
     }
 }
 
-export async function fetchAllUserCourses({ userId }: fetchUserCoursesProps) {
+export async function fetchAllUserCourses(userId: number) {
     const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
                     FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
                     WHERE plan_id = ?`;
