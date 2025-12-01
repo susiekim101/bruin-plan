@@ -14,7 +14,7 @@ interface PlanIdRow extends RowDataPacket {
 
 export async function removeCoursesFromQuarter({ userId, courseId, yearIndex, quarterName }: removeCourseProps) {
   console.log("goes to delete course");
-const results: PlanIdRow[] = await getPlanId({ userId: userId });
+  const results: PlanIdRow[] = await getPlanId({ userId: userId });
   if (!results || results.length == 0 || results[0].length == 0)  {
     throw new Error('Cannot find planId');
   }
