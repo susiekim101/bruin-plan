@@ -51,7 +51,23 @@ function Dashboard () {
         navigate('/');
     }
 
-    const userId = 3;
+    const [userId, setUserId] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const res = await axios.get("http://localhost:3001/user/userId", {
+                    withCredentials: true
+                });
+                setUserId(res.data.user_id); // sets actual ID
+            } catch (err) {
+                console.error("Failed to get user ID:", err);
+            }
+        };
+
+        fetchUserId();
+    }, []);
+
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
 
     async function loadQuarterCourses (year: number, quarter: 'Fall' | 'Winter' | 'Spring' | 'Summer') {

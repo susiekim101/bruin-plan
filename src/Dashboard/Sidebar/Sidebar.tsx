@@ -30,7 +30,22 @@ function Sidebar({loadQuarterCourses}: sideBarProps) {
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
-    const userId = 3;
+    const [userId, setUserId] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const res = await axios.get("http://localhost:3001/user/userId", {
+                    withCredentials: true
+                });
+                setUserId(res.data.user_id);
+            } catch (err) {
+                console.error("Failed to get user ID:", err);
+            }
+        };
+
+        fetchUserId();
+    }, []);
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);

@@ -101,5 +101,9 @@ userRouter.get('/major', verifyToken, async (req: Request, res, Response) => {
     }
 })
 
+userRouter.get('/userId', verifyToken, async (req: Request, res: Response) => {
+    const user_id = res.locals.user.id;
+    return res.status(200).json({message: `Fetched user_id: ${user_id}`, user_id: user_id});
+})
 
 export default userRouter;
