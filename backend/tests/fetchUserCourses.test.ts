@@ -81,9 +81,28 @@ test('query with a userId, yearIndex, and quarterName should return no courses',
 });
 
 test('fetchAllUserCourses should establish connection to database', async () => {
-  mockExecute.mockResolvedValueOnce([[], []]);
+  mockExecute
+    .mockResolvedValueOnce([[{ plan_id: 1 }], []])
+    .mockResolvedValueOnce([[], []]);
 
-  await fetchAllUserCourses({ userId: 1});
+  await fetchAllUserCourses({ userId: 4});
 
-  expect(mockExecute).toHaveBeenCalledTimes(1);
+  expect(mockExecute).toHaveBeenCalledTimes(2);
 });
+
+
+test(`fetchAllUserCourses should query database with
+        SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
+        FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
+        WHERE plan_id = ?`, async () => {
+  mockExecute
+    .mockResolvedValueOnce([[{ plan_id: 1 }], []])
+    .mockResolvedValueOnce([[], []]);
+
+  await fetchAllUserCourses({ userId: 4});
+  const plan_id = 1;
+  expect(mockExecute.mock.calls[1]).toEqual([
+                  `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
+                    FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
+                    WHERE plan_id = ?`, [plan_id]]);
+})
