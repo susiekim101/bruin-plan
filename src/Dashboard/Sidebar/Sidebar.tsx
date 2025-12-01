@@ -100,10 +100,9 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
                 return;
             
             try {
-                console.log('User ID: ', userId);
-                const response = await axios.get(`http://localhost:3001/quarter/planned-courses/${userId}`, { withCredentials: true});
+                const response = await axios.get(`http://localhost:3001/courses/planned/${userId}`, { withCredentials: true});
                 setUserCourses(response.data.data);
-                console.log(response.data.data);
+                console.log("User's planned courses: ", response.data.data);
             } catch (err) {
                 console.error("Failed to load user's courses: ", err);
                 navigate('/');
@@ -114,56 +113,36 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
 
     // Fetch all courses for a given major
     useEffect(() => {
-        const loadCourses = async () => {
+        const loadCourses = async (majorID: number) => {
             // Return if userId hasn't been loaded
             if (! userCourses)
                 return;
 
-            // Return if userMajor hasn't been loaded
-            if (! userMajor )
-                return;
-
-            if ( selectedMajor ) {
-                // Display courses for selectedMajor (different from userMajor)
-                try {
-                    const selectedMajorID = selectedMajor.value;
-                    const response = await axios.get(`http://localhost:3001/courses/${selectedMajorID}`, { withCredentials: true });
-                    const allMajorCourses = response.data.data;
-                    
-                    // Remove courses already in user's planner
-                    const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
-                        ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
-                    
-                    setCourses(coursesNotPlanned);
-                    setFilteredCourses(coursesNotPlanned);
-                    console.log(`Displaying courses for selected major ${selectedMajor.value}`, coursesNotPlanned);
-                } catch (err){
-                    console.error(`Failed to load courses for selected major ${selectedMajor.value}`, err);
-                    navigate('/');
-                }
-            } else {
-                // Display courses for userMajor
-                try {
-                    const userMajorID = userMajor.major_id;
-                    const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
-                    const allMajorCourses = response.data.data;
-                    console.log("User's planned courses: ", userCourses);
-                    
-                    // Remove courses already in user's planner
-                    const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
-                        ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
-
-                    setCourses(coursesNotPlanned);
-                    setFilteredCourses(coursesNotPlanned);
-                    console.log(`Displaying courses for user's major ${userMajor.major_name}: `, coursesNotPlanned);
-                } catch (err){
-                    console.error(`Failed to load courses for user's major ${userMajor.major_name}: `, err);
-                    navigate('/');
-                }
+            try {
+                const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
+                const allMajorCourses = response.data.data;
+                
+                // Remove courses already in user's planner
+                const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
+                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
+                
+                setCourses(coursesNotPlanned);
+                setFilteredCourses(coursesNotPlanned);
+                console.log(`Displaying courses for major ${majorID}`, coursesNotPlanned);
+            } catch (err){
+                console.error(`Failed to load courses for selected major ${majorID}`, err);
+                navigate('/');
             }
         };
 
-        loadCourses();
+        if ( selectedMajor ) {
+            loadCourses(selectedMajor.value);
+        } else if (userMajor) {
+            loadCourses( userMajor.major_id )
+        } else {
+            return;
+        }
+        
     }, [userCourses, userMajor?.major_id, selectedMajor?.value]);
 
     // Display courses whose course codes match search term

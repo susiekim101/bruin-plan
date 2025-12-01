@@ -46,13 +46,4 @@ quarterRouter.post("/removeCourses", async (req: Request, res: Response) => {
     }
 })
 
-quarterRouter.get("/planned-courses/:user_id", async (req: Request, res: Response) => {
-    const user_id = Number(req.params.user_id);
-    try {
-        const userCourses = await fetchAllUserCourses(user_id);
-        return res.status(200).json({message: `Fetched all courses in plan for user ${user_id}.`, data: userCourses});
-    } catch {
-        return res.status(500).json({message: "Failed to fetch all course in plan."});
-    }
-})
 export default quarterRouter;
