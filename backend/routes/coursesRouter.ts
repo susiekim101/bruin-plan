@@ -9,6 +9,7 @@ import 'dotenv/config';
 const coursesRouter = Router();
 
 coursesRouter.get('/:major_id', verifyToken, async (req: Request, res: Response) => {
+    // const major_id = res.locals.user.major_id;
     const major_id = Number(req.params.major_id);
     try {
         const courses = await fetchCoursesByMajor(major_id);

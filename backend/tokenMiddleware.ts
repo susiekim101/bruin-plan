@@ -1,8 +1,9 @@
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import 'dotenv/config';
+import { findByEmail } from "./controllers/createUser.ts";
 
-const verifyToken = (req: Request, res: Response, next: () => void) => {
+const verifyToken = async (req: Request, res: Response, next: () => void) => {
     const token = req.cookies.token;
 
     if(!token) {
@@ -10,8 +11,13 @@ const verifyToken = (req: Request, res: Response, next: () => void) => {
     }
 
     try {
-        jwt.verify(token, process.env.JWT_SECRET as string);
-        // req.user = payload;
+        const payload = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+        const user_email = payload.email;
+        // console.log("User email:", user_email);
+        const user_info = await findByEmail(user_email);
+        // console.log("User info:", user_info[0]);
+        res.locals.user = user_info[0];
+
         next();
     } catch {
         return res.status(403).json({ message: 'Invalid token.' });
