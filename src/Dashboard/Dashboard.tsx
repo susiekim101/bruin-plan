@@ -4,7 +4,7 @@ import Sidebar from './Sidebar/Sidebar.tsx';
 import Header from './Header/Header.tsx';
 import Year from './Year/Year.tsx'
 import axios from 'axios';
-import { ChevronLeft, ChevronRight, LogOut, House } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut, House, X } from "lucide-react";
 import { useContext } from 'react';
 import AuthenticationContext from '../AuthenticationContext.tsx';
 
