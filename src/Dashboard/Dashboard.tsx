@@ -22,6 +22,8 @@ function Dashboard () {
     const handleRightClick = () => setYearNum(yearNum+1);
     const navigate = useNavigate();
     const { logout } = useContext(AuthenticationContext);
+    const [userId, setUserId] = useState<number | null>(null);
+    const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
 
     useEffect(() => {
         // Valdiate user's tokens before logging in
@@ -35,6 +37,18 @@ function Dashboard () {
         }
         userVerification();
     }, [navigate]);
+
+    useEffect(() => {
+        fetchUserId();
+    }, []);
+
+    useEffect(() => {
+        if (userId === null) return; 
+        loadQuarterCourses(1, "Fall");
+        loadQuarterCourses(1, "Winter");
+        loadQuarterCourses(1, "Spring");
+        loadQuarterCourses(1, "Summer");
+    }, [userId]);
 
 
     const handleLogOut = async () => {
@@ -51,34 +65,29 @@ function Dashboard () {
         navigate('/');
     }
 
-    const [userId, setUserId] = useState<number | null>(null);
-
-    useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const res = await axios.get("http://localhost:3001/user/userId", {
-                    withCredentials: true
-                });
-                setUserId(res.data.user_id); // sets actual ID
-            } catch (err) {
-                console.error("Failed to get user ID:", err);
-            }
-        };
-
-        fetchUserId();
-    }, []);
-
-    const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
+    const fetchUserId = async () => {
+        try {
+            const res = await axios.get("http://localhost:3001/user/userId", {
+                withCredentials: true
+            });
+            setUserId(res.data.user_id);
+        } catch (err) {
+            console.error("Failed to get user ID:", err);
+            navigate('/');
+        }
+    };
 
     async function loadQuarterCourses (year: number, quarter: 'Fall' | 'Winter' | 'Spring' | 'Summer') {
-        if (!userId) return;
-    
+        if (!userId) {
+            return;
+        }
         try {
             const userData = {
                 userId: userId,
                 yearIndex: year,
                 quarterName: quarter
             };
+            console.log("user data being send to get courses", userData);
             const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
             console.log(`Successfully loaded courses for ${quarter}`, result.data.allCourses);
             setAllCourses(prev => ({
@@ -117,7 +126,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
+                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
                                 </div>
                             </div>
                         ))}</div>
@@ -134,7 +143,7 @@ function Dashboard () {
                 
         </div>
         <div className="w-full">
-            <Sidebar loadQuarterCourses={loadQuarterCourses} /> 
+            <Sidebar userId={userId} loadQuarterCourses={loadQuarterCourses} /> 
         </div>
     </div>
     )

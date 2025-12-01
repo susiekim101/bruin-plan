@@ -1,9 +1,8 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import handleDropLogic from "./handleDropLogic";
 import removeCourseLogic from "./removeCourseLogic";
-import axios from 'axios';
 
 interface Course {
     course_id: number | null;
@@ -14,30 +13,14 @@ interface Course {
 }
 
 type quarterProps = {
+    userId: number | null;
     yearIndex: number;
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
     courses: Course[];
     loadCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
 }
 
-function Quarters({yearIndex, quarterName, courses, loadCourses} : quarterProps) {
-    const [userId, setUserId] = useState<number | null>(null);
-
-    useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const res = await axios.get("http://localhost:3001/user/userId", {
-                    withCredentials: true
-                });
-                setUserId(res.data.user_id); // sets actual ID
-            } catch (err) {
-                console.error("Failed to get user ID:", err);
-            }
-        };
-
-        fetchUserId();
-    }, []);
-
+function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quarterProps) {
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -53,6 +36,7 @@ function Quarters({yearIndex, quarterName, courses, loadCourses} : quarterProps)
         loadCourses(payload.sourceYearIndex, payload.sourceQuarterName);
         loadCourses(yearIndex, quarterName);
     }
+
     useEffect(() => {
         loadCourses(yearIndex, quarterName);
     }, [quarterName, yearIndex]);

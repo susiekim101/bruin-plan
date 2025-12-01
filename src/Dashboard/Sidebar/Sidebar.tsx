@@ -22,34 +22,15 @@ interface Course {
 }
 
 type sideBarProps = {
+    userId: number | null;
     loadQuarterCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
 }
 
-function Sidebar({loadQuarterCourses}: sideBarProps) {
+function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
     const [ userMajor, setUserMajor ] = useState<Major>();
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
-    const [userId, setUserId] = useState<number | null>(null);
-
-    useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const res = await axios.get("http://localhost:3001/user/userId", {
-                    withCredentials: true
-                });
-                setUserId(res.data.user_id);
-            } catch (err) {
-                console.error("Failed to get user ID:", err);
-            }
-        };
-
-        fetchUserId();
-    }, []);
-
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -101,9 +82,18 @@ function Sidebar({loadQuarterCourses}: sideBarProps) {
         setFilteredCourses(result);
     }, [searchTerm, courses]);
 
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     }
+
+    const removeFromSidebar = (courseId: number) => {
+        setCourses(prev => prev.filter(c => c.course_id !== courseId));
+        setFilteredCourses(prev => prev.filter(c => c.course_id !== courseId));
+    };
     
     async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
@@ -129,10 +119,6 @@ function Sidebar({loadQuarterCourses}: sideBarProps) {
             ...prev
         ]);
     }
-    const removeFromSidebar = (courseId: number) => {
-        setCourses(prev => prev.filter(c => c.course_id !== courseId));
-        setFilteredCourses(prev => prev.filter(c => c.course_id !== courseId));
-    };
 
     return (
         <div
