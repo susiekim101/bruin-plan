@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { addCoursesToQuarter } from "../controllers/addCoursesToQuarter.ts";
-import { fetchUserCourses } from '../controllers/fetchUserCourses.ts';
+import { fetchUserCourses, fetchAllUserCourses } from '../controllers/fetchUserCourses.ts';
 import { removeCoursesFromQuarter } from '../controllers/removeCoursesFromQuarter.ts';
 
 const quarterRouter = Router();
@@ -45,4 +45,5 @@ quarterRouter.post("/removeCourses", async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to remove course. "});
     }
 })
+
 export default quarterRouter;
