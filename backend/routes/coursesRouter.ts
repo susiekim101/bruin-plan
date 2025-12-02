@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { fetchCoursesByMajor } from '../controllers/fetchCoursesByMajor.ts';
+import { fetchAllUserCourses } from '../controllers/fetchUserCourses.ts';
 import verifyToken from '../tokenMiddleware.ts';
 // import jwt from 'jsonwebtoken';
 // import cookieParser from 'cookie-parser';
@@ -16,6 +17,16 @@ coursesRouter.get('/:major_id', verifyToken, async (req: Request, res: Response)
         return res.status(200).json({message: `Fetched courses with major_id = ${major_id}.`, data: courses});
     } catch {
         return res.status(500).json({message: "Failed to fetch courses."});
+    }
+});
+
+coursesRouter.get("/planned/:user_id", async (req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id);
+    try {
+        const userCourses = await fetchAllUserCourses(user_id);
+        return res.status(200).json({message: `Fetched all courses in plan for user ${user_id}.`, data: userCourses});
+    } catch {
+        return res.status(500).json({message: "Failed to fetch all course in plan."});
     }
 });
 
