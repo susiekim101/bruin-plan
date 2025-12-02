@@ -1,154 +1,97 @@
-# React + TypeScript + Vite
+# Bruin Plan
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Our project is an interactive 4-year planner that enables UCLA engineering students to plan out their degree. While the school provides a standard 4-year planning template for each major, we wanted to create a dynamic, online platform with an interactive GUI for students to easily manipulate their schedules.  Our application will have a drag-and-drop interface with interactive course cards to allow students to visually lay out their 4-year class plan.  Users will be required to create an account and log in so their information is saved across each session. 
 
-Currently, two official plugins are available:
+Our website will also have a public bulletin board where students can anonymously share their 4-year plans for other students to view. The sample 4-year schedules provided by UCLA are outdated and generic, making them unhelpful for many students who are interested in looking for more diverse sample schedules. With our public bulletin board, students will be able to filter through posted schedules by major and observe a variety of sample 4-year plans.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies
 
-## React Compiler
+Frontend: React, TypeScript, Tailwind CSS, Axios
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Backend: Node.js, MySQL
 
-## Expanding the ESLint configuration
+Tests: Cucumber, Playwright, Jest
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Run the app
+### Frontend
+Clone the repository and install all dependencies.
+```
+git clone LINK
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To run the frontend, run
 ```
-
-# MySQL (macOS)
-Install MySQL on macOS
+npm run dev
 ```
-brew install mysql
+The application should be hosted on http://localhost:5173/
+
+### Backend
+To run the backend, run
+```
+npm start
+```
+The server should be hosted on http://localhost:3001.
+
+You must have MySQL installed and databases initialized correctly to run the application. Please refer to the MySQL section on directions for installation and initialization.
+
+After setting up the local database, create a .env file with the following information:
+```
+# Database Credentials
+DB_HOST=local_host
+DB_USER=local_user
+DB_PASSWORD=local_password
+DB_NAME="bruin_plan"
+
+# Playwright
+BASE_URL=http://localhost:5173
+AXIOS_URL=http://localhost:3001
+
+# JWT
+JWT_SECRET=local_jwt_secret
 ```
 
-Start MySQL
+## MySQL
+
+### Installation
+
+#### macOS
+You must have MySQL downloaded to run the database locally. To run MySQL locally on macOS, run the following commands
+
 ```
-brew services start mysql
+brew install mysql # Install MySQL
+brew services start mysql # Start MySQL
+mysql_secure_installation # Only needed on first run; secure the installation
 ```
 
-Secure the Installation (for first run)
-```
-mysql_secure_installation
-```
-
-Run mysql
+Follow the instructions to securely configure MySQL on your local machine. To run MySQL, run 
 ```
 mysql -u root -p
 ```
 
-Initialize the database with the script from your local machine
-
+#### Linux
+To run MySQL locally on Linux, run the following commands
 ```
-mysql -u root -p < database.sql
-```
-
-Add scraped course data
-```
-mysql -u root -p < course_scraper.sql
+sudo apt update # Update package list
+sudo apt install mysql-server # Install MySQL
+sudo mysql_secure_installation # Run MySQL secure installation script, only required on first run
+mysql -u root -p # Log into MySQL
 ```
 
-# MySQL (Linux)
-Update package list.
+If password is not set through secure installation script, do the following:
+
 ```
-sudo apt update
+mysql -u root # Sign into MySQL through built-in authentication
 ```
 
-Install MySQL on Linux.
-```
-sudo apt install mysql-server
-```
-
-Run MySQL secure installation script (for first time).
-```
-sudo mysql_secure_installation
-```
-
-Log into MySQL
-```
-mysql -u root -p
-```
-
-If, somehow, password not set through secure installation script, do the following:
-Sign into MySQL through built-in authentication.
-```
-mysql -u root
-```
-
-Create new user with username 'username' and password 'password'.
+Through the MySQL server, run the following commands.
+Make sure to update 'username' and 'password' to something secure.
 ```
 CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
-```
-
-Grant all privileges to the new user.
-```
 GRANT ALL PRIVILEGES ON *.* TO 'new_username'@'localhost' WITH GRANT OPTION;
-```
-
-Reload grant tables to ensure privileges are immediately active.
-```
 FLUSH PRIVILEGES;
-```
-
-Exit out of MySQL.
-```
 EXIT;
+
 ```
 
 Log into MySQL as new user.
@@ -156,26 +99,42 @@ Log into MySQL as new user.
 mysql -u new_username -p
 ```
 
-# Setting up MySQL Connection
-Configure your .env file
+### Datbase Initialization
+Since our application runs on the local server, you must first initialize the database with a script. First create all of the tables.
+```
+mysql -u rot -p < database.sql
+```
+
+Then, add all of our scraped course data into the corresponding table.
+```
+mysql -u root -p < course_scraper.sql
+```
+
+### Setting up MySQL Connection
+Create a .env file with the following information
 ```
 DB_HOST=YOUR_LOCAL_HOST
 DB_USER=YOUR_USER
 DB_PASSWORD=YOUR_PASSWORD
 DB_NAME="bruin_plan
 ```
+Ensure DB_HOST, DB_USER, ad DB_PASSWORD are updated for your configuration.
+
 Add .env to .gitignore
 ```
 *.env
 ```
-# Jest testing
-run tests
+
+## Jest testing
+To run and verify the Jest tests, run
 ```
 npm test
 ```
 
-# Cucumber testing
-run cucumber tests (TDD)
+## Cucumber testing
+To run and verify the Cucumber tests, run
 ```
 npx cucumber-js test
 ```
+
+## Design Diagrams
