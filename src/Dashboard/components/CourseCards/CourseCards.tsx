@@ -12,7 +12,7 @@ type CourseCardProps = {
     quarterName?: 'Fall' | 'Winter' | 'Spring' | 'Summer';
 }
 
-function CourseCard({ courseId, courseName, courseTitle, units, status, courseClassification, yearIndex, quarterName, removeFromSidebar}: CourseCardProps) {
+function CourseCard({ courseId, courseName, courseTitle, units, status, courseClassification, yearIndex, quarterName}: CourseCardProps) {
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
         const payload = {
             courseJson: JSON.stringify({
