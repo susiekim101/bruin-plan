@@ -19,10 +19,9 @@ type quarterProps = {
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
     courses: Course[];
     loadCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
-    setQuarterTotal: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Quarters({userId, yearIndex, quarterName, courses, loadCourses, setQuarterTotal} : quarterProps) {
+function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quarterProps) {
     const [totalUnits, setTotalUnits] = React.useState<number>(0);
     
     useEffect(() => {
@@ -31,7 +30,6 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses, setQuar
 
     useEffect(() => {
         setTotalUnits(courses.reduce((sum, course) => sum + course.course_units, 0));
-        setQuarterTotal(totalUnits);
     }, [courses, totalUnits]);
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {

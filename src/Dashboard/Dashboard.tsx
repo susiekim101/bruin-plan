@@ -53,11 +53,23 @@ function Dashboard () {
 
     useEffect(() => {
         if (userId === null) return; 
-        loadQuarterCourses(1, "Fall");
-        loadQuarterCourses(1, "Winter");
-        loadQuarterCourses(1, "Spring");
-        loadQuarterCourses(1, "Summer");
+        for (let year = 1; year <= 4; year++) {
+            for (const quarter of ["Fall", "Winter", "Spring", "Summer"] as const) {
+                loadQuarterCourses(year, quarter);
+            }
+        }
     }, [userId]);
+
+    useEffect(() => {
+        let total = 0;
+        for (let year = 1; year <= 4; year++) {
+            for (const quarter of ["Fall", "Winter", "Spring", "Summer"] as const) {
+                const courses = allCourses[`${year}-${quarter}`] || [];
+                total += courses.reduce((sum, course) => sum + course.course_units, 0);
+            }
+        }
+        setTotalUnits(total);
+    }, [allCourses]);
 
     const handleOpenClick = () => {
         if(dialogRef.current)
@@ -149,7 +161,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses} setTotalUnits={setTotalUnits}/>
+                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
                                 </div>
                             </div>
                         ))}</div>
