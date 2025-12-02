@@ -23,7 +23,6 @@ function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
             try {
                 const response = await axios.get(`http://localhost:3001/planItems/getPlanItems/${plan_id}`);
                 const fetchedItems = response.data.planItems;
-                console.log(fetchedItems);
                 setPlanItems(fetchedItems);
             } catch (err) {
                 console.error(err);

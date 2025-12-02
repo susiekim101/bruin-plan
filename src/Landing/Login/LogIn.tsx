@@ -99,9 +99,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
 
         const url: string = signup ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
         try {
-            // console.log(url);
             await axios.post(url, userData, { withCredentials: true });
-            // console.log("Form submit succeeded");
             navigate('/dashboard');
             login();
             return;

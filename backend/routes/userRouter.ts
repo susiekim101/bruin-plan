@@ -11,10 +11,8 @@ import 'dotenv/config';
 const userRouter = Router();
 
 userRouter.post('/login', async (req: Request, res: Response) => {
-    console.log('Called /login backend');
     try {
         const data = await findByEmail(req.body.email);
-        console.log(`The user data is ${data[0]}`);
         const isPasswordCorrect = await bcrypt.compare(req.body.password, data[0].password_hash);
 
         // Check if user exists
@@ -45,7 +43,6 @@ userRouter.post('/login', async (req: Request, res: Response) => {
 });
 
 userRouter.post('/signup', async (req: Request, res: Response) => {
-    console.log('Received post request');
     const body = {
         'first_name': req.body.first_name,
         'last_name': req.body.last_name,
@@ -62,8 +59,10 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
         if (!process.env.JWT_SECRET) {
             throw new Error('JWT_SECRET environment variable is not defined');
         }
+
+        // Sign token and return as a cookie
         const token = jwt.sign(userToken, process.env.JWT_SECRET as string, {expiresIn: 60 * 15});
-        res.cookie('token', token, { httpOnly: true }); // Store the cookie
+        res.cookie('token', token, { httpOnly: true });
 
         return res.status(201).json({ token });
     } catch (error) {
@@ -75,17 +74,14 @@ userRouter.post('/signup', async (req: Request, res: Response) => {
 });
 
 userRouter.post('/logout', async (req: Request, res: Response) => {
-    console.log("Clearing user JWT cookies");
     res.cookie('token', '', {
         httpOnly: true,
         expires: new Date(Date.now() - 1000)
     });
-    // res.clearCookie('token');
     return res.status(200).json({ message: 'User logged out.'})
 })
 
 userRouter.get('/verifyUser', verifyToken, async (req: Request, res: Response) => {
-    console.log("User verified.");
     res.status(200).json({ message: 'User verified.' })
 })
 
@@ -97,12 +93,14 @@ userRouter.get('/currUserId', verifyToken, async (req: Request, res: Response) =
 })
 
 userRouter.get('/major', verifyToken, async (req: Request, res: Response) => {
-    console.log('Reached');
     const major_id = res.locals.user.major_id;
     try {
         const result = await getMajorById(major_id);
+
         if(!result)
             return res.status(403).json({ message: 'Could not fetch major name by id'});
+
+        // Return major_name for corresponding major_id
         const major_name = result[0].major_name;
         const major_info = {'major_name': major_name, 'major_id': major_id};
         return res.status(200).json({message: `Fetched user's major: `, data: major_info});
@@ -110,6 +108,7 @@ userRouter.get('/major', verifyToken, async (req: Request, res: Response) => {
         return res.status(500).json({message: "Failed to fetch user's major ID."});
     }
 })
+
 
 userRouter.get('/userId', verifyToken, async (req: Request, res: Response) => {
     const user_id = res.locals.user.user_id;

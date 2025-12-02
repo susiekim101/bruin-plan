@@ -10,12 +10,10 @@ export default function ShareButton({units}: ShareButtonProps) {
 
     async function handleClick() {
         try{
-            // console.log("Processing user_plan");
             const response = await axios.get(`http://localhost:3001/user/currUserId`, { withCredentials: true});
             const user_id = response.data.user_id;
-            // console.log("user_id is: ", user_id);
             await axios.post(`http://localhost:3001/plan/shareplan/${user_id}`, { withCredentials: true});
-            // console.log("User plan shared");
+            
             if(confirmationRef.current)
                 confirmationRef.current.showModal();
         } catch {

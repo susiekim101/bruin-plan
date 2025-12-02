@@ -8,7 +8,6 @@ planItemsRouter.get("/getAllPublicPlans", async ( req: Request, res: Response ) 
     try {
         const row = await getAllPublicPlans();
         if(!row || row[0].length == 0) {
-            console.log("No public plans");
             return res.status(403).json({ plans: [] });
         }
         return res.status(200).json({ plans: row });

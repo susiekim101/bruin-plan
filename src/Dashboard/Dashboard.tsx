@@ -102,9 +102,7 @@ function Dashboard () {
                 yearIndex: year,
                 quarterName: quarter
             };
-            // console.log("user data being send to get courses", userData);
             const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
-            // console.log(`Successfully loaded courses for ${quarter}`, result.data.allCourses);
             setAllCourses(prev => ({
                 ...prev,
                 [`${year}-${quarter}`]: result.data.allCourses,
