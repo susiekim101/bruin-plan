@@ -18,10 +18,11 @@ type quarterProps = {
     yearIndex: number;
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
     courses: Course[];
+    removeFromSidebar: (courseId: number) => void;
     loadCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
 }
 
-function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quarterProps) {
+function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, loadCourses} : quarterProps) {
     const [totalUnits, setTotalUnits] = React.useState<number>(0);
     
     useEffect(() => {
@@ -43,6 +44,11 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quart
         await removeCourseLogic({courseJson: payload.courseJson, userId: userId, yearIndex: payload.sourceYearIndex, quarterName: payload.sourceQuarterName});
 
         await handleDropLogic({courseJson: payload.courseJson, userId: userId, yearIndex: yearIndex, quarterName: quarterName});
+
+        if (!payload.sourceQuarterName && removeFromSidebar) {
+            const courseObj = JSON.parse(payload.courseJson);
+            removeFromSidebar(courseObj.course_id);
+        }
         loadCourses(payload.sourceYearIndex, payload.sourceQuarterName);
         loadCourses(yearIndex, quarterName);
     }
