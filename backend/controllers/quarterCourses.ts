@@ -109,3 +109,25 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
         return [];
     }
 }
+
+export async function fetchAllUserCourses(userId: number) {
+    try {
+        const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
+                        FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
+                        WHERE plan_id = ?`;
+
+        const results: PlanIdResult[] = await getPlanId(userId);
+
+        if(!results || results.length == 0) {
+            throw new Error('Cannot fetch user courses');
+        }
+
+        const plan_id = results[0].plan_id;
+
+        const [rows] = await connection.execute(query, [plan_id]);
+        return rows;
+    } catch (error) {
+        console.log('Error fetching data:', error)
+        return [];
+    }
+}

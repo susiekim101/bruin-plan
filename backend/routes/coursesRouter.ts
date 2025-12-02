@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { fetchCoursesByMajor } from '../controllers/fetchCoursesByMajor.ts';
-import { fetchAllUserCourses } from '../controllers/fetchUserCourses.ts';
+import { fetchAllUserCourses } from '../controllers/quarterCourses.ts';
 import verifyToken from '../tokenMiddleware.ts';
 import 'dotenv/config';
 
