@@ -1,5 +1,6 @@
 import { connection } from "../src/database.ts";
 import type { RowDataPacket, ResultSetHeader } from "mysql2";
+
 interface createUserProps {
     'first_name': string
     'last_name': string

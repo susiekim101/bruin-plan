@@ -39,7 +39,7 @@ function PlanCardGrid({ filter }: PlanCardGridProps) {
                             major: major
                         }
                     } catch (err) {
-                        console.error("Error in translating major_id to major name, ", err);
+                        console.error(`Error in translating major_id: ${plan.major_id} to major name, `, err);
                         return { plan_id: plan.plan_id, major: 'Unknown Major' };
                     }
                 });

@@ -1,9 +1,5 @@
 import { connection } from "../src/database.ts"
 
-interface getPlanItemsProps {
-    plan_id: number
-};
-
 /* Retrieves all of the plans that are shared
 
 Returns an array of objects, where each object has a plan_id and major_id
@@ -29,7 +25,7 @@ Retrieves the name of the major by its major_id
 Returns a row with a single object that has a major_name field
     e.g. [ { major_name: "Computer Science"} ]
 */
-export async function getMajorById( major_id: number) {
+export async function getMajorById(major_id: number) {
     try {
         const query = `SELECT major_name FROM Majors WHERE major_id = ?`;
         const [rows] = await connection.execute(query, [ major_id ]);
@@ -50,7 +46,7 @@ Returns an array of objects, where each object represents a single course in the
     ]
 
 */
-export async function getPlanItems({ plan_id }: getPlanItemsProps) {
+export async function getPlanItems(plan_id: number) {
     try {
         const query = `SELECT pi.plan_item_id, c.course_number, c.course_name, pi.year, pi.quarter FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id WHERE plan_id = ?`;
         const [rows] = await connection.execute(query, [ plan_id ]);

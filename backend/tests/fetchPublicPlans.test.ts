@@ -57,7 +57,7 @@ describe('getMajorById()', () => {
 
         mockExecute.mockResolvedValueOnce(mockResult);
 
-        const majorName = await getMajorById({major_id: 1});
+        const majorName = await getMajorById(1);
         const majorId = 1;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
@@ -72,7 +72,7 @@ describe('getMajorById()', () => {
 
         mockExecute.mockResolvedValueOnce(mockResult);
 
-        const majorName = await getMajorById({major_id: 5});
+        const majorName = await getMajorById(5);
         const majorId = 5;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
@@ -95,7 +95,7 @@ describe('getPlanItems()', () => {
 
         mockExecute.mockResolvedValueOnce(mockResult);
 
-        const planItems = await getPlanItems({plan_id: 1});
+        const planItems = await getPlanItems(1);
         const planId = 1;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);
@@ -110,7 +110,7 @@ describe('getPlanItems()', () => {
 
         mockExecute.mockResolvedValueOnce(mockResult);
 
-        const planItems = await getPlanItems({plan_id: 5});
+        const planItems = await getPlanItems(5);
         const plan_id = 5;
 
         expect(mockExecute).toHaveBeenCalledTimes(1);

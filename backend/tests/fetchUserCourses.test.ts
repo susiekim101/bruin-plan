@@ -5,7 +5,7 @@ jest.mock('../src/database.ts', () => ({
 }));
 
 import { connection } from "../src/database.ts";
-import { fetchUserCourses } from "../controllers/fetchUserCourses.ts";
+import { fetchUserCourses } from "../controllers/quarterCourses.ts";
 
 const mockExecute = connection.execute as jest.Mock;
 
