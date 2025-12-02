@@ -4,15 +4,20 @@ import { getAllPublicPlans, getMajorById, getPlanItems } from '../controllers/fe
 
 const planItemsRouter = Router();
 
+interface PublicPlanResult {
+    plan_id: number,
+    major_id: number,
+}
+
 planItemsRouter.get("/getAllPublicPlans", async ( req: Request, res: Response ) => {
     try {
-        const row = await getAllPublicPlans();
-        if(!row || row[0].length == 0) {
+        const row: PublicPlanResult[] = await getAllPublicPlans();
+        if(!row) {
             return res.status(403).json({ plans: [] });
         }
         return res.status(200).json({ plans: row });
     } catch (err) {
-        console.error(err);
+        console.error("Could not get public plans", err);
         return res.status(500).json({message: "Failed to get all public plans"});
     }
 })

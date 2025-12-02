@@ -1,5 +1,10 @@
 import { connection } from "../src/database.ts"
+import type { RowDataPacket } from "mysql2";
 
+interface PublicPlanRow extends RowDataPacket {
+    plan_id: number,
+    major_id: number
+}
 /* Retrieves all of the plans that are shared
 
 Returns an array of objects, where each object has a plan_id and major_id
@@ -13,10 +18,12 @@ Returns an array of objects, where each object has a plan_id and major_id
 export async function getAllPublicPlans() {
     try {
         const query = `SELECT plan_id, major_id FROM User_Plans WHERE is_shared = 1`;
-        const [rows] = await connection.execute(query);
+        
+        const [rows] = await connection.execute<PublicPlanRow[]>(query);
         return rows;
     } catch (err) {
         console.error(err);
+        return [];
     }
 }
 

@@ -37,6 +37,8 @@ function Public() {
                 <option value="Computer Science">Computer Science</option>
                 <option value="Computer Engineering">Computer Engineering</option>
                 <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+
             </select>
         </div>
 

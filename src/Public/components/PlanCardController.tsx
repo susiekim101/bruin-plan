@@ -1,5 +1,5 @@
 import type { RefObject, ReactElement } from "react";
-import { Microscope, CodeXml, MonitorCog, Computer } from "lucide-react";
+import { Microscope, CodeXml, MonitorCog, Computer, Unplug } from "lucide-react";
 
 type DialogRef = RefObject<HTMLDialogElement | null>;
 
@@ -25,6 +25,8 @@ export const majorIcon: (major: string) => ReactElement = (major: string) => {
             return <MonitorCog className="w-15 h-15 text-yellow-200"/>
         case "Computer Science and Engineering":
             return <Computer className="w-15 h-15 text-yellow-200"/>
+        case "Electrical Engineering":
+            return <Unplug className="w-15 h-15 text-yellow-200"/>
         default:
             return <></>
     }

@@ -26,8 +26,11 @@ function Dashboard () {
     const [userId, setUserId] = useState<number | null>(null);
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
     const [totalUnits, setTotalUnits] = useState<number>(0);
-
+    const MIN_UNITS = 30;
+    
     useEffect(() => {
+        localStorage.setItem('MIN_UNITS', `${MIN_UNITS}`);
+
         // Valdiate user's tokens before logging in
         const userVerification = async () => {
             if(localStorage.getItem('loggedIn') == 'false') {
@@ -137,7 +140,7 @@ function Dashboard () {
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleHome}/>
             <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleOpenClick}/>
             </div>
-            <Header totalUnits={totalUnits} year={yearNum}/>
+            <Header totalUnits={totalUnits} year={yearNum} userId={userId}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 

@@ -29,10 +29,6 @@ interface PlanIdRow extends RowDataPacket {
   plan_id: number,
 }
 
-interface PlanIdResult {
-    plan_id: number,
-}
-
 /*
 Retrieves a User's plan_id from the database. plan_id has a foreign key of user_id.
 Return: A single array of an objct that has userId's plan_id
