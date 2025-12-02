@@ -138,3 +138,12 @@ npx cucumber-js test
 ```
 
 ## Design Diagrams
+
+
+## Use of GenAI
+Most SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu (https://www.seasoasa.ucla.edu/curric-24-25/44-compsci-ugstd-24.html). The prompt used to generate the queries for scraping the courses were as follows:
+
+
+Given this databse schema, how can I write a SQL script that scrapes the course name and number from this link: https://www.seasoasa.ucla.edu/curric-24-25/23-bioeng-ugstd-24.html
+
+A similar prompt was used for all of the majors scraped in the `course_scraper.sql` script.
