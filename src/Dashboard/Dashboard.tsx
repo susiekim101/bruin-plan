@@ -59,6 +59,10 @@ function Dashboard () {
         loadQuarterCourses(1, "Summer");
     }, [userId]);
 
+    useEffect(() => {
+        console.log("Total units updated in Dashboard: ", totalUnits);
+    }, [totalUnits]);
+
     const handleOpenClick = () => {
         if(dialogRef.current)
             dialogRef.current.showModal();

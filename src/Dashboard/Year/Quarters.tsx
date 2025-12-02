@@ -32,7 +32,7 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses, setQuar
     useEffect(() => {
         setTotalUnits(courses.reduce((sum, course) => sum + course.course_units, 0));
         setQuarterTotal(totalUnits);
-    }, [courses, setQuarterTotal]);
+    }, [courses, totalUnits]);
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
