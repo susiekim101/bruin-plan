@@ -25,6 +25,7 @@ function Dashboard () {
     const { logout } = useContext(AuthenticationContext);
     const [userId, setUserId] = useState<number | null>(null);
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
+    const [totalUnits, setTotalUnits] = useState<number>(0);
 
     useEffect(() => {
         // Valdiate user's tokens before logging in
@@ -128,7 +129,7 @@ function Dashboard () {
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleHome}/>
             <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleOpenClick}/>
             </div>
-            <Header year={yearNum}/>
+            <Header totalUnits={totalUnits} year={yearNum}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
@@ -148,7 +149,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
+                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses} setTotalUnits={setTotalUnits}/>
                                 </div>
                             </div>
                         ))}</div>

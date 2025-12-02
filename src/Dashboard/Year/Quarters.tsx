@@ -1,6 +1,7 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
 import { useEffect } from 'react';
+import React from 'react';
 import handleDropLogic from "./handleDropLogic";
 import removeCourseLogic from "./removeCourseLogic";
 
@@ -18,9 +19,20 @@ type quarterProps = {
     quarterName: 'Fall' | 'Winter' | 'Spring' | 'Summer';
     courses: Course[];
     loadCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
+    setQuarterTotal: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quarterProps) {
+function Quarters({userId, yearIndex, quarterName, courses, loadCourses, setQuarterTotal} : quarterProps) {
+    const [totalUnits, setTotalUnits] = React.useState<number>(0);
+    
+    useEffect(() => {
+        loadCourses(yearIndex, quarterName);
+    }, [quarterName, yearIndex]);
+
+    useEffect(() => {
+        setTotalUnits(courses.reduce((sum, course) => sum + course.course_units, 0));
+        setQuarterTotal(totalUnits);
+    }, [courses, setQuarterTotal]);
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -36,11 +48,6 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quart
         loadCourses(payload.sourceYearIndex, payload.sourceQuarterName);
         loadCourses(yearIndex, quarterName);
     }
-
-    useEffect(() => {
-        loadCourses(yearIndex, quarterName);
-    }, [quarterName, yearIndex]);
-
 
     const isEmptyCourse = (course: Course) => 
         course.course_number === "" &&
@@ -79,7 +86,7 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quart
                     Mark all as
                 </button>
                 <p className="text-black font-bold">
-                    Units: 15
+                    Units: {totalUnits}
                 </p>
             </div>
         </div>
