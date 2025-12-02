@@ -26,7 +26,6 @@ function Year({userId, yearIndex, allCourses, loadCourses, setTotalUnits} : year
 
     useEffect(() => {
         const totalUnits = fallUnits + winterUnits + springUnits + summerUnits;
-        console.log(totalUnits);
         setTotalUnits(totalUnits);
     }, [fallUnits, winterUnits, springUnits, summerUnits]);
 
