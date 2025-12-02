@@ -1,6 +1,7 @@
 import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
 import { useEffect } from 'react';
+import React from 'react';
 import handleDropLogic from "./handleDropLogic";
 import removeCourseLogic from "./removeCourseLogic";
 
@@ -21,6 +22,15 @@ type quarterProps = {
 }
 
 function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quarterProps) {
+    const [totalUnits, setTotalUnits] = React.useState<number>(0);
+    
+    useEffect(() => {
+        loadCourses(yearIndex, quarterName);
+    }, [quarterName, yearIndex]);
+
+    useEffect(() => {
+        setTotalUnits(courses.reduce((sum, course) => sum + course.course_units, 0));
+    }, [courses, totalUnits]);
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -36,11 +46,6 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quart
         loadCourses(payload.sourceYearIndex, payload.sourceQuarterName);
         loadCourses(yearIndex, quarterName);
     }
-
-    useEffect(() => {
-        loadCourses(yearIndex, quarterName);
-    }, [quarterName, yearIndex]);
-
 
     const isEmptyCourse = (course: Course) => 
         course.course_number === "" &&
@@ -78,9 +83,17 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quart
                 <button className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
                     Mark all as
                 </button>
-                <p className="text-black font-bold">
-                    Units: 15
-                </p>
+                <div> 
+                    { (totalUnits > 21 || (totalUnits < 12 && quarterName != "Summer")) ?
+                        <p className="text-red-600 font-bold">
+                            Units: {totalUnits}
+                        </p>
+                    :
+                        <p className="text-black font-bold">
+                            Units: {totalUnits}
+                        </p>
+                    }
+                </div>
             </div>
         </div>
     );

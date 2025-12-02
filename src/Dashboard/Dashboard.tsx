@@ -25,6 +25,7 @@ function Dashboard () {
     const { logout } = useContext(AuthenticationContext);
     const [userId, setUserId] = useState<number | null>(null);
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
+    const [totalUnits, setTotalUnits] = useState<number>(0);
 
     useEffect(() => {
         // Valdiate user's tokens before logging in
@@ -52,11 +53,23 @@ function Dashboard () {
 
     useEffect(() => {
         if (userId === null) return; 
-        loadQuarterCourses(1, "Fall");
-        loadQuarterCourses(1, "Winter");
-        loadQuarterCourses(1, "Spring");
-        loadQuarterCourses(1, "Summer");
+        for (let year = 1; year <= 4; year++) {
+            for (const quarter of ["Fall", "Winter", "Spring", "Summer"] as const) {
+                loadQuarterCourses(year, quarter);
+            }
+        }
     }, [userId]);
+
+    useEffect(() => {
+        let total = 0;
+        for (let year = 1; year <= 4; year++) {
+            for (const quarter of ["Fall", "Winter", "Spring", "Summer"] as const) {
+                const courses = allCourses[`${year}-${quarter}`] || [];
+                total += courses.reduce((sum, course) => sum + course.course_units, 0);
+            }
+        }
+        setTotalUnits(total);
+    }, [allCourses]);
 
     const handleOpenClick = () => {
         if(dialogRef.current)
@@ -128,7 +141,7 @@ function Dashboard () {
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleHome}/>
             <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleOpenClick}/>
             </div>
-            <Header year={yearNum}/>
+            <Header totalUnits={totalUnits} year={yearNum}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
