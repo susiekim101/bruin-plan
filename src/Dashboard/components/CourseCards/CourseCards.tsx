@@ -9,10 +9,9 @@ type CourseCardProps = {
     courseClassification: string;
     yearIndex?: number;
     quarterName?: 'Fall' | 'Winter' | 'Spring' | 'Summer';
-    removeFromSidebar?: (courseId: number) => void;
 }
 
-function CourseCard({ courseId, courseName, courseTitle, units, courseClassification, yearIndex, quarterName, removeFromSidebar}: CourseCardProps) {
+function CourseCard({ courseId, courseName, courseTitle, units, courseClassification, yearIndex, quarterName}: CourseCardProps) {
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
         const payload = {
             courseJson: JSON.stringify({
@@ -29,10 +28,6 @@ function CourseCard({ courseId, courseName, courseTitle, units, courseClassifica
 
         console.log(payload);
         event.dataTransfer.setData("application/json", JSON.stringify(payload));
-
-        if (!quarterName && removeFromSidebar) {
-            removeFromSidebar(courseId);
-        }
     };
 
     return (
