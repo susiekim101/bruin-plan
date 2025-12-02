@@ -19,7 +19,7 @@ interface UserMajor {
     label: string
 }
 interface Course {
-    course_id: number,
+    course_id: number | null,
     course_number: string,
     course_name: string,
     course_units: number,
@@ -30,14 +30,16 @@ interface Course {
 
 type sideBarProps = {
     userId: number | null;
+    courses: Course[];
+    setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+    filteredCourses: Course[];
+    setFilteredCourses: React.Dispatch<React.SetStateAction<Course[]>>;
     loadQuarterCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void;
 }
 
-function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
+function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCourses, loadQuarterCourses}: sideBarProps) {
     const [ userMajor, setUserMajor ] = useState<Major>();
-    const [ courses, setCourses ] = useState<Course[]>([]);
     const [ userCourses, setUserCourses ] = useState<Course[] | null>(null);
-    const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
     const [ majors, setMajors ] = useState<MajorOption[]>([]);
@@ -165,11 +167,6 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     }
-
-    const removeFromSidebar = (courseId: number) => {
-        setCourses(prev => prev.filter(c => c.course_id !== courseId));
-        setFilteredCourses(prev => prev.filter(c => c.course_id !== courseId));
-    };
     
     async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
@@ -217,6 +214,7 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
             />
             <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                 {filteredCourses.map((course, index) => (
+                    course.course_id === null ? null : (
                     <CourseCard 
                         key={index}
                         courseId={course.course_id}
@@ -225,8 +223,8 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
                         units={course.course_units}
                         status={course.status}
                         courseClassification={course.category}
-                        removeFromSidebar={removeFromSidebar}
                     />
+                    )
                 ))}
             </div>
         </div>

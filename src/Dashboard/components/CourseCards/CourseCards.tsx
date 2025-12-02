@@ -10,7 +10,6 @@ type CourseCardProps = {
     status?: 'Planned' | 'In Progress' | 'Completed';
     yearIndex?: number;
     quarterName?: 'Fall' | 'Winter' | 'Spring' | 'Summer';
-    removeFromSidebar?: (courseId: number) => void;
 }
 
 function CourseCard({ courseId, courseName, courseTitle, units, status, courseClassification, yearIndex, quarterName, removeFromSidebar}: CourseCardProps) {
@@ -31,10 +30,6 @@ function CourseCard({ courseId, courseName, courseTitle, units, status, courseCl
 
         console.log(payload);
         event.dataTransfer.setData("application/json", JSON.stringify(payload));
-
-        if (!quarterName && removeFromSidebar) {
-            removeFromSidebar(courseId);
-        }
     };
 
     return (

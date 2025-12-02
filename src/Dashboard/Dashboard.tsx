@@ -15,6 +15,7 @@ interface Course {
     course_units: number;
     status: 'Planned' | 'In Progress' | 'Completed';
     category: string;
+    major_id: number;
 }
 
 function Dashboard () {
@@ -27,6 +28,9 @@ function Dashboard () {
     const [userId, setUserId] = useState<number | null>(null);
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
     const [totalUnits, setTotalUnits] = useState<number>(0);
+    const [ courses, setCourses ] = useState<Course[]>([]);
+    const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([]);
+
 
     useEffect(() => {
         // Valdiate user's tokens before logging in
@@ -108,6 +112,11 @@ function Dashboard () {
         }
     };
 
+    const removeFromSidebar = (courseId: number) => {
+        setCourses(prev => prev.filter(c => c.course_id !== courseId));
+        setFilteredCourses(prev => prev.filter(c => c.course_id !== courseId));
+    };
+
     async function loadQuarterCourses (year: number, quarter: 'Fall' | 'Winter' | 'Spring' | 'Summer') {
         if (!userId) {
             return;
@@ -161,7 +170,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
+                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} removeFromSidebar={removeFromSidebar} loadCourses={loadQuarterCourses}/>
                                 </div>
                             </div>
                         ))}</div>
@@ -178,7 +187,7 @@ function Dashboard () {
                 
         </div>
         <div className="w-full">
-            <Sidebar userId={userId} loadQuarterCourses={loadQuarterCourses} /> 
+            <Sidebar userId={userId} courses={courses} setCourses={setCourses} filteredCourses={filteredCourses} setFilteredCourses={setFilteredCourses} loadQuarterCourses={loadQuarterCourses} /> 
         </div>
     </div>
     )
