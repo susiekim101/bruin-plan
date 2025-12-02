@@ -24,6 +24,6 @@ test('execute query once with two parameters', async () => {
     const mock_result = [mock_OkPackage, []];
     mockExecute.mockResolvedValueOnce(mock_result);
 
-    await sharePlan({user_id: mockUserId});
+    await sharePlan(mockUserId);
     expect(mockExecute).toHaveBeenCalledTimes(1);
 })
