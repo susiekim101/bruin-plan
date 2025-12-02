@@ -17,7 +17,7 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
                     FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
                     WHERE plan_id = ? AND year = ? AND quarter = ?`;
 
-        const results: PlanIdResult[] = await getPlanId({userId: userId});
+        const results: PlanIdResult[] = await getPlanId(userId);
         if(!results || results.length == 0) {
             throw new Error('Cannot fetch user courses');
         }

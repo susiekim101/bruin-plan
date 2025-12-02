@@ -1,9 +1,5 @@
 import { connection } from "../src/database.ts"
 
-interface getMajorByIdProps {
-    major_id: number
-};
-
 interface getPlanItemsProps {
     plan_id: number
 };
@@ -33,13 +29,14 @@ Retrieves the name of the major by its major_id
 Returns a row with a single object that has a major_name field
     e.g. [ { major_name: "Computer Science"} ]
 */
-export async function getMajorById({ major_id }: getMajorByIdProps) {
+export async function getMajorById( major_id: number) {
     try {
         const query = `SELECT major_name FROM Majors WHERE major_id = ?`;
         const [rows] = await connection.execute(query, [ major_id ]);
         return rows;
     } catch (err) {
         console.error(`getMajorById(${major_id}) threw an error: ${err}`);
+        return [];
     }
 }
 

@@ -8,10 +8,6 @@ interface addCourseProps {
   quarterName: "Fall" | "Winter" | "Spring" | "Summer";
 }
 
-interface getPlanIdProps {
-    userId: number,
-}
-
 interface PlanIdRow extends RowDataPacket {
   plan_id: number,
 }
@@ -21,7 +17,7 @@ Retrieves a User's plan_id from the database. plan_id has a foreign key of user_
 Return: A single array of an objct that has userId's plan_id
   [{ plan_id: 5 }]
 */
-export async function getPlanId({ userId }: getPlanIdProps) {
+export async function getPlanId(userId: number) {
     const query = `SELECT plan_id FROM User_Plans WHERE user_id = ?`;
     try {
       const [ results ] = await connection.execute<PlanIdRow[]>(query, [ userId ]);
@@ -35,7 +31,7 @@ export async function getPlanId({ userId }: getPlanIdProps) {
 
 export async function addCoursesToQuarter({ userId, courseId, yearIndex, quarterName }: addCourseProps) {
 
-  const results: PlanIdRow[] = await getPlanId({ userId: userId });
+  const results: PlanIdRow[] = await getPlanId(userId);
   if (!results || results.length == 0 || results[0].length == 0)  {
     throw new Error('Cannot find planId');
   }

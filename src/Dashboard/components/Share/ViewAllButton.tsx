@@ -3,7 +3,6 @@ export default function ViewAll() {
     const navigate = useNavigate();
 
     function handleClick() {
-        console.log("View All button clicked")
         navigate('/public');
     } 
 

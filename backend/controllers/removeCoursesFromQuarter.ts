@@ -13,7 +13,7 @@ interface PlanIdResult {
 }
 
 export async function removeCoursesFromQuarter({ userId, courseId, yearIndex, quarterName }: removeCourseProps) {
-const results: PlanIdResult[] = await getPlanId({ userId: userId });
+const results: PlanIdResult[] = await getPlanId(userId);
   if (!results || results.length == 0)  {
     throw new Error('Cannot find planId');
   }

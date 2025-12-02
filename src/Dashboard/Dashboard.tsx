@@ -29,13 +29,11 @@ function Dashboard () {
     useEffect(() => {
         // Valdiate user's tokens before logging in
         const userVerification = async () => {
-            // console.log(`Logged in status: ${loggedIn}`);
             if(localStorage.getItem('loggedIn') == 'false') {
                 navigate('/');
                 return;
             }
             try {
-
                 await axios.get('http://localhost:3001/user/verifyUser', { withCredentials: true });
             } catch (err) {
                 console.log("User unverified. ", err);
