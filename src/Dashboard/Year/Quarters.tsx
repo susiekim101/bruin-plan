@@ -83,9 +83,17 @@ function Quarters({userId, yearIndex, quarterName, courses, loadCourses} : quart
                 <button className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
                     Mark all as
                 </button>
-                <p className="text-black font-bold">
-                    Units: {totalUnits}
-                </p>
+                <div> 
+                    { (totalUnits > 21 || (totalUnits < 12 && quarterName != "Summer")) ?
+                        <p className="text-red-600 font-bold">
+                            Units: {totalUnits}
+                        </p>
+                    :
+                        <p className="text-black font-bold">
+                            Units: {totalUnits}
+                        </p>
+                    }
+                </div>
             </div>
         </div>
     );
