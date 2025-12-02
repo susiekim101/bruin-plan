@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import AuthenticationContext from '../../AuthenticationContext';
+import { handleOpenClick, handleCloseClick } from './LoginHandler';
 
 interface UserData {
     first_name: string,
@@ -65,22 +66,6 @@ function LogIn({ textStyle, px, py }: LogInProps) {
         };
     }, [signup])
 
-    function handleOpenClick() {
-        if(localStorage.getItem('loggedIn') == 'true') {
-            navigate('/dashboard');
-            return;
-        }
-        if(dialogRef.current) {
-            dialogRef.current.showModal();
-        }
-    }
-
-    function handleCloseClick() {
-        if(dialogRef.current) {
-            dialogRef.current.close();
-        }
-    }
-
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { name, value } = e.target;
         setUserData((prevData) => ({
@@ -119,7 +104,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
                 <form ref={formRef} onSubmit={handleSubmit} className="fieldset bg-base-200 border-base-300 rounded-box w-xs h-fit border p-4">
                     <header className="flex justify-between">
                         <legend className="text-lg" id="registration-title">{signup ? "Create Account" : "Log In"}</legend>
-                        <X className="w-5 h-5 cursor-pointer" onClick={handleCloseClick}/>
+                        <X className="w-5 h-5 cursor-pointer" onClick={() => handleCloseClick(dialogRef)}/>
                     </header>
 
                     {signup && (
@@ -185,7 +170,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
 
             <button 
                 className={`px-${px} py-${py} cursor-pointer ${textStyle} font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition`}
-                onClick={handleOpenClick} 
+                onClick={() => handleOpenClick(navigate, dialogRef)} 
                 id="my-dashboard"
             >
                 My Dashboard

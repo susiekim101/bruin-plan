@@ -1,4 +1,3 @@
-// Share plan {user_id, major_id, is_shared}
 import { connection } from "../src/database.ts"
 
 /*

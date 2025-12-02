@@ -1,6 +1,6 @@
-import { CodeXml, Microscope, MonitorCog, Computer } from 'lucide-react';
-import { useRef, type ReactElement } from 'react';
+import { useRef } from 'react';
 import FullPlan from './FullPlan';
+import { handleOpenClick, handleCloseClick, majorIcon } from './PlanCardController';
 
 interface PlanCardProps {
     plan_id: number,
@@ -10,39 +10,12 @@ interface PlanCardProps {
 function PlanCard( { plan_id, major }: PlanCardProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
 
-    const handleOpenClick = () => {
-        if(dialogRef.current) {
-            dialogRef.current.showModal();
-        }
-    }
-
-    const handleCloseClick = () => {
-        if(dialogRef.current) {
-            dialogRef.current.close();
-        }
-    }
-
-    const majorIcon: () => ReactElement = () => {
-        switch (major) {
-            case "Bioengineering":
-                return <Microscope className="w-15 h-15 text-yellow-200"/>
-            case "Computer Science":
-                return <CodeXml className="w-15 h-15 text-yellow-200"/>
-            case "Computer Engineering":
-                return <MonitorCog className="w-15 h-15 text-yellow-200"/>
-            case "Computer Science and Engineering":
-                return <Computer className="w-15 h-15 text-yellow-200"/>
-            default:
-                return <></>
-        }
-    }
-
     return (
         <>
             <div className="h-full flex flex-col p-2 rounded-xl gap-2 bg-blue-800 transition-transform duration-300 hover:scale-[1.05] cursor-pointer"
-                onClick={handleOpenClick}>
+                onClick={() => handleOpenClick(dialogRef)}>
                 <div className="flex justify-center items-center aspect-square rounded-xl w-full bg-blue-200">
-                    { majorIcon() }
+                    { majorIcon(major) }
                 </div>
 
                 <div className="h-full flex flex-col text-center justify-center">
@@ -51,7 +24,7 @@ function PlanCard( { plan_id, major }: PlanCardProps) {
             </div>
 
             <dialog ref={dialogRef}>
-                <FullPlan plan_id={plan_id} handleCloseClick={handleCloseClick}/>
+                <FullPlan plan_id={plan_id} handleCloseClick={() => handleCloseClick(dialogRef)}/>
             </dialog>
         </>
     );
