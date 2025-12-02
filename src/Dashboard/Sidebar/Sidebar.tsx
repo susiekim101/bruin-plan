@@ -35,6 +35,7 @@ type sideBarProps = {
 function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
     const [ userMajor, setUserMajor ] = useState<Major>();
     const [ courses, setCourses ] = useState<Course[]>([]);
+    const [ userCourses, setUserCourses ] = useState<Course[] | null>(null);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([])
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
@@ -89,41 +90,56 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
         loadAllMajors();
     }, [userMajor?.major_id]);
 
+    useEffect(() => {
+        const loadUserCourses = async () => {
+            if (! userId)
+                return;
+            
+            try {
+                const response = await axios.get(`http://localhost:3001/courses/planned/${userId}`, { withCredentials: true});
+                setUserCourses(response.data.data);
+                console.log("User's planned courses: ", response.data.data);
+            } catch (err) {
+                console.error("Failed to load user's courses: ", err);
+                navigate('/');
+            }
+        }
+        loadUserCourses();
+    }, [userId]);
+
     // Fetch all courses for a given major
     useEffect(() => {
-        const loadCourses = async () => {
-
-            // Return if userMajor hasn't been loaded
-            if (! userMajor )
+        const loadCourses = async (majorID: number) => {
+            // Return if userId hasn't been loaded
+            if (! userCourses)
                 return;
 
-            if ( selectedMajor ) {
-                // Display courses for selectedMajor (different from userMajor)
-                try {
-                    const selectedMajorID = selectedMajor.value;
-                    const response = await axios.get(`http://localhost:3001/courses/${selectedMajorID}`, { withCredentials: true });
-                    setCourses(response.data.data);
-                    setFilteredCourses(response.data.data);
-                } catch (err){
-                    console.error(`Failed to load courses for selected major ${selectedMajor.value}`, err);
-                    navigate('/');
-                }
-            } else {
-                // Display courses for userMajor
-                try {
-                    const userMajorID = userMajor.major_id;
-                    const response = await axios.get(`http://localhost:3001/courses/${userMajorID}`, { withCredentials: true });
-                    setCourses(response.data.data);
-                    setFilteredCourses(response.data.data);
-                } catch (err){
-                    console.error(`Failed to load courses for user's major ${userMajor.major_name}: `, err);
-                    navigate('/');
-                }
+            try {
+                const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
+                const allMajorCourses = response.data.data;
+                
+                // Remove courses already in user's planner
+                const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
+                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
+                
+                setCourses(coursesNotPlanned);
+                setFilteredCourses(coursesNotPlanned);
+                console.log(`Displaying courses for major ${majorID}`, coursesNotPlanned);
+            } catch (err){
+                console.error(`Failed to load courses for selected major ${majorID}`, err);
+                navigate('/');
             }
         };
 
-        loadCourses();
-    }, [userMajor?.major_id, selectedMajor?.value]);
+        if ( selectedMajor ) {
+            loadCourses(selectedMajor.value);
+        } else if (userMajor) {
+            loadCourses( userMajor.major_id )
+        } else {
+            return;
+        }
+        
+    }, [userCourses, userMajor?.major_id, selectedMajor?.value]);
 
     // Display courses whose course codes match search term
     useEffect(() => {
