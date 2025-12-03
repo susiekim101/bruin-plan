@@ -7,7 +7,7 @@ jest.mock('../src/database.ts', () => ({
 
 // import the mocked connection and the function to be tested
 import { connection } from "../src/database.ts";
-import { fetchUserCourses, fetchAllUserCourses } from "../controllers/fetchUserCourses.ts";
+import { fetchUserCourses, fetchAllUserCourses } from "../controllers/quarterCourses.ts";
 
 // create a mock execute function
 const mockExecute = connection.execute as jest.Mock;

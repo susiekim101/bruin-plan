@@ -5,7 +5,7 @@ import 'dotenv/config';
 setDefaultTimeout(60 * 1000);
 let page, browser;
 
-Before(async function () {
+Before({ tags: "@userVerification"}, async function () {
     browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     page = await context.newPage();
@@ -28,6 +28,6 @@ Then('I should be able to enter my password', async function () {
 });
 
 
-After(async function () {
+After({ tags: "@userVerification"}, async function () {
     await browser.close();
 })

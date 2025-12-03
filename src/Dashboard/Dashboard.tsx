@@ -27,21 +27,22 @@ function Dashboard () {
     const { logout } = useContext(AuthenticationContext);
     const [userId, setUserId] = useState<number | null>(null);
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
-    const [totalUnits, setTotalUnits] = useState<number>(0);
+    const [totalUnits, setTotalUnits] = useState<number>(0); 
     const [ courses, setCourses ] = useState<Course[]>([]);
     const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([]);
+    const MIN_UNITS = 30;
 
 
     useEffect(() => {
+        localStorage.setItem('MIN_UNITS', `${MIN_UNITS}`);
+
         // Valdiate user's tokens before logging in
         const userVerification = async () => {
-            // console.log(`Logged in status: ${loggedIn}`);
             if(localStorage.getItem('loggedIn') == 'false') {
                 navigate('/');
                 return;
             }
             try {
-
                 await axios.get('http://localhost:3001/user/verifyUser', { withCredentials: true });
             } catch (err) {
                 console.log("User unverified. ", err);
@@ -127,7 +128,6 @@ function Dashboard () {
                 yearIndex: year,
                 quarterName: quarter
             };
-            // console.log("user data being send to get courses", userData);
             const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
             setAllCourses(prev => ({
                 ...prev,
@@ -150,7 +150,7 @@ function Dashboard () {
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleHome}/>
             <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleOpenClick}/>
             </div>
-            <Header totalUnits={totalUnits} year={yearNum}/>
+            <Header totalUnits={totalUnits} year={yearNum} userId={userId}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 

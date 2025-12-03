@@ -30,7 +30,6 @@ async function removeCourseLogic({courseJson, userId, yearIndex, quarterName} : 
                 quarterName: quarterName
             };
             try {
-                console.log("Removing course with data:", courseData);
                 await axios.post(`http://localhost:3001/quarter/removeCourses`, courseData);
             } catch (err) {
                 console.error(`Could not remove dragged course from database: `, err);

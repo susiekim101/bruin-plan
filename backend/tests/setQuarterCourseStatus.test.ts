@@ -1,6 +1,6 @@
 // test: course status is updated in a user's plan for a specific quarter
 import { connection } from '../src/database';
-import { setQuarterCourseStatus } from '../controllers/setQuarterCourseStatus';
+import { setQuarterCourseStatus } from '../controllers/quarterCourses';
 
 // create a fixture for database
 jest.mock('../src/database');
@@ -31,7 +31,7 @@ test('query to setQuarterCourseStatus returns update result', async () => {
         userId: 3, 
         yearIndex: 1,
         quarterName: 'Fall', 
-        status: 'Taken'
+        status: 'Completed'
     });
 
   // assert that mockExecute was called with correct queries and values
