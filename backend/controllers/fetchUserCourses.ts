@@ -27,7 +27,6 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
         // console.log(rows);
         return rows;
     } catch (error) {
-        console.log('Error fetching data:', error)
         return [];
     }
 }
@@ -39,7 +38,6 @@ export async function fetchAllUserCourses(userId: number) {
                         WHERE plan_id = ?`;
 
         const results: PlanIdResult[] = await getPlanId({userId: userId});
-        console.log("Fetched plan_id: ", results);
         
         if(!results || results.length == 0) {
             throw new Error('Cannot fetch user courses');
