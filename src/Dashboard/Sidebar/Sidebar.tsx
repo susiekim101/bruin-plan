@@ -23,6 +23,7 @@ interface Course {
     course_number: string,
     course_name: string,
     course_units: number,
+    status: 'Planned' | 'In Progress' | 'Completed';
     category: string,
     major_id: number
 }
@@ -222,6 +223,7 @@ function Sidebar({userId, loadQuarterCourses}: sideBarProps) {
                         courseName={course.course_number}
                         courseTitle={course.course_name}
                         units={course.course_units}
+                        status={course.status}
                         courseClassification={course.category}
                         removeFromSidebar={removeFromSidebar}
                     />

@@ -9,7 +9,7 @@ interface setQuarterCourseStatusProps {
     userId: number,
     yearIndex: number,
     quarterName: "Fall" | "Winter" | "Spring" | "Summer",
-    status: "Planned" | "In Progress" | "Taken"
+    status: "Planned" | "In Progress" | "Completed"
 }
 
 export async function setQuarterCourseStatus({ userId, yearIndex, quarterName, status }: setQuarterCourseStatusProps) {
