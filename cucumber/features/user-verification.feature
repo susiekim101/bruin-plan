@@ -1,3 +1,4 @@
+@userVerification
 Feature: User registration flow from landing page
     As a potential new user,
     I want to start the sign up process from the landing page,

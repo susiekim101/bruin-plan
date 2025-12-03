@@ -45,12 +45,10 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-        console.log('Search by: ', event.target.value);
     };
 
     const handleFilter = (option: MajorOption | null) => {
         setSelectedMajor(option);
-        console.log('Selected major: ', option);
     };
 
     const navigate = useNavigate();
@@ -61,7 +59,6 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
             try {
                 const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
                 setUserMajor(response.data.data);
-                console.log("Loaded user's major: ", response.data.data);
             } catch (err){
                 console.error("Failed to load user's major: ", err);
                 navigate('/');
@@ -86,7 +83,6 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
                     );
 
                     setMajors(allMajorsExceptUserMajor);
-                    console.log("All majors except user's major: ", allMajorsExceptUserMajor);
                 }
             } catch (err) {
                 console.error("Failed to load all majors: ", err);

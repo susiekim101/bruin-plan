@@ -5,7 +5,7 @@ import 'dotenv/config';
 setDefaultTimeout(60 * 1000);
 let page, browser;
 
-Before(async function () {
+Before({ tags: "@userRegistration"}, async function () {
     browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     page = await context.newPage();
@@ -54,6 +54,6 @@ Then('when I click the Sign up text, the input fields change.', async function (
     expect(await page.locator('select[id="major-input"]').isVisible()).toBeTruthy();
 });
 
-After(async function () {
+After({ tags: "@userRegistration"}, async function () {
     await browser.close();
 })

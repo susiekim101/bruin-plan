@@ -1,6 +1,6 @@
 // test: course shows up in a specific quarter in a user's plan
 import { connection } from '../src/database';
-import { addCoursesToQuarter } from '../controllers/addCoursesToQuarter';
+import { addCoursesToQuarter } from '../controllers/quarterCourses';
 
 // create a fixture for database
 jest.mock('../src/database');

@@ -49,10 +49,10 @@ function CourseStatus({ initialStatus = 'Planned' }: CourseStatusProps) {
                 <option value="In Progress">In Progress</option>
                 <option value="Taken">Taken</option>
             </select>
-            <span
+            {/* <span
                 ref={spanRef}
                 className="absolute left-[-9999px] top-0 whitespace-pre px-3"
-            />
+            /> */}
         </div>
     );
 };

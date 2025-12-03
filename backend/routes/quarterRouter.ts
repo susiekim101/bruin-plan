@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
-import { addCoursesToQuarter } from "../controllers/addCoursesToQuarter.ts";
-import { fetchUserCourses, fetchAllUserCourses } from '../controllers/fetchUserCourses.ts';
-import { removeCoursesFromQuarter } from '../controllers/removeCoursesFromQuarter.ts';
+import { removeCoursesFromQuarter, fetchUserCourses, addCoursesToQuarter } from '../controllers/quarterCourses.ts';
 
 const quarterRouter = Router();
 

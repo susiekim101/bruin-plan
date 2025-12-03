@@ -26,7 +26,6 @@ function CourseCard({ courseId, courseName, courseTitle, units, courseClassifica
 
         };
 
-        console.log(payload);
         event.dataTransfer.setData("application/json", JSON.stringify(payload));
     };
 

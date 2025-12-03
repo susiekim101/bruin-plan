@@ -1,16 +1,13 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { fetchCoursesByMajor } from '../controllers/fetchCoursesByMajor.ts';
-import { fetchAllUserCourses } from '../controllers/fetchUserCourses.ts';
+import { fetchAllUserCourses } from '../controllers/quarterCourses.ts';
 import verifyToken from '../tokenMiddleware.ts';
-// import jwt from 'jsonwebtoken';
-// import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 
 const coursesRouter = Router();
 
 coursesRouter.get('/:major_id', verifyToken, async (req: Request, res: Response) => {
-    // const major_id = res.locals.user.major_id;
     const major_id = Number(req.params.major_id);
     try {
         const courses = await fetchCoursesByMajor(major_id);

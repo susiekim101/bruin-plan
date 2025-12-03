@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import AuthenticationContext from '../../AuthenticationContext';
+import { handleOpenClick, handleCloseClick } from './LoginHandler';
 
 interface UserData {
     first_name: string,
@@ -12,7 +13,13 @@ interface UserData {
     major: string
 };
 
-function LogIn() {
+interface LogInProps {
+    textStyle: string,
+    px: number,
+    py: number
+}
+
+function LogIn({ textStyle, px, py }: LogInProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
     const [signup, setSignUp] = useState(false);
@@ -59,22 +66,6 @@ function LogIn() {
         };
     }, [signup])
 
-    function handleOpenClick() {
-        if(localStorage.getItem('loggedIn') == 'true') {
-            navigate('/dashboard');
-            return;
-        }
-        if(dialogRef.current) {
-            dialogRef.current.showModal();
-        }
-    }
-
-    function handleCloseClick() {
-        if(dialogRef.current) {
-            dialogRef.current.close();
-        }
-    }
-
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { name, value } = e.target;
         setUserData((prevData) => ({
@@ -93,9 +84,7 @@ function LogIn() {
 
         const url: string = signup ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
         try {
-            // console.log(url);
             await axios.post(url, userData, { withCredentials: true });
-            // console.log("Form submit succeeded");
             navigate('/dashboard');
             login();
             return;
@@ -111,11 +100,11 @@ function LogIn() {
 
     return (
         <div className="">
-            <dialog ref={dialogRef} className="p-0 rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
+            <dialog ref={dialogRef} className="p-0 border rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
                 <form ref={formRef} onSubmit={handleSubmit} className="fieldset bg-base-200 border-base-300 rounded-box w-xs h-fit border p-4">
                     <header className="flex justify-between">
                         <legend className="text-lg" id="registration-title">{signup ? "Create Account" : "Log In"}</legend>
-                        <X className="w-5 h-5 cursor-pointer" onClick={handleCloseClick}/>
+                        <X className="w-5 h-5 cursor-pointer" onClick={() => handleCloseClick(dialogRef)}/>
                     </header>
 
                     {signup && (
@@ -180,8 +169,8 @@ function LogIn() {
             </dialog>
 
             <button 
-                className="px-6 py-3 cursor-pointer text-lg font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition"
-                onClick={handleOpenClick} 
+                className={`px-${px} py-${py} cursor-pointer ${textStyle} font-semibold border-2 border-[#0353A4] rounded-xl text-[#0353A4] bg-white hover:bg-[#0353A4] hover:text-white transition`}
+                onClick={() => handleOpenClick(navigate, dialogRef)} 
                 id="my-dashboard"
             >
                 My Dashboard
