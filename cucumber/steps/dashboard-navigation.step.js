@@ -5,7 +5,7 @@ import 'dotenv/config';
 setDefaultTimeout(60 * 1000);
 let page, browser;
 
-Before(async function () {
+Before({tags: "@dashboardNavigation"}, async function () {
     browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     page = await context.newPage();
@@ -223,6 +223,6 @@ Then('the screen and year number don\'t change when I click below the left arrow
     expect(await page.locator('text="Year 1"').isVisible()).toBeTruthy();
 });
     
-After(async function () {
+After({tags: "@dashboardNavigation"}, async function () {
     await browser.close();
 })
