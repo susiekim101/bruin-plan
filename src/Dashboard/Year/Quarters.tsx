@@ -2,14 +2,17 @@ import CourseCard from "../components/CourseCards/CourseCards";
 import CustomCard from "../components/CourseCards/CustomCards";
 import { useEffect } from 'react';
 import React from 'react';
+import Select from "react-select";
 import handleDropLogic from "./handleDropLogic";
 import removeCourseLogic from "./removeCourseLogic";
+import axios from "axios";
 
 interface Course {
     course_id: number | null;
     course_number: string;
     course_name: string;
     course_units: number;
+    status: 'Planned' | 'In Progress' | 'Completed';
     category: string;
 }
 
@@ -77,6 +80,7 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
                             courseName={course.course_number}
                             courseTitle={course.course_name}
                             units={course.course_units}
+                            status={course.status}
                             courseClassification={course.category}
                             yearIndex={yearIndex}
                             quarterName={quarterName}
@@ -87,9 +91,68 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
             </div>
             
             <div className="flex flex-col justify-center items-center mt-0.5">
-                <button className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
-                    Mark all as
-                </button>
+                <div className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
+                    <Select
+                        options={[
+                            { value: 'Planned', label: 'Planned' },
+                            { value: 'In Progress', label: 'In Progress' },
+                            { value: 'Completed', label: 'Completed' },
+                        ]} 
+                        controlShouldRenderValue={false}
+                        styles={{
+                            control: (baseStyles) => ({
+                                ...baseStyles,
+                                border: 'none',
+                                boxShadow: 'none',
+                                backgroundColor: 'transparent',
+                                width: 'fit-content',
+                                minHeight: '20px',
+                                cursor: 'pointer',
+                            }),
+                            dropdownIndicator: (baseStyles) => ({
+                                ...baseStyles,
+                                padding: 0,
+                                color: 'white',
+                                '&:hover': {
+                                    color: 'white',
+                                },
+                            }),
+                            indicatorSeparator: (baseStyles) => ({
+                                ...baseStyles,
+                                display: 'none',
+                            }),
+                            option: (baseStyles, state) => ({
+                                ...baseStyles,
+                                backgroundColor: state.isFocused ? '#3b82f6' : 'white',
+                                color: state.isFocused ? 'white' : 'black',
+                                cursor: 'pointer',
+                            }),
+                            placeholder: (baseStyles) => ({
+                                ...baseStyles,
+                                color: 'white',
+                            }),
+                        }}
+                        placeholder="Mark All As" 
+                        onChange={async (selectedOption) => {
+                            if (selectedOption === null) {
+                                return;
+                            }
+                            const newStatus = selectedOption.value as 'Planned' | 'In Progress' | 'Completed';
+                                const statusData = {
+                                    userId: userId,
+                                    yearIndex: yearIndex,
+                                    quarterName: quarterName,
+                                    status: newStatus,
+                                };
+                                try {
+                                    await axios.post(`http://localhost:3001/quarter/setStatus`, statusData);
+                                } catch (err) {
+                                    console.error(`Could not update quarter status in database: `, err);
+                                }
+                            loadCourses(yearIndex, quarterName);
+                        }}
+                    />
+                </div>
                 <div> 
                     { (totalUnits > 21 || (totalUnits < 12 && quarterName != "Summer")) ?
                         <p className="text-red-600 font-bold">

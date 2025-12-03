@@ -21,6 +21,13 @@ interface fetchUserCoursesProps {
     quarterName: string;
 }
 
+interface setQuarterCourseStatusProps {
+    userId: number,
+    yearIndex: number,
+    quarterName: "Fall" | "Winter" | "Spring" | "Summer",
+    status: "Planned" | "In Progress" | "Completed"
+}
+
 interface PlanIdResult {
     plan_id: number,
 }
@@ -88,7 +95,7 @@ const results: PlanIdResult[] = await getPlanId(userId);
 
 export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetchUserCoursesProps) {
     try {
-        const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
+        const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, pi.status, c.category 
                     FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
                     WHERE plan_id = ? AND year = ? AND quarter = ?`;
 
@@ -108,7 +115,7 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
 
 export async function fetchAllUserCourses(userId: number) {
     try {
-        const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
+        const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, pi.status, c.category 
                         FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
                         WHERE plan_id = ?`;
 
@@ -127,3 +134,18 @@ export async function fetchAllUserCourses(userId: number) {
         return [];
     }
 }
+
+export async function setQuarterCourseStatus({ userId, yearIndex, quarterName, status }: setQuarterCourseStatusProps) {
+    const results: PlanIdResult[] = await getPlanId(userId);
+
+    if (!results || results.length == 0)  {
+        throw new Error('Cannot find planId');
+    }
+    const planId = results[0].plan_id;
+
+    const query = `UPDATE Plan_Items SET status = ? WHERE plan_id = ? AND year = ? AND quarter = ?;`;
+  
+    const [setResult] = await connection.execute(query, [status, planId, yearIndex, quarterName]);
+
+    return setResult;
+}   

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
-import { removeCoursesFromQuarter, fetchUserCourses, addCoursesToQuarter } from '../controllers/quarterCourses.ts';
+import { removeCoursesFromQuarter, fetchUserCourses, addCoursesToQuarter, setQuarterCourseStatus} from '../controllers/quarterCourses.ts';
 
 const quarterRouter = Router();
 
@@ -43,5 +43,18 @@ quarterRouter.post("/removeCourses", async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to remove course. "});
     }
 })
+
+
+quarterRouter.post("/setStatus", async (req: Request, res: Response) => {
+    const { userId, yearIndex, quarterName, status } = req.body;
+
+    try {
+        await setQuarterCourseStatus({ userId, yearIndex, quarterName, status });
+        res.status(200).json({ message: "Course status updated" });
+    } catch (err) {
+        console.error(`Could not update course status for userId: ${userId}`, err);
+        res.status(500).json({ error: "Failed to update course status. "});
+    }
+});
 
 export default quarterRouter;

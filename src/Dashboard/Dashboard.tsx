@@ -13,6 +13,7 @@ interface Course {
     course_number: string;
     course_name: string;
     course_units: number;
+    status: 'Planned' | 'In Progress' | 'Completed';
     category: string;
     major_id: number;
 }
