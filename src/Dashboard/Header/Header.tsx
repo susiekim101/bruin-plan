@@ -4,14 +4,15 @@ import Share from "../components/Share/Share";
 interface HeaderProps {
     totalUnits: number,
     year: number,
+    userId: number | null
 }
-export default function Header({totalUnits, year}: HeaderProps) {
 
+export default function Header({totalUnits, year, userId}: HeaderProps) {
     return (
         <div className="w-full flex justify-between items-center px-3">
-            <TotalUnits units={totalUnits}/>
+            <TotalUnits units={totalUnits} userId={userId}/>
             <p className="text-4xl text-sky-800 font-bold">Year {year}</p>
-            <Share/>
+            <Share units={totalUnits}/>
         </div>
     );
 }

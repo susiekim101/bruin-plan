@@ -4,7 +4,7 @@
             "cucumber/features/"
         ],
         "require": [
-            "cucumber/steps/*.js"
+            "cucumber/steps/"
         ],
         "formatOptions": {
             "snippetInterface": "async-await"

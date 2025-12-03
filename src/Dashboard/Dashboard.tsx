@@ -13,7 +13,9 @@ interface Course {
     course_number: string;
     course_name: string;
     course_units: number;
+    status: 'Planned' | 'In Progress' | 'Completed';
     category: string;
+    major_id: number;
 }
 
 function Dashboard () {
@@ -25,18 +27,22 @@ function Dashboard () {
     const { logout } = useContext(AuthenticationContext);
     const [userId, setUserId] = useState<number | null>(null);
     const [allCourses, setAllCourses] = useState<{ [key: string]: Course[] }>({});
-    const [totalUnits, setTotalUnits] = useState<number>(0);
+    const [totalUnits, setTotalUnits] = useState<number>(0); 
+    const [ courses, setCourses ] = useState<Course[]>([]);
+    const [ filteredCourses, setFilteredCourses ] = useState<Course[]>([]);
+    const MIN_UNITS = 30;
+
 
     useEffect(() => {
+        localStorage.setItem('MIN_UNITS', `${MIN_UNITS}`);
+
         // Valdiate user's tokens before logging in
         const userVerification = async () => {
-            // console.log(`Logged in status: ${loggedIn}`);
             if(localStorage.getItem('loggedIn') == 'false') {
                 navigate('/');
                 return;
             }
             try {
-
                 await axios.get('http://localhost:3001/user/verifyUser', { withCredentials: true });
             } catch (err) {
                 console.log("User unverified. ", err);
@@ -107,6 +113,11 @@ function Dashboard () {
         }
     };
 
+    const removeFromSidebar = (courseId: number) => {
+        setCourses(prev => prev.filter(c => c.course_id !== courseId));
+        setFilteredCourses(prev => prev.filter(c => c.course_id !== courseId));
+    };
+
     async function loadQuarterCourses (year: number, quarter: 'Fall' | 'Winter' | 'Spring' | 'Summer') {
         if (!userId) {
             return;
@@ -117,9 +128,7 @@ function Dashboard () {
                 yearIndex: year,
                 quarterName: quarter
             };
-            // console.log("user data being send to get courses", userData);
             const result = await axios.post(`http://localhost:3001/quarter/getCourses`, userData);
-            // console.log(`Successfully loaded courses for ${quarter}`, result.data.allCourses);
             setAllCourses(prev => ({
                 ...prev,
                 [`${year}-${quarter}`]: result.data.allCourses,
@@ -141,7 +150,7 @@ function Dashboard () {
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleHome}/>
             <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={handleOpenClick}/>
             </div>
-            <Header totalUnits={totalUnits} year={yearNum}/>
+            <Header totalUnits={totalUnits} year={yearNum} userId={userId}/>
             <div>
                 <div className="flex flex-row items-stretch w-full">
                     <button 
@@ -161,7 +170,7 @@ function Dashboard () {
                                 className="w-full shrink-0 flex justify-center items-start"
                             >
                                 <div className="flex grow min-w-1/4">
-                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} loadCourses={loadQuarterCourses}/>
+                                    <Year userId={userId} yearIndex={yearNum} allCourses={allCourses} removeFromSidebar={removeFromSidebar} loadCourses={loadQuarterCourses}/>
                                 </div>
                             </div>
                         ))}</div>
@@ -178,7 +187,7 @@ function Dashboard () {
                 
         </div>
         <div className="w-full">
-            <Sidebar userId={userId} loadQuarterCourses={loadQuarterCourses} /> 
+            <Sidebar userId={userId} courses={courses} setCourses={setCourses} filteredCourses={filteredCourses} setFilteredCourses={setFilteredCourses} loadQuarterCourses={loadQuarterCourses} /> 
         </div>
     </div>
     )

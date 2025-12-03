@@ -14,6 +14,8 @@ SET @cs_major_id = LAST_INSERT_ID();
 INSERT INTO Majors (major_name) VALUES ('Computer Science and Engineering');
 SET @cse_major_id = LAST_INSERT_ID();
 
+INSERT INTO Majors (major_name) VALUES ('Electrical Engineering');
+SET @ee_major_id = LAST_INSERT_ID();
 
 -- -----------------------------------------------------
 -- 3. INSERT COURSES: COMPUTER ENGINEERING (CE)
@@ -102,9 +104,7 @@ INSERT INTO Courses (course_number, course_name, course_units, category, major_i
 ('COM SCI 130', 'Software Engineering', 4, 'Major', @cs_major_id),
 ('COM SCI 152B', 'Digital Design Project Laboratory', 4, 'Major', @cs_major_id),
 -- Electives (Partial list from catalog)
-('COM SCI 130', 'Software Engineering', 4, 'Major', @cs_major_id),
 ('COM SCI 132', 'Compiler Construction', 4, 'Major', @cs_major_id),
-('COM SCI 152B', 'Digital Design Project Laboratory', 4, 'Major', @cs_major_id),
 ('COM SCI 117', 'Computer Network Security', 4, 'Major', @cs_major_id),
 ('COM SCI 133', 'Parallel and Distributed Computing', 4, 'Major', @cs_major_id),
 ('COM SCI 136', 'Introduction to Computer Security', 4, 'Major', @cs_major_id),
@@ -240,4 +240,48 @@ INSERT INTO Courses (course_number, course_name, course_units, category, major_i
 ('BIOENGR CM187', 'Research Communication in Computational and Systems Biology', NULL, 'Elective', @bioe_major_id),
 ('BIOENGR 199', 'Directed Research in Bioengineering', NULL, 'Elective', @bioe_major_id);
 
+-- -----------------------------------------------------
+-- 5. INSERT COURSES: ELECTRICAL ENGINEERING (EE)
+-- -----------------------------------------------------
+INSERT INTO Courses (course_number, course_name, course_units, category, major_id) VALUES
+-- Preparation for the Major (Required Courses)
+('CHEM 20A', 'Chemical Structure', 4, 'Major', @ee_major_id),
+('COM SCI 31', 'Introduction to Computer Science I', 4, 'Major', @ee_major_id),
+('COM SCI 32', 'Introduction to Computer Science II', 4, 'Major', @ee_major_id),
+('EC ENGR 2', 'Physics for Electrical Engineers', 4, 'Major', @ee_major_id),
+('EC ENGR 3', 'Introduction to Electrical Engineering', 4, 'Major', @ee_major_id),
+('EC ENGR 10', 'Circuit Theory I', 4, 'Major', @ee_major_id),
+('EC ENGR 11L', 'Circuits Laboratory I', 1, 'Major', @ee_major_id),
+('MATH 31A', 'Differential and Integral Calculus', 4, 'Major', @ee_major_id),
+('MATH 31B', 'Integration and Infinite Series', 4, 'Major', @ee_major_id),
+('MATH 32A', 'Calculus of Several Variables', 4, 'Major', @ee_major_id),
+('MATH 32B', 'Calculus of Several Variables', 4, 'Major', @ee_major_id),
+('MATH 33A', 'Linear Algebra and Applications', 4, 'Major', @ee_major_id),
+('MATH 33B', 'Differential Equations', 4, 'Major', @ee_major_id),
+('PHYSICS 1A', 'Physics for Scientists and Engineers: Mechanics', 5, 'Major', @ee_major_id),
+('PHYSICS 1B', 'Physics for Scientists and Engineers: Oscillations, Waves, Electric and Magnetic Fields', 5, 'Major', @ee_major_id),
+('PHYSICS 1C', 'Physics for Scientists and Engineers: Electrodynamics, Optics, and Special Relativity', 5, 'Major', @ee_major_id),
+('PHYSICS 4AL', 'Physics Laboratory for Scientists and Engineers: Mechanics', 2, 'Major', @ee_major_id),
+('PHYSICS 4BL', 'Physics Laboratory for Scientists and Engineers: Electricity and Magnetism', 2, 'Major', @ee_major_id),
+-- Preparation for the Major (Option Courses)
+('COM SCI M51A', 'Logic Design of Digital Systems', 4, 'Major', @ee_major_id), -- Option 1 for Logic Design
+('EC ENGR M16', 'Logic Design of Digital Systems', 4, 'Major', @ee_major_id),   -- Option 2 for Logic Design
+
+-- The Major (Required Core Courses)
+('EC ENGR 101A', 'Engineering Electromagnetics', 4, 'Major', @ee_major_id),
+('EC ENGR 102', 'Systems and Signals', 4, 'Major', @ee_major_id),
+('EC ENGR 110', 'Circuit Theory II', 4, 'Major', @ee_major_id),
+('EC ENGR 111L', 'Circuits Laboratory II', 1, 'Major', @ee_major_id),
+('EC ENGR 113', 'Digital Signal Processing', 4, 'Major', @ee_major_id),
+('EC ENGR 131A', 'Probability and Statistics', 4, 'Major', @ee_major_id),
+
+-- The Major (Core Elective Options)
+('COM SCI 33', 'Introduction to Computer Organization', 5, 'Major', @ee_major_id),
+('EC ENGR 101B', 'Electromagnetic Waves', 4, 'Major', @ee_major_id),
+('EC ENGR 115A', 'Analog Electronic Circuits I', 4, 'Major', @ee_major_id),
+('EC ENGR 121B', 'Principles of Semiconductor Device Design', 4, 'Major', @ee_major_id),
+('EC ENGR 132A', 'Introduction to Communication Systems', 4, 'Major', @ee_major_id),
+('EC ENGR 133A', 'Applied Numerical Computing', 4, 'Major', @ee_major_id),
+('EC ENGR 141', 'Principles of Feedback Control', 4, 'Major', @ee_major_id),
+('EC ENGR 170A', 'Principles of Photonics', 4, 'Major', @ee_major_id);
 SET FOREIGN_KEY_CHECKS = 1;

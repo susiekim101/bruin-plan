@@ -1,6 +1,6 @@
-// test: course is removed from a user's plan in a specific quarter
+// test: course status is updated in a user's plan for a specific quarter
 import { connection } from '../src/database';
-import { removeCoursesFromQuarter } from '../controllers/quarterCourses';
+import { setQuarterCourseStatus } from '../controllers/quarterCourses';
 
 // create a fixture for database
 jest.mock('../src/database');
@@ -21,18 +21,18 @@ beforeEach(() => {
   mockExecute.mockClear()
 });
 
-test('query to removeCoursesFromQuarter returns removed course id', async () => {
+test('query to setQuarterCourseStatus returns update result', async () => {
   mockExecute
   .mockResolvedValueOnce([[{ plan_id: 18 }], []]) // getPlanId
-  .mockResolvedValueOnce([{ affectedRows: 1 }]); // delete query
-
-  // call function to remvove course
-  const id = await removeCoursesFromQuarter({
-    userId: 3, 
-    courseId: 1,
-    yearIndex: 1,
-    quarterName: 'Fall', 
-  });
+  .mockResolvedValueOnce([{}]); // update/set query
+  
+  // call function to set course status
+    const result = await setQuarterCourseStatus({
+        userId: 3, 
+        yearIndex: 1,
+        quarterName: 'Fall', 
+        status: 'Completed'
+    });
 
   // assert that mockExecute was called with correct queries and values
   expect(mockExecute).toHaveBeenCalledTimes(2);
@@ -44,9 +44,9 @@ test('query to removeCoursesFromQuarter returns removed course id', async () => 
 
   expect(mockExecute).toHaveBeenCalledWith(
     expect.any(String), 
-    [18, 1, 1, 'Fall']
+    ['Taken', 18, 1, 'Fall']
   );
 
-  // assert that the returned id is correct
-  expect(id).toBe(1);
+  // assert that the returned result is correct
+  expect(result).toBeDefined();
 });
