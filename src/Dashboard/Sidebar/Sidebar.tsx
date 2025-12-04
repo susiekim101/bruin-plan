@@ -1,12 +1,15 @@
-// import CustomCard from '../CourseCards/CustomCards';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import type { MajorOption } from './Filter.tsx';
+
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
 import SearchBar from './SearchBar.tsx';
 import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
 import Filter from './Filter.tsx';
-import type { MajorOption } from './Filter.tsx';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { useUserMajor } from './hooks/useUserMajor.ts';
 import removeCourseLogic from '../Year/removeCourseLogic';
 
 interface Major {
@@ -38,11 +41,12 @@ type sideBarProps = {
 }
 
 function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCourses, loadQuarterCourses}: sideBarProps) {
-    const [ userMajor, setUserMajor ] = useState<Major>();
     const [ userCourses, setUserCourses ] = useState<Course[] | null>(null);
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
     const [ majors, setMajors ] = useState<MajorOption[]>([]);
+
+    const { userMajor } = useUserMajor();
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -53,20 +57,6 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     };
 
     const navigate = useNavigate();
-
-    // Fetch user's major
-    useEffect(() => {
-        const loadUserMajor = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
-                setUserMajor(response.data.data);
-            } catch (err){
-                console.error("Failed to load user's major: ", err);
-                navigate('/');
-            }
-        }
-        loadUserMajor();
-    }, []);
 
     // Fetch all majors for Filter component
     useEffect(() => {
