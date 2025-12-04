@@ -42,6 +42,14 @@ Then('the search bar should be visible', async function () {
 
 Then('the list of course cards should be visible.', async function () {
     await expect(page.locator('#course-list')).toBeVisible();
+
+    const cardsLocator = page.locator('#sidebar #course-card-root');
+        
+    // make sure first card loads
+    await cardsLocator.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const allCardsLocator = await cardsLocator.all();
+    expect(allCardsLocator.length).toBeGreaterThan(0);
 });
 
 After({ tags: "@sidebar"}, async function () {

@@ -48,8 +48,13 @@ When('I do not select an option in the Filter component', async function () {
 });
 
 Then('I should see course cards for the Computer Science major', async function () {
-    const cardLocators = await page.locator('#sidebar #course-card-root').all();
-    expect(cardLocators.length).toBeGreaterThan(0);
+    const cardsLocator = page.locator('#sidebar #course-card-root');
+
+    // make sure first card loads
+    await cardsLocator.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const allCardsLocator = await cardsLocator.all();
+    expect(allCardsLocator.length).toBeGreaterThan(0);
 });
 
 When('I select the Computer Engineering option', async function () {
@@ -58,8 +63,13 @@ When('I select the Computer Engineering option', async function () {
 });
 
 Then('I should see course cards for the Computer Engineering major', async function () {
-    const cardLocators = await page.locator('#sidebar #course-card-root').all();
-    expect(cardLocators.length).toBeGreaterThan(0);
+    const cardsLocator = page.locator('#sidebar #course-card-root');
+
+    // make sure first card loads
+    await cardsLocator.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    const allCardsLocator = await cardsLocator.all();
+    expect(allCardsLocator.length).toBeGreaterThan(0);
 });
 
 After({ tags: "@filter"}, async function () {
