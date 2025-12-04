@@ -36,8 +36,7 @@ Then('my major should be visible', async function () {
 });
 
 Then('the Select-a-major component should be visible', async function () {
-    // TODO: figure out why Playwright can't find the Filter component
-    await expect(page.locator('[name="filter"]')).toBeAttached({ timeout: 10000 });
+    await expect(page.getByRole("combobox", { name: "Select a major" })).toBeVisible();
 });
 
 Then('the search bar should be visible', async function () {
