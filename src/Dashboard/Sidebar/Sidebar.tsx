@@ -7,8 +7,7 @@ import SearchBar from './SearchBar.tsx';
 import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
 import Filter from './Filter.tsx';
 
-import { useUserMajor } from './hooks/useUserMajor.ts';
-import { useAllMajors } from './hooks/useAllMajors.ts'
+import { useUserMajor,  useAllMajors} from './hooks/majors-hooks.ts';
 import { useMajorCourses, useUserCourses } from './hooks/courses-hooks.ts';
 import removeCourseLogic from '../Year/removeCourseLogic';
 
