@@ -1,4 +1,4 @@
-USE bruin_plan
+USE bruin_plan;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
