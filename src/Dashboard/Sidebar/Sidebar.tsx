@@ -10,6 +10,7 @@ import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.ts
 import Filter from './Filter.tsx';
 
 import { useUserMajor } from './hooks/useUserMajor.ts';
+import { useAllMajors } from './hooks/useAllMajors.ts'
 import removeCourseLogic from '../Year/removeCourseLogic';
 
 interface Major {
@@ -21,6 +22,7 @@ interface UserMajor {
     value: string,
     label: string
 }
+
 interface Course {
     course_id: number | null,
     course_number: string,
@@ -44,9 +46,9 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     const [ userCourses, setUserCourses ] = useState<Course[] | null>(null);
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
-    const [ majors, setMajors ] = useState<MajorOption[]>([]);
 
     const { userMajor } = useUserMajor();
+    const { majors } = useAllMajors({ userMajor });
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -57,7 +59,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     };
 
     const navigate = useNavigate();
-
+/*
     // Fetch all majors for Filter component
     useEffect(() => {
         const loadAllMajors = async () => {
@@ -69,7 +71,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
                 }));
                 
                 if (userMajor) {
-                        const allMajorsExceptUserMajor = allMajors.filter((major: UserMajor) =>
+                        const allMajorsExceptUserMajor = allMajors.filter((major: MajorOption) =>
                         Number(major.value) != Number(userMajor.major_id)
                     );
 
@@ -82,7 +84,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
         }
         loadAllMajors();
     }, [userMajor?.major_id]);
-
+*/
     useEffect(() => {
         const loadUserCourses = async () => {
             if (! userId)
