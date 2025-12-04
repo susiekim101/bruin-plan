@@ -7,12 +7,12 @@ import { connection } from '../src/database.ts';
     E.g.
     [
         {
-            "course_id":42,
-            "course_number":"COM SCI 35L",
-            "course_name":"Software Construction",
-            "course_units":4,
-            "category":"Major",
-            "major_id":2
+            "course_id": 42,
+            "course_number": "COM SCI 35L",
+            "course_name": "Software Construction",
+            "course_units": 4,
+            "category": "Major",
+            "major_id": 2
         },
         ...
     ]
