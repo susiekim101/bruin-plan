@@ -3,6 +3,10 @@
 SET FOREIGN_KEY_CHECKS = 0;
 SET UNIQUE_CHECKS = 0;
 
+TRUNCATE TABLE Users;
+TRUNCATE TABLE User_Plans;
+TRUNCATE TABLE Plan_Items;
+
 -- --------------------------------------------------------
 -- 1. INSERT DATA INTO Users TABLE (AUTO_INCREMENT for user_id)
 -- --------------------------------------------------------
