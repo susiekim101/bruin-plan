@@ -11,6 +11,7 @@ import Filter from './Filter.tsx';
 
 import { useUserMajor } from './hooks/useUserMajor.ts';
 import { useAllMajors } from './hooks/useAllMajors.ts'
+import { useUserCourses } from './hooks/courses-hooks.ts';
 import removeCourseLogic from '../Year/removeCourseLogic';
 
 interface Course {
@@ -33,12 +34,12 @@ type sideBarProps = {
 }
 
 function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCourses, loadQuarterCourses}: sideBarProps) {
-    const [ userCourses, setUserCourses ] = useState<Course[] | null>(null);
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
 
     const { userMajor } = useUserMajor();
     const { majors } = useAllMajors({ userMajor });
+    const { userCourses } = useUserCourses({ userId }); 
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -49,23 +50,6 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     };
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const loadUserCourses = async () => {
-            if (! userId)
-                return;
-            
-            try {
-                const response = await axios.get(`http://localhost:3001/courses/planned/${userId}`, { withCredentials: true});
-                setUserCourses(response.data.data);
-                console.log("User's planned courses: ", response.data.data);
-            } catch (err) {
-                console.error("Failed to load user's courses: ", err);
-                navigate('/');
-            }
-        }
-        loadUserCourses();
-    }, [userId]);
 
     // Fetch all courses for a given major
     useEffect(() => {
