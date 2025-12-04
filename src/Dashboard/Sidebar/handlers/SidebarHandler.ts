@@ -5,14 +5,14 @@ interface handleSearchProps {
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
 }
 
+export function handleSearch ({ event, setSearchTerm }: handleSearchProps) {
+    setSearchTerm(event.target.value);
+};
+
 interface handleFilterProps {
     option: MajorOption | null,
     setSelectedMajor: React.Dispatch<React.SetStateAction<MajorOption | null>>
 }
-
-export function handleSearch ({ event, setSearchTerm }: handleSearchProps) {
-    setSearchTerm(event.target.value);
-};
 
 export function handleFilter ({ option, setSelectedMajor }: handleFilterProps) {
     setSelectedMajor(option);

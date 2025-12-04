@@ -4,10 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 import type { Major, MajorOption } from '../../types.ts';
 
-interface useAllMajorsProps {
-    userMajor: Major | undefined
-}
-
 export function useUserMajor() {
     const [ userMajor, setUserMajor ] = useState<Major>();
     const navigate = useNavigate();
@@ -26,6 +22,10 @@ export function useUserMajor() {
     }, []);
 
     return { userMajor };
+}
+
+interface useAllMajorsProps {
+    userMajor: Major | undefined
 }
 
 export function useAllMajors({ userMajor }: useAllMajorsProps) {

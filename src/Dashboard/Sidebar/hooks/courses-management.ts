@@ -8,11 +8,6 @@ interface useUserCoursesProps {
     userId: number | null
 }
 
-interface useMajorCoursesProps {
-    userMajor: Major | undefined,
-    selectedMajor: MajorOption | null
-}
-
 export function useUserCourses ({ userId }: useUserCoursesProps) {
     const [ userCourses, setUserCourses ] = useState<Course[]>([]);
     const navigate = useNavigate();
@@ -35,6 +30,11 @@ export function useUserCourses ({ userId }: useUserCoursesProps) {
     }, [userId]);
 
     return { userCourses };
+}
+
+interface useMajorCoursesProps {
+    userMajor: Major | undefined,
+    selectedMajor: MajorOption | null
 }
 
 export function useMajorCourses ({ userMajor, selectedMajor }: useMajorCoursesProps) {

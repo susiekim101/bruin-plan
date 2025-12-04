@@ -1,6 +1,10 @@
 import type { Course, Major } from '../../types.ts';
 import removeCourseLogic from '../../Year/removeCourseLogic.ts'; 
 
+export function handleDragOver (event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+}
+
 interface handleDropProps {
     event: React.DragEvent<HTMLDivElement>,
     userId: number | null,
@@ -8,10 +12,6 @@ interface handleDropProps {
     setCourses: React.Dispatch<React.SetStateAction<Course[]>>,
     setFilteredCourses: React.Dispatch<React.SetStateAction<Course[]>>,
     loadQuarterCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => void
-}
-
-export function handleDragOver (event: React.DragEvent<HTMLDivElement>) {
-        event.preventDefault();
 }
 
 export async function handleDrop ({ event, userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses }: handleDropProps) {
