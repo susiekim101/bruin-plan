@@ -7,9 +7,11 @@ import SearchBar from './SearchBar.tsx';
 import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
 import Filter from './Filter.tsx';
 
-import { useUserMajor,  useAllMajors} from './hooks/majors-hooks.ts';
-import { useMajorCourses, useUserCourses } from './hooks/courses-hooks.ts';
 import removeCourseLogic from '../Year/removeCourseLogic';
+
+import { useUserMajor,  useAllMajors} from './hooks/majors-selection.ts';
+import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
+import { handleDragOver } from './handlers/dragDropHandler.ts';
 
 type sideBarProps = {
     userId: number | null;
@@ -64,10 +66,6 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
 
         setFilteredCourses(result);
     }, [searchTerm, courses]);
-
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    }
     
     async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
         event.preventDefault();
