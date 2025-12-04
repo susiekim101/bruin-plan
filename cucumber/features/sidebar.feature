@@ -1,8 +1,8 @@
 @sidebar
-Feature: Sidebar display
+Feature: Sidebar
     As a user of the Bruin Plan,
-    I want to see the list of courses I need to take for my engineering major
-    so that I can plan out my classes for each quarter of my 4 years at UCLA
+    I want to see all aspects of the Sidebar, including my major, select a different major, search bar, and list of courses for my major
+    so that I have tools to search for specific courses and explore courses in different majors.
     
     Background: User is logged in
     Given I log in as a returning user
