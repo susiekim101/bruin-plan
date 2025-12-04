@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import type { Course, MajorOption } from '../types.ts';
 
@@ -7,11 +7,9 @@ import SearchBar from './SearchBar.tsx';
 import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
 import Filter from './Filter.tsx';
 
-import removeCourseLogic from '../Year/removeCourseLogic';
-
 import { useUserMajor,  useAllMajors} from './hooks/majors-selection.ts';
 import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
-import { handleDragOver } from './handlers/dragDropHandler.ts';
+import { handleDragOver, handleDrop } from './handlers/dragDropHandler.ts';
 
 type sideBarProps = {
     userId: number | null;
@@ -30,6 +28,10 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     const { majors } = useAllMajors({ userMajor });
     const { userCourses } = useUserCourses({ userId }); 
     const { majorCourses } = useMajorCourses({ userMajor, selectedMajor });
+
+    const onDropHandler = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+        handleDrop({ event, userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses });
+    }, [ userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses ]);
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -67,36 +69,12 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
         setFilteredCourses(result);
     }, [searchTerm, courses]);
     
-    async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
-        event.preventDefault();
-        const payload = JSON.parse(event.dataTransfer.getData("application/json"));
-        const courseObj : Course = JSON.parse(payload.courseJson);
-        await removeCourseLogic({courseJson: payload.courseJson, userId: userId, yearIndex: payload.sourceYearIndex, quarterName: payload.sourceQuarterName});
-        loadQuarterCourses(payload.sourceYearIndex, payload.sourceQuarterName);
-        if (!userMajor || !courseObj) {
-            return;
-        }
-        setCourses(prev => [
-            {
-                ...courseObj,
-                major_id: userMajor.major_id
-            },
-            ...prev
-        ]);
-        setFilteredCourses(prev => [
-            {
-                ...courseObj,
-                major_id: userMajor.major_id
-            },
-            ...prev
-        ]);
-    }
 
     return (
         <div
             id="sidebar"
             onDragOver={handleDragOver}
-            onDrop={handleDrop}
+            onDrop={onDropHandler}
             className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
             { userMajor && 
                 <UserMajorDisplay
