@@ -9,7 +9,8 @@ import Filter from './Filter.tsx';
 
 import { useUserMajor,  useAllMajors} from './hooks/majors-selection.ts';
 import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
-import { handleDragOver, handleDrop } from './handlers/dragDropHandler.ts';
+import { handleDragOver, handleDrop } from './handlers/DragDropHandler.ts';
+import { handleSearch, handleFilter } from './handlers/SidebarHandler.ts';
 
 type sideBarProps = {
     userId: number | null;
@@ -33,25 +34,14 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
         handleDrop({ event, userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses });
     }, [ userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses ]);
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
+    const onFilterSelect = useCallback((option: MajorOption | null) => {
+        handleFilter({ option, setSelectedMajor });
+    }, [setSelectedMajor]);
+    
+    const onSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        handleSearch({ event, setSearchTerm });
+    }, [setSearchTerm]);
 
-    const handleFilter = (option: MajorOption | null) => {
-        setSelectedMajor(option);
-    };
-
-    // Remove user's planned courses from major courses
-    useEffect(() => {
-        const loadCourses = async () => {
-            const coursesNotPlanned = majorCourses.filter((majorCourse: Course) => 
-                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number)
-            );
-            setCourses(coursesNotPlanned);
-            setFilteredCourses(coursesNotPlanned);
-        };
-        loadCourses();
-    }, [userCourses, majorCourses]);
 
     // Display courses whose course codes match search term
     useEffect(() => {
@@ -68,6 +58,18 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
 
         setFilteredCourses(result);
     }, [searchTerm, courses]);
+
+    // Remove user's planned courses from major courses
+    useEffect(() => {
+        const loadCourses = async () => {
+            const coursesNotPlanned = majorCourses.filter((majorCourse: Course) => 
+                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number)
+            );
+            setCourses(coursesNotPlanned);
+            setFilteredCourses(coursesNotPlanned);
+        };
+        loadCourses();
+    }, [userCourses, majorCourses]);
     
 
     return (
@@ -84,11 +86,11 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
             <Filter 
                 selectedOption={selectedMajor}
                 majorOptions={majors}
-                handleChange={handleFilter}
+                handleChange={onFilterSelect}
             />
             <SearchBar 
                 searchTerm={searchTerm} 
-                handleSearch={handleSearch}
+                handleSearch={onSearchChange}
             />
             <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                 {filteredCourses.map((course, index) => (

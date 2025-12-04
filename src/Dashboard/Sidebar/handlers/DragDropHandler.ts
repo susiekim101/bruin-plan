@@ -1,5 +1,5 @@
 import type { Course, Major } from '../../types.ts';
-import removeCourseLogic from '../../Year/removeCourseLogic'; 
+import removeCourseLogic from '../../Year/removeCourseLogic.ts'; 
 
 interface handleDropProps {
     event: React.DragEvent<HTMLDivElement>,
