@@ -12,7 +12,7 @@ import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
 import { handleDragOver, handleDrop } from './handlers/DragDropHandler.ts';
 import { handleSearch, handleFilter } from './handlers/SidebarHandler.ts';
 
-type sideBarProps = {
+interface sideBarProps {
     userId: number | null;
     courses: Course[];
     setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
