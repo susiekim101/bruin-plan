@@ -2,12 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import type { MajorOption } from '../Filter.tsx';
-
-interface Major {
-    major_name: string,
-    major_id: number
-}
+import type { Major, MajorOption } from '../../types.ts';
 
 interface useAllMajorsProps {
     userMajor: Major | undefined

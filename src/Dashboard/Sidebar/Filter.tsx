@@ -1,10 +1,6 @@
 // import React, { useState } from 'react'
 import Select from 'react-select';
-
-export interface MajorOption {
-    value: number,
-    label: string
-}
+import type { MajorOption } from '../types.ts'
 
 interface FilterProps {
     majorOptions: MajorOption[],

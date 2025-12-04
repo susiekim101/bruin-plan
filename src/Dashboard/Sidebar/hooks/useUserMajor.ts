@@ -1,11 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-interface Major {
-    major_name: string,
-    major_id: number
-}
+import type { Major } from '../../types.ts';
 
 export function useUserMajor() {
     const [ userMajor, setUserMajor ] = useState<Major>();

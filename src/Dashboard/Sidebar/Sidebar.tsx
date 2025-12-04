@@ -1,8 +1,6 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import type { MajorOption } from './Filter.tsx';
+import type { Course, MajorOption } from '../types.ts';
 
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
 import SearchBar from './SearchBar.tsx';
@@ -11,18 +9,8 @@ import Filter from './Filter.tsx';
 
 import { useUserMajor } from './hooks/useUserMajor.ts';
 import { useAllMajors } from './hooks/useAllMajors.ts'
-import { useUserCourses } from './hooks/courses-hooks.ts';
+import { useMajorCourses, useUserCourses } from './hooks/courses-hooks.ts';
 import removeCourseLogic from '../Year/removeCourseLogic';
-
-interface Course {
-    course_id: number | null,
-    course_number: string,
-    course_name: string,
-    course_units: number,
-    status: 'Planned' | 'In Progress' | 'Completed';
-    category: string,
-    major_id: number
-}
 
 type sideBarProps = {
     userId: number | null;
@@ -40,6 +28,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     const { userMajor } = useUserMajor();
     const { majors } = useAllMajors({ userMajor });
     const { userCourses } = useUserCourses({ userId }); 
+    const { majorCourses } = useMajorCourses({ userMajor, selectedMajor });
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -49,41 +38,17 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
         setSelectedMajor(option);
     };
 
-    const navigate = useNavigate();
-
-    // Fetch all courses for a given major
+    // Remove user's planned courses from major courses
     useEffect(() => {
-        const loadCourses = async (majorID: number) => {
-            // Return if userId hasn't been loaded
-            if (! userCourses)
-                return;
-
-            try {
-                const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
-                const allMajorCourses = response.data.data;
-                
-                // Remove courses already in user's planner
-                const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
-                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
-                
-                setCourses(coursesNotPlanned);
-                setFilteredCourses(coursesNotPlanned);
-                console.log(`Displaying courses for major ${majorID}`, coursesNotPlanned);
-            } catch (err){
-                console.error(`Failed to load courses for selected major ${majorID}`, err);
-                navigate('/');
-            }
+        const loadCourses = async () => {
+            const coursesNotPlanned = majorCourses.filter((majorCourse: Course) => 
+                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number)
+            );
+            setCourses(coursesNotPlanned);
+            setFilteredCourses(coursesNotPlanned);
         };
-
-        if ( selectedMajor ) {
-            loadCourses(selectedMajor.value);
-        } else if (userMajor) {
-            loadCourses( userMajor.major_id )
-        } else {
-            return;
-        }
-        
-    }, [userCourses, userMajor?.major_id, selectedMajor?.value]);
+        loadCourses();
+    }, [userCourses, majorCourses]);
 
     // Display courses whose course codes match search term
     useEffect(() => {
