@@ -21,6 +21,7 @@ Given('I log in as a returning user with a Computer Science major', async functi
     await expect(page.locator('#major-display')).toContainText('Computer Science');
 });
 
+
 Given('I am on the dashboard', async function () {
     await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
@@ -30,19 +31,15 @@ When('I click on the Filter component', async function () {
 });
 
 Then('I should only see the Computer Engineering and Computer Science and Engineering options', async function () {
-    // 1. Get all locators with the role="option"
     const options = page.getByRole("option");
 
-    // 2. Extract the text content from all located options
     const observedOptions = await options.allTextContents();
 
-    // 3. Define the expected options array
     const expectedOptions = [
         "Computer Engineering",
         "Computer Science and Engineering",
     ];
 
-    // 4. Assert that the actual array matches the expected array
     await expect(observedOptions).toEqual(expectedOptions);
 });
 

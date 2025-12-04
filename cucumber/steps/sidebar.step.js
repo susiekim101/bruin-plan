@@ -23,6 +23,7 @@ When('I am on the dashboard,', async function () {
     await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
 
+
 Then('the Sidebar should be visible', async function () {
     await expect(page.locator('#sidebar')).toBeVisible();
 });

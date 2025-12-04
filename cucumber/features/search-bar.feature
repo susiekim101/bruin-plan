@@ -5,12 +5,12 @@ Feature: Search bar
     so that I can easily find classes I want to take and move them into my plan
 
     Background: User is logged in
-    Given I log in as a returning user
-    And I am on the dashboard
+    Given I log in
+    And I land on the dashboard page
 
     Scenario: Entering no course code displays all courses for user's major
     When I don't enter a course code into the search bar
-    Then I should see all courses for my major
+    Then I should see the courses for my major
 
     Scenario: Entering an existing (partial) course code displays courses matching that course code
     When I enter COM SCI 

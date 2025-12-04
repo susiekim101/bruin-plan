@@ -59,10 +59,10 @@ function CourseCard({ courseId, courseName, courseTitle, units, status, courseCl
                         </p>
                     </div>
                 </div>
-                <div 
+                <div
                     className="p-1 pt-2 flex flex-start text-white font-bold text-[18px] w-full
                 ">
-                    <p>
+                    <p data-testid="course-code">
                         {courseName}
                     </p>
                 </div>
