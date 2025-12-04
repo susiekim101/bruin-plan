@@ -1,7 +1,7 @@
 // import CustomCard from '../CourseCards/CustomCards';
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
 import SearchBar from './SearchBar.tsx';
-import Major from '../components/Major/Major.tsx';
+import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
 import Filter from './Filter.tsx';
 import type { MajorOption } from './Filter.tsx';
 import axios from 'axios';
@@ -196,7 +196,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
             onDrop={handleDrop}
             className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
             { userMajor && 
-                <Major
+                <UserMajorDisplay
                     majorName={userMajor.major_name}
                 />
             }
