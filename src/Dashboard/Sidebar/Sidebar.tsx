@@ -13,16 +13,6 @@ import { useUserMajor } from './hooks/useUserMajor.ts';
 import { useAllMajors } from './hooks/useAllMajors.ts'
 import removeCourseLogic from '../Year/removeCourseLogic';
 
-interface Major {
-    major_name: string,
-    major_id: number
-}
-
-interface UserMajor {
-    value: string,
-    label: string
-}
-
 interface Course {
     course_id: number | null,
     course_number: string,
@@ -59,32 +49,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
     };
 
     const navigate = useNavigate();
-/*
-    // Fetch all majors for Filter component
-    useEffect(() => {
-        const loadAllMajors = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/majors', { withCredentials: true });
-                const allMajors = response.data.data.map((major: Major) => ({
-                    value: major.major_id,
-                    label: major.major_name
-                }));
-                
-                if (userMajor) {
-                        const allMajorsExceptUserMajor = allMajors.filter((major: MajorOption) =>
-                        Number(major.value) != Number(userMajor.major_id)
-                    );
 
-                    setMajors(allMajorsExceptUserMajor);
-                }
-            } catch (err) {
-                console.error("Failed to load all majors: ", err);
-                navigate('/');
-            }
-        }
-        loadAllMajors();
-    }, [userMajor?.major_id]);
-*/
     useEffect(() => {
         const loadUserCourses = async () => {
             if (! userId)
