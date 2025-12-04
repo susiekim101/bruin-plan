@@ -1,6 +1,6 @@
-import axios from "axios";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useFetchItems } from "./FullPlanHandler";
 
 type FullPlanProps = {
     plan_id: number,
@@ -18,19 +18,7 @@ type PlanItems = {
 function FullPlan({ plan_id, handleCloseClick }: FullPlanProps) {
     const [ planItems, setPlanItems ] = useState<PlanItems[]>([]);
 
-    useEffect(() => {
-        const fetchPlanItems = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3001/planItems/getPlanItems/${plan_id}`);
-                const fetchedItems = response.data.planItems;
-                setPlanItems(fetchedItems);
-            } catch (err) {
-                console.error(err);
-                setPlanItems([]);
-            }
-        };
-        fetchPlanItems();
-    }, [plan_id]);
+    useFetchItems(plan_id, setPlanItems)
 
     return (
     <>
