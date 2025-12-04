@@ -1,5 +1,16 @@
 import { connection } from '../src/database.ts'
 
+/*
+    Retrieves all majors stored in the Majors table of the database.
+
+    Returns an array of objects, each object representing a major with a unique major_id and major_name.
+    E.g.
+    [
+        {"major_id": 1,"major_name": "Computer Engineering" },
+        {"major_id": 2,"major_name": "Computer Science" },
+        ...
+    ]
+*/
 export async function fetchMajors() {
     try {
         // query Majors table

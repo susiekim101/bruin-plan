@@ -113,6 +113,23 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
     }
 }
 
+/* 
+    Retrieves all courses in a given user's plan, regardless of year or quarter.
+
+    Returns an array of objects, each object representing a course in the user's plan.
+    E.g.
+    [
+        {
+            "course_id": 42,
+            "course_number": "COM SCI 35L",
+            "course_name": "Software Construction",
+            "course_units": 4,
+            "status": "Planned",
+            "category": "Major"
+        },
+        ...
+    ]
+*/
 export async function fetchAllUserCourses(userId: number) {
     try {
         const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, pi.status, c.category 
