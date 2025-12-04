@@ -21,6 +21,10 @@ Given('I log in as a returning user with a Computer Science major', async functi
     await expect(page.locator('#major-display')).toContainText('Computer Science');
 });
 
+Given('I am on the dashboard', async function () {
+    await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
+});
+
 When('I click on the Filter component', async function () {
     await page.getByRole("combobox", { name: "Select a major" }).click();
 });
@@ -47,7 +51,7 @@ When('I do not select an option in the Filter component', async function () {
 });
 
 Then('I should see course cards for the Computer Science major', async function () {
-    const cardLocators = await page.getByTestId("course-card-root").all();
+    const cardLocators = await page.locator('#sidebar #course-card-root').all();
     expect(cardLocators.length).toBeGreaterThan(0);
 });
 
@@ -57,7 +61,7 @@ When('I select the Computer Engineering option', async function () {
 });
 
 Then('I should see course cards for the Computer Engineering major', async function () {
-    const cardLocators = await page.getByTestId("course-card-root").all();
+    const cardLocators = await page.locator('#sidebar #course-card-root').all();
     expect(cardLocators.length).toBeGreaterThan(0);
 });
 

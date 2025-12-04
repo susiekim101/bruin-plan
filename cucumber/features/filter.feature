@@ -6,6 +6,7 @@ Feature: Filter
 
     Background: User is logged in
     Given I log in as a returning user with a Computer Science major
+    And I am on the dashboard
 
     Scenario: Clicking on Filter component displays all engineering major options in the database except the user's major
     When I click on the Filter component
