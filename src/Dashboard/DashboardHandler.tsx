@@ -1,8 +1,30 @@
 import { useEffect } from "react";
-
 import type { NavigateFunction } from "react-router-dom";
 import type { RefObject } from "react";
 import axios from "axios";
+
+interface useLoadCoursesProps {
+    userId: number | null,
+    loadQuarterCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => Promise<void>
+}
+
+interface Course {
+    course_id: number | null;
+    course_number: string;
+    course_name: string;
+    course_units: number;
+    status: 'Planned' | 'In Progress' | 'Completed';
+    category: string;
+    major_id: number;
+}
+
+interface UseSetTotalUnitsProps {
+    allCourses: { [key: string]: Course[] }
+    setTotalUnits: (units: number) => void
+}
+
+type DialogRef = RefObject<HTMLDialogElement | null>;
+type SetYearNumType = React.Dispatch<React.SetStateAction<number>>;
 
 export function useVerifyUser(navigate: NavigateFunction, MIN_UNITS: number) {
     useEffect(() => {
@@ -23,7 +45,7 @@ export function useVerifyUser(navigate: NavigateFunction, MIN_UNITS: number) {
             }
         }
         userVerification();
-    }, [navigate, MIN_UNITS]);
+    }, [MIN_UNITS]);
 }
 
 export function useFetchUserId(navigate: NavigateFunction, setUserId: (userId: number) => void) {
@@ -40,13 +62,9 @@ export function useFetchUserId(navigate: NavigateFunction, setUserId: (userId: n
             }
         }; 
         fetchUserId(); 
-    }, [navigate, setUserId]);
+    }, []);
 }
 
-interface useLoadCoursesProps {
-    userId: number | null,
-    loadQuarterCourses: (year: number, quarter: "Fall" | "Winter" | "Spring" | "Summer") => Promise<void>
-}
 export function useLoadCourses({userId, loadQuarterCourses}: useLoadCoursesProps) {
     useEffect(() => {
         if (userId === null) return; 
@@ -55,21 +73,7 @@ export function useLoadCourses({userId, loadQuarterCourses}: useLoadCoursesProps
                 loadQuarterCourses(year, quarter);
             }
         }
-    }, [loadQuarterCourses, userId]);
-}
-interface Course {
-    course_id: number | null;
-    course_number: string;
-    course_name: string;
-    course_units: number;
-    status: 'Planned' | 'In Progress' | 'Completed';
-    category: string;
-    major_id: number;
-}
-
-interface UseSetTotalUnitsProps {
-    allCourses: { [key: string]: Course[] }
-    setTotalUnits: (units: number) => void
+    }, [userId]);
 }
 
 export function useSetTotalUnits({ allCourses, setTotalUnits }: UseSetTotalUnitsProps) {
@@ -82,10 +86,8 @@ export function useSetTotalUnits({ allCourses, setTotalUnits }: UseSetTotalUnits
             }
         }
         setTotalUnits(total);
-    }, [setTotalUnits, allCourses]);
+    }, [allCourses]);
 }
-
-type DialogRef = RefObject<HTMLDialogElement | null>;
 
 export function handleOpenClick(dialogRef: DialogRef) {
     if(dialogRef.current)
@@ -110,8 +112,6 @@ export async function handleLogOut(logout: () => void, navigate: NavigateFunctio
 export function handleHome(navigate: NavigateFunction) {
     navigate('/');
 }
-
-type SetYearNumType = React.Dispatch<React.SetStateAction<number>>;
 
 export function handleLeftClick(setYearNum: SetYearNumType): void {
     setYearNum(prevYearNum => prevYearNum - 1);
