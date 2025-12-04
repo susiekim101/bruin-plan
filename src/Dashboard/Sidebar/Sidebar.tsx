@@ -191,6 +191,7 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
 
     return (
         <div
+            id="sidebar"
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
