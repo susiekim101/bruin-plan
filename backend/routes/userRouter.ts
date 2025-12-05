@@ -1,7 +1,7 @@
 
 import type { Request, Response } from 'express';
 import { Router } from 'express';
-import { createUser, findByEmail } from '../controllers/createUser.ts';
+import { createUser, findByEmail, validateUser } from '../controllers/createUser.ts';
 import { getMajorById } from '../controllers/fetchPlanItems.ts'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -10,21 +10,23 @@ import 'dotenv/config';
 
 const userRouter = Router();
 
+interface UserData {
+    'user_id': number
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password_hash': string
+    'major_id': number
+}
+
 userRouter.post('/login', async (req: Request, res: Response) => {
     try {
-        const data = await findByEmail(req.body.email);
-        const isPasswordCorrect = await bcrypt.compare(req.body.password, data[0].password_hash);
-
-        // Check if user exists
-        if(!data || data[0].length == 0) {
-            console.log("User not found");
-            return res.status(403).send("User not found");
-        }  
-
-        // Incorrect validation check
-        if(!isPasswordCorrect) {
-            console.log("Incorrect password");
-            return res.status(403).send("Log in failed: Incorrect password");
+        const data: UserData[] = await findByEmail(req.body.email);
+        const invalidUser: {status?: number, message?: string} = await validateUser(data, req.body.password);
+        
+        // If user does not exist or incorrect credentials
+        if(invalidUser.status && invalidUser.message) {
+            return res.status(invalidUser.status).send(invalidUser.message);
         }
 
         // Create token (user id and email)
