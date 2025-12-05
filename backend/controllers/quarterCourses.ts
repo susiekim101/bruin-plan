@@ -18,7 +18,7 @@ interface addCourseProps {
 interface fetchUserCoursesProps {
     userId: number;
     yearIndex: number;
-    quarterName: string;
+    quarterName: "Fall" | "Winter" | "Spring" | "Summer";
 }
 
 interface setQuarterCourseStatusProps {
@@ -113,6 +113,21 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
     }
 }
 
+/* 
+    Returns an array of objects, each object representing a course in the user's plan, regardless of what quarter or year the course is in.
+    E.g.
+    [
+        {
+            "course_id": 42,
+            "course_number": "COM SCI 35L",
+            "course_name": "Software Construction",
+            "course_units": 4,
+            "status": "Planned",
+            "category": "Major"
+        },
+        ...
+    ]
+*/
 export async function fetchAllUserCourses(userId: number) {
     try {
         const query = `SELECT pi.course_id, c.course_number, c.course_name, c.course_units, pi.status, c.category 

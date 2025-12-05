@@ -20,7 +20,7 @@ test('fetchCoursesByMajor should estabish connection to database', async () => {
 });
 
 
-test('query with no specified major should return no courses', async () => {
+test('query with invalid specified major should return no courses', async () => {
   mockExecute.mockResolvedValueOnce([[], []]);
   const result = await fetchCoursesByMajor(-1);
   expect(mockExecute).toHaveBeenCalledWith('SELECT * FROM Courses WHERE major_id = ?', [-1]);
