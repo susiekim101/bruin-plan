@@ -1,10 +1,10 @@
-interface MajorProps {
+interface UserMajorDisplayProps {
     majorName: string
 }
 
-function Major ({ majorName } : MajorProps) {
+function UserMajorDisplay ({ majorName } : UserMajorDisplayProps) {
     return (
-        <div className="flex gap-x-1">
+        <div id="major-display" className="flex gap-x-1">
             <div className="pb-3 px-1 flex flex-col justify-items-center">
                 <p className="text-gray-200 font-bold text-sm"> 
                     Major:
@@ -19,4 +19,4 @@ function Major ({ majorName } : MajorProps) {
     )
 }
 
-export default Major;
+export default UserMajorDisplay;
