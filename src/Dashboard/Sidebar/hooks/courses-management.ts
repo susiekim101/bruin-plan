@@ -23,7 +23,7 @@ export function useUserCourses ({ userId }: useUserCoursesProps) {
                 const fetchedUserCourses = response.data.data;
                 setUserCourses(fetchedUserCourses);
                 
-                console.log("User's planned courses: ", response.data.data);
+                console.log("User's planned courses: ", fetchedUserCourses);
             } catch (err) {
                 console.error("Failed to load user's courses: ", err);
                 navigate('/');
@@ -31,7 +31,7 @@ export function useUserCourses ({ userId }: useUserCoursesProps) {
         }
 
         loadUserCourses();
-        
+
     }, [userId]);
 
     return { userCourses };
