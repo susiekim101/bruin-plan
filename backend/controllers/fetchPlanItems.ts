@@ -47,7 +47,6 @@ Returns an array of objects, where each object represents a single course in the
         { plan_item_id: 2, course_number: "COM SCI 31", course_name: "Introduction to C++", year: 2, quarter: "Spring" },
         ...
     ]
-
 */
 export async function getPlanItems(plan_id: number) {
     try {

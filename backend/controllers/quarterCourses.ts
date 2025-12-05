@@ -1,40 +1,6 @@
 import { connection } from "../src/database.ts";
-import type { RowDataPacket, ResultSetHeader } from "mysql2";
-
-interface removeCourseProps {
-  userId: number;
-  courseId: number;
-  yearIndex: number;
-  quarterName: "Fall" | "Winter" | "Spring" | "Summer";
-}
-
-interface addCourseProps {
-  userId: number,
-  courseId: number,
-  yearIndex: number,
-  quarterName: "Fall" | "Winter" | "Spring" | "Summer";
-}
-
-interface fetchUserCoursesProps {
-    userId: number;
-    yearIndex: number;
-    quarterName: "Fall" | "Winter" | "Spring" | "Summer";
-}
-
-interface setQuarterCourseStatusProps {
-    userId: number,
-    yearIndex: number,
-    quarterName: "Fall" | "Winter" | "Spring" | "Summer",
-    status: "Planned" | "In Progress" | "Completed"
-}
-
-interface PlanIdResult {
-    plan_id: number,
-}
-
-interface PlanIdRow extends RowDataPacket {
-  plan_id: number,
-}
+import type { ResultSetHeader } from "mysql2";
+import type { PlanIdRow, addCourseProps,removeCourseProps, PlanIdResult,fetchUserCoursesProps,setQuarterCourseStatusProps } from "../types/quarterTypes.ts";
 
 /*
 Retrieves a User's plan_id from the database. plan_id has a foreign key of user_id.

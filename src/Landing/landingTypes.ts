@@ -29,7 +29,7 @@ export interface HandleSubmitProps {
     e: React.FormEvent<HTMLFormElement>
     setError: (prev: string | null) => void,
     isFormValid: boolean,
-    signup: boolean,
+    isSignedUp: boolean,
     navigate: NavigateFunction,
     login: () => void,
     userData: UserData,

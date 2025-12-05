@@ -1,3 +1,4 @@
+
 export interface Course {
     course_id: number | null;
     course_number: string;
@@ -17,3 +18,8 @@ export interface MajorOption {
     value: number,
     label: string
 }
+
+export interface TotalUnitsProps {
+    units: number;
+}
+

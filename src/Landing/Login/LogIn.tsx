@@ -8,7 +8,7 @@ import type { LogInProps, UserData } from '../landingTypes';
 function LogIn({ textStyle, px, py }: LogInProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
-    const [signup, setSignUp] = useState(false);
+    const [isSignedUp, setSignUp] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [userData, setUserData] = useState<UserData>({
         'first_name': '',
@@ -26,13 +26,13 @@ function LogIn({ textStyle, px, py }: LogInProps) {
     return (
         <div className="">
             <dialog ref={dialogRef} className="p-0 border rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
-                <form ref={formRef} onSubmit={(e) => handleSubmit({e, setError, isFormValid, signup, navigate, login, userData})} className="fieldset bg-base-200 border-base-300 rounded-box w-xs h-fit border p-4">
+                <form ref={formRef} onSubmit={(e) => handleSubmit({e, setError, isFormValid, isSignedUp, navigate, login, userData})} className="fieldset bg-base-200 border-base-300 rounded-box w-xs h-fit border p-4">
                     <header className="flex justify-between">
-                        <legend className="text-lg" id="registration-title">{signup ? "Create Account" : "Log In"}</legend>
+                        <legend className="text-lg" id="registration-title">{isSignedUp ? "Create Account" : "Log In"}</legend>
                         <X className="w-5 h-5 cursor-pointer" onClick={() => handleCloseDialog(dialogRef)}/>
                     </header>
 
-                    {signup && (
+                    {isSignedUp && (
                         <>
                             <label className="label">First Name</label>
                             <input id="first-name" type="text" className="input validator" placeholder="First Name" name="first_name" onChange={(e) => handleInputChange({e, setUserData})} required/>
@@ -61,7 +61,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
                         <br/>At least one special character from ?!*._
                     </p>
 
-                    {signup && (
+                    {isSignedUp && (
                         <>
                             <label className="label">Major</label>
                             <select id="major-input" defaultValue="" className="select validator" name="major" onChange={(e) => handleInputChange({e, setUserData})} required >
@@ -78,16 +78,16 @@ function LogIn({ textStyle, px, py }: LogInProps) {
                             type="submit"
                             disabled={!isFormValid}
                     >
-                            {signup ? "Create Account" : "Log In"}
+                            {isSignedUp ? "Create Account" : "Log In"}
                     </button>
                     
                     {error && (
                         <p className="text-red-500">{error}</p>
                     )}
                     <div className="flex gap-2 justify-center">
-                        <p>{signup ? "Already have an account?" : "Don't have an account?"}</p>
-                        <p className="cursor-pointer hover:underline" onClick={() => setSignUp(!signup)}>
-                            {signup ? "Log in" : "Sign up"}
+                        <p>{isSignedUp ? "Already have an account?" : "Don't have an account?"}</p>
+                        <p className="cursor-pointer hover:underline" onClick={() => setSignUp(!isSignedUp)}>
+                            {isSignedUp ? "Log in" : "Sign up"}
                         </p>
                     </div>
                 </form>
