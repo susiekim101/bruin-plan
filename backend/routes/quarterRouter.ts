@@ -19,7 +19,7 @@ quarterRouter.post('/addCourse', async (req: Request, res: Response) => {
 quarterRouter.post("/getCourses", async (req: Request, res: Response) => {
     const userId = Number(req.body.userId);
     const yearIndex = Number(req.body.yearIndex);
-    const quarterName = String(req.body.quarterName);
+    const quarterName = String(req.body.quarterName) as "Fall" | "Winter" | "Spring" | "Summer";
 
     try {
         const result = await fetchUserCourses({ userId, yearIndex, quarterName });
