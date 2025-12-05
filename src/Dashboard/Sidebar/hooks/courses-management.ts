@@ -19,14 +19,19 @@ export function useUserCourses ({ userId }: useUserCoursesProps) {
             
             try {
                 const response = await axios.get(`http://localhost:3001/courses/planned/${userId}`, { withCredentials: true});
-                setUserCourses(response.data.data);
+                
+                const fetchedUserCourses = response.data.data;
+                setUserCourses(fetchedUserCourses);
+                
                 console.log("User's planned courses: ", response.data.data);
             } catch (err) {
                 console.error("Failed to load user's courses: ", err);
                 navigate('/');
             }
         }
+
         loadUserCourses();
+        
     }, [userId]);
 
     return { userCourses };
