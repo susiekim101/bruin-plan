@@ -1,3 +1,59 @@
+/* 
+For the purposes of testing, we initialize our tables with user data so there are plans to view on the Public Page. The following was the prompt we used for Gemini:
+
+<prompt>
+I want to initialize my MySQL database with dummy data. I will write a script in .sql and run it from my terminal so that I can put user data into all of the necessary tables. I will show you the tables and table, describe each table and their fields, and what the final table should look like after you input the user data. You can ignore the specic IDs of the data, since they AUTO_INCREMENT
+</prompt>
+
+<mySQL tables>
+Plan_Items 
+User_Plans  
+Users  
+</mySQL tables>
+
+<Plan_Items>
++--------------+-------------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                      | Null | Key | Default | Extra          |
++--------------+-------------------------------------------+------+-----+---------+----------------+
+| plan_item_id | int                                       | NO   | PRI | NULL    | auto_increment |
+| plan_id      | int                                       | YES  | MUL | NULL    |                |
+| course_id    | int                                       | YES  | MUL | NULL    |                |
+| year         | int                                       | NO   |     | NULL    |                |
+| quarter      | enum('Fall','Winter','Spring','Summer')   | NO   |     | NULL    |                |
+| status       | enum('Planned','Completed','In Progress') | YES  |     | NULL    |                |
++--------------+-------------------------------------------+------+-----+---------+----------------+
+</Plan_Items>
+
+<User_Plans>
++-----------+------------+------+-----+---------+----------------+
+| Field     | Type       | Null | Key | Default | Extra          |
++-----------+------------+------+-----+---------+----------------+
+| plan_id   | int        | NO   | PRI | NULL    | auto_increment |
+| user_id   | int        | YES  | MUL | NULL    |                |
+| major_id  | int        | YES  | MUL | NULL    |                |
+| is_shared | tinyint(1) | NO   |     | 0       |                |
++-----------+------------+------+-----+---------+----------------+
+</User_Plans>
+
+<Users>
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| user_id       | int          | NO   | PRI | NULL    | auto_increment |
+| first_name    | varchar(50)  | NO   |     | NULL    |                |
+| last_name     | varchar(50)  | NO   |     | NULL    |                |
+| email         | varchar(100) | NO   | UNI | NULL    |                |
+| password_hash | varchar(255) | NO   |     | NULL    |                |
+| major_id      | int          | YES  | MUL | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+</Users>
+
+I will now pass what the final table should look like with all of the user data.
+
+<User Data>
+...
+</User Data>
+*/
 USE bruin_plan;
 -- Temporarily disable foreign key constraints and unique checks to allow clean insertion
 -- into tables that might reference each other.
