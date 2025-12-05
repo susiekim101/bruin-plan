@@ -30,14 +30,16 @@ When('I click on the SelectAMajor component', async function () {
     await page.getByRole("combobox", { name: "Select a major" }).click();
 });
 
-Then('I should only see the Computer Engineering and Computer Science and Engineering options', async function () {
+Then('I should only see the Bioengineering, Computer Engineering, Computer Science and Engineering, and Electrical Engineering options', async function () {
     const options = page.getByRole("option");
 
     const observedOptions = await options.allTextContents();
 
     const expectedOptions = [
+        "Bioengineering",
         "Computer Engineering",
         "Computer Science and Engineering",
+        "Electrical Engineering"
     ];
 
     await expect(observedOptions).toEqual(expectedOptions);
