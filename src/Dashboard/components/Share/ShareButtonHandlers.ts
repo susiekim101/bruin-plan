@@ -3,7 +3,7 @@ import type { RefObject } from "react";
 
 type DialogRef = RefObject<HTMLDialogElement | null>;
 
-export async function handleClick(confirmationRef: DialogRef) {
+export async function handleShareClick(confirmationRef: DialogRef) {
     try{
         const response = await axios.get(`http://localhost:3001/user/currUserId`, { withCredentials: true});
         const user_id = response.data.user_id;
@@ -16,13 +16,13 @@ export async function handleClick(confirmationRef: DialogRef) {
     }
 }
 
-export async function handleOpenClick(dialogRef: DialogRef) {
+export async function handleOpenDialog(dialogRef: DialogRef) {
     if(dialogRef.current) {
         dialogRef.current.showModal();
     }
 }
 
-export async function handleCloseClick(dialogRef: DialogRef) {
+export async function handleCloseDialog(dialogRef: DialogRef) {
     if(dialogRef.current) {
         dialogRef.current.close();
     }
