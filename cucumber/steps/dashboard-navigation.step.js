@@ -20,8 +20,8 @@ Given('I am a user with an account who navigates to the landing page', async fun
 // Then I should be able to log in with my credientials when I click the "My Dashboard" button
 Then('I should be able to log in with my credentials when I click the "My Dashboard" button', async function () {
     await page.click('text="My Dashboard"');
-    await page.fill('input[name="email"]', "testuser@gmail.com");
-    await page.fill('input[name="password"]',"testPassword7!");
+    await page.fill('input[name="email"]', "testuser@ucla.edu");
+    await page.fill('input[name="password"]',"Password123!");
     await page.click('button[type="submit"]');
 });
 
@@ -64,8 +64,8 @@ Then('the left arrow icon should be visible', async function () {
 Given('I return to the dashboard page', async function () {
     await page.goto(process.env.BASE_URL);
     await page.click('text="My Dashboard"');
-    await page.fill('input[name="email"]', "testuser@gmail.com");
-    await page.fill('input[name="password"]',"testPassword7!");
+    await page.fill('input[name="email"]', "testuser@ucla.edu");
+    await page.fill('input[name="password"]',"Password123!");
     await page.click('button[type="submit"]');
     await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });

@@ -29,7 +29,8 @@ INSERT INTO Users (first_name, last_name, email, password_hash, major_id) VALUES
 ('Hello', 'Hello', 'test@examplee.com', '$2b$10$7okZ.twLkp44v2lojGKVtOAycTHfAUp0AEycNGVQVQCk7EoEBLRRm', 2);
 SET @user_hello_2 = LAST_INSERT_ID(); -- Capture the new ID for second Hello Hello (Original ID 25)
 
-
+INSERT INTO Users (first_name, last_name, email, password_hash, major_id) VALUES
+('Cucumber', 'Test', 'testuser@ucla.edu', '$2b$10$MqvEM.v8Dnbk3kpKEcGjqOcO4CS4Pn/NvvWsMT.XoIkEogd6nqIrG', 3);
 -- --------------------------------------------------------
 -- 2. INSERT DATA INTO User_Plans TABLE (AUTO_INCREMENT for plan_id)
 -- --------------------------------------------------------
