@@ -1,4 +1,4 @@
-import { Given, When, Then, Before, After, setDefaultTimeout } from "@cucumber/cucumber";
+import { Given, Then, Before, After, setDefaultTimeout } from "@cucumber/cucumber";
 import { chromium, expect } from "@playwright/test";
 import 'dotenv/config';
 
@@ -236,5 +236,9 @@ Then('the screen and year number don\'t change when I click below the left arrow
 });
     
 After({tags: "@dashboardNavigation"}, async function () {
-    await browser.close();
+    if (browser) {
+        await browser.close();
+        browser = undefined;
+        page = undefined;
+    }
 })

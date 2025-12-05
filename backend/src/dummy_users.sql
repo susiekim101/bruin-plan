@@ -126,7 +126,7 @@ INSERT INTO Plan_Items (plan_id, course_id, year, quarter, status) VALUES
 (@plan_hello_2, 30, 4, 'Spring', 'Planned'),
 (@plan_hello_2, 34, 4, 'Fall', 'Planned'),
 
--- Plan for Cucumber Test (Original Plan ID 9, now @plan_cucumber) - 10 Items
+-- Plan for Cucumber Test (Original Plan ID 9, now @plan_cucumber) - 7 Items
 (@plan_cucumber, 86, 1, 'Spring', 'Planned'),
 (@plan_cucumber, 89, 1, 'Winter', 'Planned'),
 (@plan_cucumber, 90, 2, 'Spring', 'Planned'),

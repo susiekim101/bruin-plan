@@ -93,7 +93,8 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
             </div>
             
             <div className="flex flex-col justify-center items-center mt-0.5">
-                <div className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
+                <div className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap"
+                id="mark-all-as-dropdown">
                     <Select
                         options={[
                             { value: 'Planned', label: 'Planned' },
@@ -155,7 +156,7 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
                         }}
                     />
                 </div>
-                <div> 
+                <div id="unit-tracker"> 
                     { (totalUnits > 21 || (totalUnits < 12 && quarterName != "Summer")) ?
                         <p className="text-red-600 font-bold">
                             Units: {totalUnits}
