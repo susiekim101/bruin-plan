@@ -4,7 +4,9 @@ Feature: Navigated dashboard and viewing four-year plan
     so that I can view all four years of my plan on the dashboard
 
     Scenario: Clicking on the right arrow icon prompts a transition to the next year
-    Given I am on the dashboard page
+    Given I am a user with an account who navigates to the landing page
+    Then I should be able to log in with my credentials when I click the "My Dashboard" button
+    Then I should be directed to the dashboard page
     Then the screen should change when I click on the right arrow icon
     Then the year number should increment
     And the left arrow icon should be visible
@@ -16,13 +18,13 @@ Feature: Navigated dashboard and viewing four-year plan
     And the right arrow icon should not be visible
 
     Scenario: Disabled left arrow at Year 1
-    Given I reload the dashboard page
+    Given I return to the dashboard page
     Then the left arrow icon should not be visible
     And the screen should remain the same when I click where the icon would be
     And the year number should remain the same
 
     Scenario: Clicking above and below the arrows doesn't prompt transition
-    Given I navigate back to the dashboard page
+    Given I return to the dashboard page
     Then the screen and year number don't change when I click above the right arrow icon
     And the screen and year number don't change when I click below the right arrow icon
     And the screen and year number don't change when I click above the left arrow icon

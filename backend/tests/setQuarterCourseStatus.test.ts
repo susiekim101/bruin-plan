@@ -44,7 +44,7 @@ test('query to setQuarterCourseStatus returns update result', async () => {
 
   expect(mockExecute).toHaveBeenCalledWith(
     expect.any(String), 
-    ['Taken', 18, 1, 'Fall']
+    ['Completed', 18, 1, 'Fall']
   );
 
   // assert that the returned result is correct

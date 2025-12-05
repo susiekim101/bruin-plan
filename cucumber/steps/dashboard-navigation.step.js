@@ -12,9 +12,21 @@ Before(async function () {
 });
 
 // SCENARIO 1: Clicking on the right arrow icon prompts a transition to the next year
-// Given I am on the dashboard page
-Given('I am on the dashboard page', async function () {
-    await page.goto(process.env.DASHBOARD_URL)
+//  Given I am a user with an account who navigates to the landing page
+Given('I am a user with an account who navigates to the landing page', async function () {
+    await page.goto(process.env.BASE_URL);
+});
+
+// Then I should be able to log in with my credientials when I click the "My Dashboard" button
+Then('I should be able to log in with my credentials when I click the "My Dashboard" button', async function () {
+    await page.click('text="My Dashboard"');
+    await page.fill('input[name="email"]', "testuser@gmail.com");
+    await page.fill('input[name="password"]',"testPassword7!");
+    await page.click('button[type="submit"]');
+});
+
+Then('I should be directed to the dashboard page', async function () {
+    await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
        
 // Then the screen should change when I click on the right arrow icon
@@ -50,7 +62,12 @@ Then('the left arrow icon should be visible', async function () {
 // SCENARIO 2: Disabled right arrow at Year 4
 // Given I return to the dashboard page
 Given('I return to the dashboard page', async function () {
-    await page.goto(process.env.DASHBOARD_URL)
+    await page.goto(process.env.BASE_URL);
+    await page.click('text="My Dashboard"');
+    await page.fill('input[name="email"]', "testuser@gmail.com");
+    await page.fill('input[name="password"]',"testPassword7!");
+    await page.click('button[type="submit"]');
+    await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
 
 // Then the fourth click on the right arrow shouldn't change the screen
@@ -61,6 +78,7 @@ Then('the fourth click on the right arrow shouldn\'t change the screen', async f
 
     const container = page.locator("#plan-container");
 
+    await page.waitForTimeout(500);
     const before = await container.evaluate(
         el => getComputedStyle(el).transform
     );
@@ -89,10 +107,7 @@ Then('the right arrow icon should not be visible', async function () {
 });
 
 // SCENARIO 3: Disabled left arrow at Year 1
-// Given I reload the dashboard page
-Given('I reload the dashboard page', async function () {
-    await page.goto(process.env.DASHBOARD_URL)
-});
+// Given I return to the dashboard page
 
 // Then the left arrow icon should not be visible
 Then('the left arrow icon should not be visible', async function () {
@@ -126,10 +141,7 @@ Then('the year number should remain the same', async function () {
 });
 
 // SCENARIO 4: Clicking above and below the arrows doesn't prompt transition
-// Given I navigate back to the dashboard page
-Given('I navigate back to the dashboard page', async function () {
-    await page.goto(process.env.DASHBOARD_URL)
-});
+// Given I return to the dashboard page
 
 // Then the screen and year number don't change when I click above the right arrow icon
 Then('the screen and year number don\'t change when I click above the right arrow icon', async function () {
