@@ -1,5 +1,6 @@
+@dragAndDrop
 Feature: Drag and drop courses to add and remove courses from user's plan
-    As a user, 
+    As a Bruin Plan user, 
     I want to be able to drag and drop courses,
     so that I can add and remove courses from my plan
 

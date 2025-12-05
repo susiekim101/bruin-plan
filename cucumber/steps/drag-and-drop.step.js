@@ -5,7 +5,7 @@ import 'dotenv/config';
 setDefaultTimeout(60 * 1000);
 let page, browser;
 
-Before(async function () {
+Before({tags: "@dragAndDrop"}, async function () {
     browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     page = await context.newPage();
@@ -39,7 +39,7 @@ When('I drag a course from the sidebar and drop it into a quarter', async functi
     await page.evaluate(({ source, target }) => {
         const fakePayload = {
             courseJson: JSON.stringify({
-                course_id: 1,
+                course_id: 87,
                 course_number: "COM SCI 31",
                 course_name: "Introduction to Computer Science I",
                 course_units: 4
@@ -110,7 +110,7 @@ When('I drag an existing course in a quarter and drop it in another quarter', as
     await page.evaluate(({ source, target }) => {
         const fakePayload = {
             courseJson: JSON.stringify({
-                course_id: 1,
+                course_id: 87,
                 course_number: "COM SCI 31",
                 course_name: "Introduction to Computer Science I",
                 course_units: 4
@@ -181,7 +181,7 @@ When('I drag an existing course in a quarter and drop it in the sidebar', async 
     await page.evaluate(({ source, target }) => {
         const fakePayload = {
             courseJson: JSON.stringify({
-                course_id: 1,
+                course_id: 87,
                 course_number: "COM SCI 31",
                 course_name: "Introduction to Computer Science I",
                 course_units: 4
@@ -233,6 +233,10 @@ Then('the course should not be in the old quarter after I reload the page', asyn
     expect(await courseInQuarter.isVisible({ timeout: 10000 })).toBeFalsy();
 });
 
-After(async function () {
-    await browser.close();
+After({tags: "@dragAndDrop"}, async function () {
+    if (browser) {
+        await browser.close();
+        browser = undefined;
+        page = undefined;
+    }
 })
