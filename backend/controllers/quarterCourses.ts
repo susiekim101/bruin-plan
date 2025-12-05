@@ -114,9 +114,7 @@ export async function fetchUserCourses ({ userId, yearIndex, quarterName }: fetc
 }
 
 /* 
-    Retrieves all courses in a given user's plan, regardless of year or quarter.
-
-    Returns an array of objects, each object representing a course in the user's plan.
+    Returns an array of objects, each object representing a course in the user's plan, regardless of what quarter or year the course is in.
     E.g.
     [
         {

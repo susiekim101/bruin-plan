@@ -1,8 +1,6 @@
 import { connection } from '../src/database.ts'
 
 /*
-    Retrieves all majors stored in the Majors table of the database.
-
     Returns an array of objects, each object representing a major with a unique major_id and major_name.
     E.g.
     [

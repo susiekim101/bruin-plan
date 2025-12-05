@@ -1,9 +1,7 @@
 import { connection } from '../src/database.ts';
 
 /* 
-    Retrieves all courses with a specified major_id.
-
-    Returns an array of objects, each object representing a course.
+    Returns an array of objects a given major ID, each object representing a course.
     E.g.
     [
         {
