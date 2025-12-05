@@ -45,13 +45,11 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
 
     // Display courses whose course codes match search term
     useEffect(() => {
-        // If the search term is empty, display all courses
         if (searchTerm === '') {
             setFilteredCourses(courses);
             return;
         }
 
-        // Filter the courses based on the search term
         const result = courses.filter(course =>
             course.course_number.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -61,14 +59,14 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
 
     // Remove user's planned courses from major courses
     useEffect(() => {
-        const loadCourses = async () => {
+        const loadCoursesNotPlanned = async () => {
             const coursesNotPlanned = majorCourses.filter((majorCourse: Course) => 
                     ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number)
             );
             setCourses(coursesNotPlanned);
             setFilteredCourses(coursesNotPlanned);
         };
-        loadCourses();
+        loadCoursesNotPlanned();
     }, [userCourses, majorCourses]);
     
 

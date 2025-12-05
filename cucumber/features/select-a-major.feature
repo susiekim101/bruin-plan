@@ -10,7 +10,7 @@ Feature: Select-A-Major
 
     Scenario: Clicking on SelectAMajor component displays all engineering major options in the database except the user's major
     When I click on the SelectAMajor component
-    Then I should only see the Computer Engineering and Computer Science and Engineering options
+    Then I should only see the Bioengineering, Computer Engineering, Computer Science and Engineering, and Electrical Engineering options
 
     Scenario: Not selecting an option displays the courses for the user's major
     When I do not select an option in the SelectAMajor component
