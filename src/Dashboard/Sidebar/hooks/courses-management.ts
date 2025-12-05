@@ -45,6 +45,9 @@ export function useMajorCourses ({ userMajor, selectedMajor }: useMajorCoursesPr
     const [ majorCourses, setMajorCourses ] = useState<Course[]>([]);
     const navigate = useNavigate();
     useEffect(() => {
+        if (! userMajor && ! selectedMajor)
+            return;
+
         const loadMajorCourses = async (majorID: number) => {
             try {
                 const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
@@ -55,10 +58,10 @@ export function useMajorCourses ({ userMajor, selectedMajor }: useMajorCoursesPr
             }
         };
 
-        if ( selectedMajor ) {
+        if (selectedMajor) {
             loadMajorCourses(selectedMajor.value);
         } else if (userMajor) {
-            loadMajorCourses( userMajor.major_id )
+            loadMajorCourses(userMajor.major_id)
         } else {
             return;
         }
