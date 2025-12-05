@@ -36,7 +36,7 @@ function CourseStatus({status }: CourseStatusProps) {
             <span className={`
                 h-2 w-2 rounded-full ml-1 ${color}
             `}></span>
-            <p className="pr-1 whitespace-nowrap">
+            <p className="pr-1 whitespace-nowrap" id="course-status">
                 {status}
             </p>
             <span
