@@ -1,7 +1,40 @@
 import { connection } from "../src/database.ts";
-import type { ResultSetHeader } from "mysql2";
-import type { UserRows, addToUserPlanProps, createUserProps, MajorRows, UserData } from "../types/userTypes.ts";
-import bcrypt from "bcryptjs"; 
+import type { RowDataPacket, ResultSetHeader } from "mysql2";
+import bcrypt from "bcryptjs";
+
+interface createUserProps {
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password': string
+    'major': string
+}
+interface addToUserPlanProps {
+    user_id: number,
+    major_id: number
+}
+
+interface MajorRows extends RowDataPacket {
+    major_id: number,
+}
+
+interface UserRows extends RowDataPacket {
+    'user_id': number
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password_hash': string
+    'major_id': number
+}
+
+interface UserData {
+    'user_id': number
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password_hash': string
+    'major_id': number
+}
 
 /* 
     Return: An array of an single object that holds information about specified User

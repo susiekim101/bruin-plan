@@ -1,6 +1,5 @@
 
 import type { Request, Response } from 'express';
-import type { UserData } from '../types/userTypes.ts';
 import { Router } from 'express';
 import { createUser, findByEmail, validateUser } from '../controllers/createUser.ts';
 import { getMajorById } from '../controllers/fetchPlanItems.ts'
@@ -10,6 +9,15 @@ import verifyToken from '../tokenMiddleware.ts';
 import 'dotenv/config';
 
 const userRouter = Router();
+
+interface UserData {
+    'user_id': number
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password_hash': string
+    'major_id': number
+}
 
 userRouter.post('/login', async (req: Request, res: Response) => {
     try {

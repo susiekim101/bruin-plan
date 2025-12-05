@@ -1,4 +1,6 @@
-import type { TotalUnitsProps } from "../../types"
+interface TotalUnitsProps {
+    units: number;
+}
 
 export default function TotalUnits({units }: TotalUnitsProps) {
     const MIN_UNITS = Number(localStorage.getItem('MIN_UNITS'))

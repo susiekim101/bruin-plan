@@ -110,7 +110,7 @@ export function handleInputChange({ e, setUserData }: HandleInputChangeProps) {
     }));
 };
 
-export async function handleSubmit({ e, setError, isFormValid, isSignedUp, navigate, login, userData}: HandleSubmitProps): Promise<void> {
+export async function handleSubmit({ e, setError, isFormValid, signup, navigate, login, userData}: HandleSubmitProps): Promise<void> {
     e.preventDefault();
     setError(null);
 
@@ -118,7 +118,7 @@ export async function handleSubmit({ e, setError, isFormValid, isSignedUp, navig
         console.log("Form is invalid");
         return;
     }
-    const url: string = isSignedUp ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
+    const url: string = signup ? `http://localhost:3001/user/signup` : 'http://localhost:3001/user/login';
 
     tryLogInSignUp({ navigate, login, setError, url, userData});
 }
