@@ -12,7 +12,7 @@ TRUNCATE TABLE Plan_Items;
 -- 1. INSERT DATA INTO Users TABLE (AUTO_INCREMENT for user_id)
 -- --------------------------------------------------------
 
--- Inserting 4 user records. The user_id is automatically generated.
+-- Inserting 5 user records. The user_id is automatically generated.
 INSERT INTO Users (first_name, last_name, email, password_hash, major_id) VALUES
 ('Joe', 'Bruin', 'joebruin@gmail.com', '$2b$10$fAc8uSqQ.mVaG7hxrmCr6uR/QPg/ugFip6pI36/1PEpHKCaoRMuXW', 3);
 SET @user_joe = LAST_INSERT_ID(); -- Capture the new ID for Joe Bruin (Original ID 22)
@@ -31,11 +31,12 @@ SET @user_hello_2 = LAST_INSERT_ID(); -- Capture the new ID for second Hello Hel
 
 INSERT INTO Users (first_name, last_name, email, password_hash, major_id) VALUES
 ('Cucumber', 'Test', 'testuser@ucla.edu', '$2b$10$MqvEM.v8Dnbk3kpKEcGjqOcO4CS4Pn/NvvWsMT.XoIkEogd6nqIrG', 3);
+SET @user_cucumber = LAST_INSERT_ID(); -- Capture the new ID for Cucumber Test (Original ID 26)
 -- --------------------------------------------------------
 -- 2. INSERT DATA INTO User_Plans TABLE (AUTO_INCREMENT for plan_id)
 -- --------------------------------------------------------
 
--- Inserting 4 plan records, referencing the newly generated user_id values.
+-- Inserting 5 plan records, referencing the newly generated user_id values.
 INSERT INTO User_Plans (user_id, major_id, is_shared) VALUES
 (@user_joe, 3, 1); -- Joe Bruin's plan
 SET @plan_joe = LAST_INSERT_ID(); -- Capture the new ID for Plan (Original ID 5)
@@ -52,12 +53,15 @@ INSERT INTO User_Plans (user_id, major_id, is_shared) VALUES
 (@user_hello_2, 2, 1); -- Second Hello Hello's plan
 SET @plan_hello_2 = LAST_INSERT_ID(); -- Capture the new ID for Plan (Original ID 8)
 
+INSERT INTO User_Plans (user_id, major_id, is_shared) VALUES
+(@user_cucumber, 3, 0); -- Cucumber Test's plan
+SET @plan_cucumber = LAST_INSERT_ID(); -- Capture the new ID for Plan (Original ID 9)
 
 -- --------------------------------------------------------
 -- 3. INSERT DATA INTO Plan_Items TABLE (AUTO_INCREMENT for plan_item_id)
 -- --------------------------------------------------------
 
--- Inserting 53 plan item records, referencing the newly generated plan_id values.
+-- Inserting 63 plan item records, referencing the newly generated plan_id values.
 INSERT INTO Plan_Items (plan_id, course_id, year, quarter, status) VALUES
 -- Plan for Joe Bruin (Original Plan ID 5, now @plan_joe) - 9 Items
 (@plan_joe, 216, 1, 'Spring', 'Planned'),
@@ -120,8 +124,16 @@ INSERT INTO Plan_Items (plan_id, course_id, year, quarter, status) VALUES
 (@plan_hello_2, 32, 4, 'Spring', 'Planned'),
 (@plan_hello_2, 33, 4, 'Winter', 'Planned'),
 (@plan_hello_2, 30, 4, 'Spring', 'Planned'),
-(@plan_hello_2, 34, 4, 'Fall', 'Planned');
+(@plan_hello_2, 34, 4, 'Fall', 'Planned'),
 
+-- Plan for Cucumber Test (Original Plan ID 9, now @plan_cucumber) - 10 Items
+(@plan_cucumber, 86, 1, 'Spring', 'Planned'),
+(@plan_cucumber, 89, 1, 'Winter', 'Planned'),
+(@plan_cucumber, 90, 2, 'Spring', 'Planned'),
+(@plan_cucumber, 92, 2, 'Winter', 'Planned'),
+(@plan_cucumber, 91, 2, 'Fall', 'Planned'),
+(@plan_cucumber, 93, 3, 'Winter', 'Planned'),
+(@plan_cucumber, 94, 4, 'Fall', 'Planned');
 
 -- --------------------------------------------------------
 -- 4. Re-enable Checks

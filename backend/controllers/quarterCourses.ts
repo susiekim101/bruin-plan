@@ -18,7 +18,7 @@ interface addCourseProps {
 interface fetchUserCoursesProps {
     userId: number;
     yearIndex: number;
-    quarterName: string;
+    quarterName: "Fall" | "Winter" | "Spring" | "Summer";
 }
 
 interface setQuarterCourseStatusProps {
