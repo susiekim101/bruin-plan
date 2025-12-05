@@ -5,7 +5,7 @@ import 'dotenv/config';
 setDefaultTimeout(60 * 1000);
 let page, browser;
 
-Before({tags: "@filter" }, async function () {
+Before({tags: "@selectAMajor" }, async function () {
     browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     page = await context.newPage();
@@ -26,7 +26,7 @@ Given('I am on the dashboard', async function () {
     await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
 
-When('I click on the Filter component', async function () {
+When('I click on the SelectAMajor component', async function () {
     await page.getByRole("combobox", { name: "Select a major" }).click();
 });
 
@@ -43,7 +43,7 @@ Then('I should only see the Computer Engineering and Computer Science and Engine
     await expect(observedOptions).toEqual(expectedOptions);
 });
 
-When('I do not select an option in the Filter component', async function () {
+When('I do not select an option in the SelectAMajor component', async function () {
     await expect(page.getByRole("combobox", { name: "Select a major" })).toHaveValue("");
 });
 
@@ -72,6 +72,6 @@ Then('I should see course cards for the Computer Engineering major', async funct
     expect(allCardsLocator.length).toBeGreaterThan(0);
 });
 
-After({ tags: "@filter"}, async function () {
+After({ tags: "@selectAMajor"}, async function () {
     await browser.close();
 });

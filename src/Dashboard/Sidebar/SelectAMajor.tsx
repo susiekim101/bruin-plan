@@ -8,7 +8,7 @@ interface FilterProps {
     handleChange: (opt: MajorOption | null) => void
 }
 
-function Filter ({majorOptions, selectedOption, handleChange} : FilterProps) {
+function SelectAMajor ({majorOptions, selectedOption, handleChange} : FilterProps) {
     return (
         <>
             <label hidden htmlFor="major-select-input">Select a major</label>
@@ -27,4 +27,4 @@ function Filter ({majorOptions, selectedOption, handleChange} : FilterProps) {
     );
 }
 
-export default Filter;
+export default SelectAMajor;

@@ -9,11 +9,11 @@ export function handleSearch ({ event, setSearchTerm }: handleSearchProps) {
     setSearchTerm(event.target.value);
 };
 
-interface handleFilterProps {
+interface handleSelectProps {
     option: MajorOption | null,
     setSelectedMajor: React.Dispatch<React.SetStateAction<MajorOption | null>>
 }
 
-export function handleFilter ({ option, setSelectedMajor }: handleFilterProps) {
+export function handleSelect ({ option, setSelectedMajor }: handleSelectProps) {
     setSelectedMajor(option);
 };

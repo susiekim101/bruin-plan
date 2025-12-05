@@ -5,12 +5,12 @@ import type { Course, MajorOption } from '../types.ts';
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
 import SearchBar from './SearchBar.tsx';
 import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
-import Filter from './Filter.tsx';
+import SelectAMajor from './SelectAMajor.tsx';
 
 import { useUserMajor,  useAllMajors} from './hooks/majors-selection.ts';
 import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
 import { handleDragOver, handleDrop } from './handlers/DragDropHandler.ts';
-import { handleSearch, handleFilter } from './handlers/SidebarHandler.ts';
+import { handleSearch, handleSelect } from './handlers/SidebarHandler.ts';
 
 interface sideBarProps {
     userId: number | null;
@@ -34,8 +34,8 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
         handleDrop({ event, userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses });
     }, [ userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses ]);
 
-    const onFilterSelect = useCallback((option: MajorOption | null) => {
-        handleFilter({ option, setSelectedMajor });
+    const onSelectChange = useCallback((option: MajorOption | null) => {
+        handleSelect({ option, setSelectedMajor });
     }, [setSelectedMajor]);
     
     const onSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,10 +83,10 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
                     majorName={userMajor.major_name}
                 />
             }
-            <Filter 
+            <SelectAMajor 
                 selectedOption={selectedMajor}
                 majorOptions={majors}
-                handleChange={onFilterSelect}
+                handleChange={onSelectChange}
             />
             <SearchBar 
                 searchTerm={searchTerm} 
