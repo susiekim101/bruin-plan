@@ -4,11 +4,22 @@ Our project is an interactive 4-year planner that enables UCLA engineering stude
 
 Our website will also have a public bulletin board where students can anonymously share their 4-year plans for other students to view. The sample 4-year schedules provided by UCLA are outdated and generic, making them unhelpful for many students who are interested in looking for more diverse sample schedules. With our public bulletin board, students will be able to filter through posted schedules by major and observe a variety of sample 4-year plans.
 
+With Bruin Plan, you will be able to
+
+📝 Create your 4-year plan containing of all major-required courses <br>
+✅ Mark a course as "Planned", "In Progress", or "Completed" <br>
+⏰ Track the number of units completed for each quarter and for all 4-years <br>
+👤 Share your plan anonymously for other users to browse <br>
+💡 View other anonymously shared plans for inspiration <br>
+👁️ Browse public plans even if you don't have an account! <br>
+
+❗️ The minimum unit threshold to post your plan has been set to 30 for testing purposes. Ideally, this would be set to 180 so plans that do not meet the graduation requirement are not shared.
+
 ## Technologies
 
-Frontend: React, TypeScript, Tailwind CSS, Axios
+Frontend: React, Vite, TypeScript, Tailwind CSS, Axios
 
-Backend: Node.js, MySQL
+Backend: Node.js, Express, MySQL
 
 Tests: Cucumber, Playwright, Jest
 
@@ -16,7 +27,8 @@ Tests: Cucumber, Playwright, Jest
 ### Frontend
 Clone the repository and install all dependencies.
 ```
-git clone LINK
+git clone https://github.com/susiekim101/bruin-plan.git
+cd bruin-plan
 npm install
 ```
 
@@ -100,14 +112,12 @@ mysql -u new_username -p
 ```
 
 ### Datbase Initialization
-Since our application runs on the local server, you must first initialize the database with a script. First create all of the tables.
+Since our application runs on the local server, you must first initialize the database with a script. The scripts will 1) Initialize all tables 2) Initialize the Courses table with relevant course data and 3) Initialize Users, User_Plans, and Plan_Items with dummy user data to see posts on the public page.
 ```
-mysql -u rot -p < database.sql
-```
-
-Then, add all of our scraped course data into the corresponding table.
-```
+cd backend/src
+mysql -u root -p < database.sql
 mysql -u root -p < course_scraper.sql
+mysql -u root -p < dummy_users.sql
 ```
 
 ### Setting up MySQL Connection
@@ -141,9 +151,35 @@ npx cucumber-js test
 
 
 ## Use of GenAI
-Most SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu (https://www.seasoasa.ucla.edu/curric-24-25/44-compsci-ugstd-24.html). The prompt used to generate the queries for scraping the courses were as follows:
+### Course Data
+The SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu. The prompt used to generate the queries for scraping the courses were as follows:
+```
+  I want to initialize my MySQL database with course data fetched from the UCLA course catalog. I will give you the table and its fields for which you will generate SQL queries to insert each course into the table. Please add the following courses to the table, where the major_id is referenced using @bioe_major_id, the category is either "Major" or "Elective" and the course_units is extracted from the UCLA course catalog. Assume the category is "Major" unless otherwise specified.
 
+  Courses table:
+  +---------------+--------------+------+-----+---------+----------------+
+  | Field         | Type         | Null | Key | Default | Extra          |
+  +---------------+--------------+------+-----+---------+----------------+
+  | course_id     | int          | NO   | PRI | NULL    | auto_increment |
+  | course_number | varchar(20)  | NO   |     | NULL    |                |
+  | course_name   | varchar(255) | NO   |     | NULL    |                |
+  | course_units  | int          | YES  |     | NULL    |                |
+  | category      | varchar(50)  | YES  |     | NULL    |                |
+  | major_id      | int          | YES  | MUL | NULL    |                |
+  +---------------+--------------+------+-----+---------+----------------+  
 
-Given this databse schema, how can I write a SQL script that scrapes the course name and number from this link: https://www.seasoasa.ucla.edu/curric-24-25/23-bioeng-ugstd-24.html
+  Courses data: 
+  Complete the following course: 
+  BIOENGR 10 - Introduction to Bioengineering 
+  Chemistry 
+  Complete the following six courses: 
+  
+  CHEM 20A - Chemical Structure 
+  CHEM 20B - Chemical Energetics and Change 
+  CHEM 20L - General Chemistry Laboratory 
+  ... 
+```
+The same prompt was used for all of the majors scraped in the `course_scraper.sql` script.
 
-A similar prompt was used for all of the majors scraped in the `course_scraper.sql` script.
+### Dummy Users
+For the purposes of testing, we initialize our tables with user data so there are plans to view on the Public Page.
