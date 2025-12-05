@@ -16,14 +16,15 @@ Before(async function () {
 Given('I navigate to my dashboard', async function () {
     await page.goto(process.env.BASE_URL);
     await page.click('text="My Dashboard"');
-    await page.fill('input[name="email"]', "testuser@gmail.com");
-    await page.fill('input[name="password"]',"testPassword7!");
+    await page.fill('input[name="email"]', "testuser@ucla.edu");
+    await page.fill('input[name="password"]',"Password123!");
     await page.click('button[type="submit"]');
     await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
 
 // When I drag a course from the sidebar and drop it into a quarter
 When('I drag a course from the sidebar and drop it into a quarter', async function () {
+    await page.waitForLoadState('networkidle');
     const course = page.locator('text=COM SCI 31').first();
     const quarter = page.locator('[data-year="1"][data-quarter="Fall"]').first();
 
@@ -94,6 +95,7 @@ Then('the course should remain in the quarter after I reload the page', async fu
 // Given I navigate to my dashboard
 // When I drag an existing course in a quarter and drop it in another quarter
 When('I drag an existing course in a quarter and drop it in another quarter', async function () {
+    await page.waitForLoadState('networkidle');
     const course = page.locator('text=COM SCI 31').first();
     const quarter = page.locator('[data-year="1"][data-quarter="Winter"]').first();
 
@@ -164,6 +166,7 @@ Then('the course should remain in the new quarter after I reload the page', asyn
 // Given I navigate to my dashboard
 // When I drag an existing course in a quarter and drop it in the sidebar
 When('I drag an existing course in a quarter and drop it in the sidebar', async function () {
+    await page.waitForLoadState('networkidle');
     const course = page.locator('text=COM SCI 31').first();
     const sidebar = page.locator('#course-list');
 
