@@ -1,6 +1,15 @@
 import { useEffect } from "react";
 import axios from "axios";
-import type { Plan, RawPlan } from "../publicTypes.ts";
+
+interface Plan {
+    plan_id: number,
+    major: string
+}
+
+interface RawPlan {
+    plan_id: number,
+    major_id: number,
+}
 
 export function useFetchPlans(setAllPlans: (plans: Plan[]) => void) {
     /* 

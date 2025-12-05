@@ -1,7 +1,42 @@
 import type { NavigateFunction } from "react-router-dom";
+import type { RefObject } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import type { FormRef, DialogRef, tryLogInSignUpProps, HandleInputChangeProps, HandleSubmitProps } from "../landingTypes";
+
+type FormRef = RefObject<HTMLFormElement | null>;
+type DialogRef = RefObject<HTMLDialogElement | null>;
+
+interface UserData {
+    first_name: string,
+    last_name: string,
+    email: string,
+    password: string,
+    major: string
+};
+
+interface tryLogInSignUpProps {
+    navigate: NavigateFunction,
+    login: () => void,
+    setError: (prev: string) => void,
+    url: string,
+    userData: UserData
+};
+
+
+interface HandleInputChangeProps {
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    setUserData: React.Dispatch<React.SetStateAction<UserData>>,
+}
+
+interface HandleSubmitProps {
+    e: React.FormEvent<HTMLFormElement>
+    setError: (prev: string | null) => void,
+    isFormValid: boolean,
+    signup: boolean,
+    navigate: NavigateFunction,
+    login: () => void,
+    userData: UserData,
+}
 
 export function useValidateForm(formRef: FormRef, setIsFormValid: (prev: boolean) => void) {
     useEffect(() => {

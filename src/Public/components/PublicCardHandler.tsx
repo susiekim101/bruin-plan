@@ -1,6 +1,7 @@
-import type { ReactElement } from "react";
+import type { RefObject, ReactElement } from "react";
 import { Microscope, CodeXml, MonitorCog, Computer, Unplug } from "lucide-react";
-import type { DialogRef } from "../publicTypes";
+
+type DialogRef = RefObject<HTMLDialogElement | null>;
 
 export const handleOpenClick = (dialogRef: DialogRef) => {
     if(dialogRef.current) {

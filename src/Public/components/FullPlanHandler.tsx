@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import axios from "axios";
-import type { PlanItems } from "../publicTypes";
+
+type PlanItems = {
+    plan_item_id: number,
+    course_number: string,
+    course_name: string,
+    year: number,
+    quarter: string,
+}
 
 export function useFetchItems(plan_id: number, setPlanItems: (plans: PlanItems[]) => void) {
     useEffect(() => {
