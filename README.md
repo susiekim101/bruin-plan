@@ -120,21 +120,6 @@ mysql -u root -p < course_scraper.sql
 mysql -u root -p < dummy_users.sql
 ```
 
-### Setting up MySQL Connection
-Create a .env file with the following information
-```
-DB_HOST=YOUR_LOCAL_HOST
-DB_USER=YOUR_USER
-DB_PASSWORD=YOUR_PASSWORD
-DB_NAME="bruin_plan
-```
-Ensure DB_HOST, DB_USER, ad DB_PASSWORD are updated for your configuration.
-
-Add .env to .gitignore
-```
-*.env
-```
-
 ## Jest testing
 To run and verify the Jest tests, run
 ```
