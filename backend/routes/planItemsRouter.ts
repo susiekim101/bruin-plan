@@ -24,6 +24,7 @@ planItemsRouter.get("/getAllPublicPlans", async ( req: Request, res: Response ) 
 
 planItemsRouter.get('/getMajorById/:major_id', async( req: Request, res: Response ) => {
     const majorId = Number(req.params.major_id);
+    
     try {
         const row = await getMajorById(majorId);
         if(!row) {
@@ -41,6 +42,7 @@ planItemsRouter.get('/getMajorById/:major_id', async( req: Request, res: Respons
 
 planItemsRouter.get('/getPlanItems/:plan_id', async( req: Request, res: Response) => {
     const plan_id = Number(req.params.plan_id);
+
     try {
         const response = await getPlanItems(plan_id);
         if(!response) {

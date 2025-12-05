@@ -1,24 +1,9 @@
-import { useEffect } from "react";
-import axios from "axios";
 interface TotalUnitsProps {
     units: number;
-    userId: number | null
 }
 
-export default function TotalUnits({units, userId}: TotalUnitsProps) {
+export default function TotalUnits({units }: TotalUnitsProps) {
     const MIN_UNITS = Number(localStorage.getItem('MIN_UNITS'))
-    useEffect(() => {
-        const checkUnits = async() => {
-            try {
-                await axios.post(`http://localhost:3001/plan/unsharePlan/${userId}`);
-            } catch {
-                console.error("Failed to unshare user plan");
-            }
-        } 
-        if(units < MIN_UNITS) {
-            checkUnits();
-        }
-    }, [units, userId]);
 
     return (
         <>

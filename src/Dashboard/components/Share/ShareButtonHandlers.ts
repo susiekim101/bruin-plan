@@ -33,3 +33,17 @@ export async function handleCloseConfirmation(confirmationRef: DialogRef) {
         confirmationRef.current.close();
     }
 }
+
+export async function handleUnshare(confirmationRef: DialogRef) {
+    try {
+        const res = await axios.get("http://localhost:3001/user/userId", { withCredentials: true });
+        const userId = res.data.user_id;
+        await axios.post(`http://localhost:3001/plan/unsharePlan/${userId}`);
+
+        if(confirmationRef.current) {
+            confirmationRef.current.close();
+        }
+    } catch {
+        console.error("Failed to unshare user plan");
+    }
+}

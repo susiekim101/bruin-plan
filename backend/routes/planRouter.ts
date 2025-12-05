@@ -6,6 +6,7 @@ const planRouter = Router()
 
 planRouter.post('/sharePlan/:user_id', async ( req: Request, res: Response) => {
     const user_id = Number(req.params.user_id);
+
     try {
         await sharePlan(user_id);
         res.status(200).json({message: "Shared user plan."});
@@ -16,6 +17,7 @@ planRouter.post('/sharePlan/:user_id', async ( req: Request, res: Response) => {
 
 planRouter.post('/unsharePlan/:user_id', async (req: Request, res: Response) => {
     const user_id = Number(req.params.user_id);
+    
     try {
         await unsharePlan(user_id);
         res.status(200).json({message: "Unshared user plan."});

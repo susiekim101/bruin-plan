@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import FullPlan from './FullPlan';
-import { handleOpenClick, handleCloseClick, majorIcon } from './PlanCardController';
+import { handleOpenClick, handleCloseClick, majorIcon } from './PublicCardHandler';
 
 interface PlanCardProps {
     plan_id: number,
