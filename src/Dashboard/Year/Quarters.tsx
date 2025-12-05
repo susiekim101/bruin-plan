@@ -68,7 +68,8 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
         <div 
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="flex flex-col w-full justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4 overflow-y-scroll">
+            className="flex flex-col w-full justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4 overflow-y-scroll"
+            id={`${yearIndex}-${quarterName}`}>
             <div className="flex flex-col shrink space-y-2">
                 {courses.map((course, index) => (
                     (isEmptyCourse(course) || course.course_id === null) ? (
