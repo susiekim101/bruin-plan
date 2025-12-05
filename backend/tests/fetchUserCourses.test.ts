@@ -103,7 +103,7 @@ test('fetchAllUserCourses should establish connection to database', async () => 
 
 
 test(`fetchAllUserCourses should query database with
-        SELECT pi.course_id, c.course_number, c.course_name, c.course_units, c.category 
+        SELECT pi.course_id, c.course_number, c.course_name, c.course_units, pi.status, c.category 
         FROM Plan_Items pi JOIN Courses c ON pi.course_id = c.course_id 
         WHERE plan_id = ?`, async () => {
   
@@ -131,6 +131,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
           course_number: 'TEST 1',
           course_name: 'Test Course 1',
           course_units: 1,
+          status: 'Planned',
           category: 'Major'
         },
         { 
@@ -138,6 +139,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
           course_number: 'TEST 2',
           course_name: 'Test Course 2',
           course_units: 1,
+          status: 'Planned',
           category: 'Major'
         },
         { 
@@ -145,6 +147,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
           course_number: 'TEST 3',
           course_name: 'Test Course 3',
           course_units: 1,
+          status: 'Planned',
           category: 'Major'
         }
     ], []]);
@@ -156,6 +159,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
       course_number: 'TEST 1',
       course_name: 'Test Course 1',
       course_units: 1,
+      status: 'Planned',
       category: 'Major'
     },
     { 
@@ -163,6 +167,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
       course_number: 'TEST 2',
       course_name: 'Test Course 2',
       course_units: 1,
+      status: 'Planned',
       category: 'Major'
     },
     { 
@@ -170,6 +175,7 @@ test('fetchAllUserCourses should return all courses of a given plan_id', async (
       course_number: 'TEST 3',
       course_name: 'Test Course 3',
       course_units: 1,
+      status: 'Planned',
       category: 'Major'
     }
   ]);

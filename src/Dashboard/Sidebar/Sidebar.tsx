@@ -1,34 +1,18 @@
-// import CustomCard from '../CourseCards/CustomCards';
+import { useState, useEffect, useCallback } from 'react';
+
+import type { Course, MajorOption } from '../types.ts';
+
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
 import SearchBar from './SearchBar.tsx';
-import Major from '../components/Major/Major.tsx';
-import Filter from './Filter.tsx';
-import type { MajorOption } from './Filter.tsx';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import removeCourseLogic from '../Year/removeCourseLogic';
+import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
+import SelectAMajor from './SelectAMajor.tsx';
 
-interface Major {
-    major_name: string,
-    major_id: number
-}
+import { useUserMajor,  useAllMajors} from './hooks/majors-selection.ts';
+import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
+import { handleDragOver, handleDrop } from './handlers/DragDropHandler.ts';
+import { handleSearch, handleSelect } from './handlers/SidebarHandler.ts';
 
-interface UserMajor {
-    value: string,
-    label: string
-}
-interface Course {
-    course_id: number | null,
-    course_number: string,
-    course_name: string,
-    course_units: number,
-    status: 'Planned' | 'In Progress' | 'Completed';
-    category: string,
-    major_id: number
-}
-
-type sideBarProps = {
+interface sideBarProps {
     userId: number | null;
     courses: Course[];
     setCourses: React.Dispatch<React.SetStateAction<Course[]>>;
@@ -38,111 +22,26 @@ type sideBarProps = {
 }
 
 function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCourses, loadQuarterCourses}: sideBarProps) {
-    const [ userMajor, setUserMajor ] = useState<Major>();
-    const [ userCourses, setUserCourses ] = useState<Course[] | null>(null);
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ selectedMajor, setSelectedMajor ] = useState<MajorOption | null>(null);
-    const [ majors, setMajors ] = useState<MajorOption[]>([]);
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
+    const { userMajor } = useUserMajor();
+    const { majors } = useAllMajors({ userMajor });
+    const { userCourses } = useUserCourses({ userId }); 
+    const { majorCourses } = useMajorCourses({ userMajor, selectedMajor });
 
-    const handleFilter = (option: MajorOption | null) => {
-        setSelectedMajor(option);
-    };
+    const onDropHandler = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+        handleDrop({ event, userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses });
+    }, [ userId, userMajor, setCourses, setFilteredCourses, loadQuarterCourses ]);
 
-    const navigate = useNavigate();
+    const onSelectChange = useCallback((option: MajorOption | null) => {
+        handleSelect({ option, setSelectedMajor });
+    }, [setSelectedMajor]);
+    
+    const onSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        handleSearch({ event, setSearchTerm });
+    }, [setSearchTerm]);
 
-    // Fetch user's major
-    useEffect(() => {
-        const loadUserMajor = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/user/major', { withCredentials: true });
-                setUserMajor(response.data.data);
-            } catch (err){
-                console.error("Failed to load user's major: ", err);
-                navigate('/');
-            }
-        }
-        loadUserMajor();
-    }, []);
-
-    // Fetch all majors for Filter component
-    useEffect(() => {
-        const loadAllMajors = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/majors', { withCredentials: true });
-                const allMajors = response.data.data.map((major: Major) => ({
-                    value: major.major_id,
-                    label: major.major_name
-                }));
-                
-                if (userMajor) {
-                        const allMajorsExceptUserMajor = allMajors.filter((major: UserMajor) =>
-                        Number(major.value) != Number(userMajor.major_id)
-                    );
-
-                    setMajors(allMajorsExceptUserMajor);
-                }
-            } catch (err) {
-                console.error("Failed to load all majors: ", err);
-                navigate('/');
-            }
-        }
-        loadAllMajors();
-    }, [userMajor?.major_id]);
-
-    useEffect(() => {
-        const loadUserCourses = async () => {
-            if (! userId)
-                return;
-            
-            try {
-                const response = await axios.get(`http://localhost:3001/courses/planned/${userId}`, { withCredentials: true});
-                setUserCourses(response.data.data);
-                console.log("User's planned courses: ", response.data.data);
-            } catch (err) {
-                console.error("Failed to load user's courses: ", err);
-                navigate('/');
-            }
-        }
-        loadUserCourses();
-    }, [userId]);
-
-    // Fetch all courses for a given major
-    useEffect(() => {
-        const loadCourses = async (majorID: number) => {
-            // Return if userId hasn't been loaded
-            if (! userCourses)
-                return;
-
-            try {
-                const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
-                const allMajorCourses = response.data.data;
-                
-                // Remove courses already in user's planner
-                const coursesNotPlanned = allMajorCourses.filter((majorCourse: Course) => 
-                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number));
-                
-                setCourses(coursesNotPlanned);
-                setFilteredCourses(coursesNotPlanned);
-                console.log(`Displaying courses for major ${majorID}`, coursesNotPlanned);
-            } catch (err){
-                console.error(`Failed to load courses for selected major ${majorID}`, err);
-                navigate('/');
-            }
-        };
-
-        if ( selectedMajor ) {
-            loadCourses(selectedMajor.value);
-        } else if (userMajor) {
-            loadCourses( userMajor.major_id )
-        } else {
-            return;
-        }
-        
-    }, [userCourses, userMajor?.major_id, selectedMajor?.value]);
 
     // Display courses whose course codes match search term
     useEffect(() => {
@@ -160,53 +59,38 @@ function Sidebar({userId, courses, setCourses, filteredCourses, setFilteredCours
         setFilteredCourses(result);
     }, [searchTerm, courses]);
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    }
+    // Remove user's planned courses from major courses
+    useEffect(() => {
+        const loadCourses = async () => {
+            const coursesNotPlanned = majorCourses.filter((majorCourse: Course) => 
+                    ! userCourses.some(userCourse => majorCourse.course_number === userCourse.course_number)
+            );
+            setCourses(coursesNotPlanned);
+            setFilteredCourses(coursesNotPlanned);
+        };
+        loadCourses();
+    }, [userCourses, majorCourses]);
     
-    async function handleDrop (event: React.DragEvent<HTMLDivElement>) {
-        event.preventDefault();
-        const payload = JSON.parse(event.dataTransfer.getData("application/json"));
-        const courseObj : Course = JSON.parse(payload.courseJson);
-        await removeCourseLogic({courseJson: payload.courseJson, userId: userId, yearIndex: payload.sourceYearIndex, quarterName: payload.sourceQuarterName});
-        loadQuarterCourses(payload.sourceYearIndex, payload.sourceQuarterName);
-        if (!userMajor || !courseObj) {
-            return;
-        }
-        setCourses(prev => [
-            {
-                ...courseObj,
-                major_id: userMajor.major_id
-            },
-            ...prev
-        ]);
-        setFilteredCourses(prev => [
-            {
-                ...courseObj,
-                major_id: userMajor.major_id
-            },
-            ...prev
-        ]);
-    }
 
     return (
         <div
+            id="sidebar"
             onDragOver={handleDragOver}
-            onDrop={handleDrop}
+            onDrop={onDropHandler}
             className="flex flex-col justify-center bg-blue-800 rounded-l-3xl px-6 py-6 h-screen">
             { userMajor && 
-                <Major
+                <UserMajorDisplay
                     majorName={userMajor.major_name}
                 />
             }
-            <Filter 
+            <SelectAMajor 
                 selectedOption={selectedMajor}
                 majorOptions={majors}
-                handleChange={handleFilter}
+                handleChange={onSelectChange}
             />
             <SearchBar 
                 searchTerm={searchTerm} 
-                handleSearch={handleSearch}
+                handleSearch={onSearchChange}
             />
             <div id='course-list' className="flex flex-col gap-4 mt-6 overflow-y-auto h-full w-full">
                 {filteredCourses.map((course, index) => (
