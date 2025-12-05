@@ -1,5 +1,6 @@
+@dashboardNavigation
 Feature: Navigated dashboard and viewing four-year plan
-    As a user,
+    As a Bruin Plan user,
     I want to click through the years on the dashboard, 
     so that I can view all four years of my plan on the dashboard
 

@@ -5,7 +5,7 @@ import 'dotenv/config';
 setDefaultTimeout(60 * 1000);
 let page, browser;
 
-Before(async function () {
+Before({tags: "@dragAndDrop"}, async function () {
     browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     page = await context.newPage();
