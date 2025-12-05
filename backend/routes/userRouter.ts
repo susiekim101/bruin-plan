@@ -94,6 +94,7 @@ userRouter.get('/currUserId', verifyToken, async (req: Request, res: Response) =
 
 userRouter.get('/major', verifyToken, async (req: Request, res: Response) => {
     const major_id = res.locals.user.major_id;
+    
     try {
         const result = await getMajorById(major_id);
 
@@ -112,6 +113,7 @@ userRouter.get('/major', verifyToken, async (req: Request, res: Response) => {
 
 userRouter.get('/userId', verifyToken, async (req: Request, res: Response) => {
     const user_id = res.locals.user.user_id;
+
     return res.status(200).json({message: `Fetched user_id: ${user_id}`, user_id: user_id});
 })
 
