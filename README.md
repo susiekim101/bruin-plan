@@ -23,6 +23,16 @@ Backend: Node.js, Express, MySQL
 
 Tests: Cucumber, Playwright, Jest
 
+## Design Diagrams
+This sequence diagram models the interaction of a user creating an account for the first time. The user's data is inserted into the database and if the query is successful, the server will return a token for the user. Otherwise, if the query fails because the user's account already exists or the server failed to connect to the database, then a token is not issued.
+<img width="1320" height="1362" alt="CS35L Design Diagram - Sign Up (1)" src="https://github.com/user-attachments/assets/bff26c69-a3a5-48e9-9c04-3aea5e8ea8a7" />
+
+This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
+<img width="1320" height="1362" alt="CS35L Design Diagram - Log In (1)" src="https://github.com/user-attachments/assets/011f211b-64fd-48bc-9da6-235bfa86c97a" />
+
+The entity relationship diagram models how data is stored in our MySQL database. The database stored user data and their plans. Each course in a user's plan is identified as a plan item.
+<img width="1820" height="940" alt="CS35L Design Diagram - ER" src="https://github.com/user-attachments/assets/3e4cc66e-14fe-40a6-8044-43e1c9e02e06" />
+
 ## Run the app
 ### Frontend
 Clone the repository and install all dependencies.
@@ -147,14 +157,6 @@ To run and verify the Cucumber tests, run
 npx cucumber-js test
 ```
 
-## Design Diagrams
-This sequence diagram models the interaction of a user creating an account for the first time. The user's data is inserted into the database and if the query is successful, the server will return a token for the user. Otherwise, if the query fails because the user's account already exists or the server failed to connect to the database, then a token is not issued.
-<img width="1320" height="1362" alt="CS35L Design Diagram - Sign Up" src="https://github.com/user-attachments/assets/7b618340-6898-4dc5-9505-fb4b4fd953b0" />
-
-
-This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
-<img width="1320" height="1362" alt="CS35L Design Diagram - Log In" src="https://github.com/user-attachments/assets/92c2d3d3-dcb9-4f74-9091-6aa1c0c4f331" />
-
 ## Use of GenAI
 ### Course Data
 The SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu. The prompt used to generate the queries for scraping the courses were as follows:
@@ -187,4 +189,56 @@ The SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. R
 The same prompt was used for all of the majors scraped in the `course_scraper.sql` script.
 
 ### Dummy Users
-For the purposes of testing, we initialize our tables with user data so there are plans to view on the Public Page.
+For the purposes of testing, we initialize our tables with user data so there are plans to view on the Public Page. The following was the prompt we used for Gemini:
+```
+<prompt>
+I want to initialize my MySQL database with dummy data. I will write a script in .sql and run it from my terminal so that I can put user data into all of the necessary tables. I will show you the tables and table, describe each table and their fields, and what the final table should look like after you input the user data. You can ignore the specic IDs of the data, since they AUTO_INCREMENT
+</prompt>
+
+<mySQL tables>
+Plan_Items 
+User_Plans  
+Users  
+</mySQL tables>
+
+<Plan_Items>
++--------------+-------------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                      | Null | Key | Default | Extra          |
++--------------+-------------------------------------------+------+-----+---------+----------------+
+| plan_item_id | int                                       | NO   | PRI | NULL    | auto_increment |
+| plan_id      | int                                       | YES  | MUL | NULL    |                |
+| course_id    | int                                       | YES  | MUL | NULL    |                |
+| year         | int                                       | NO   |     | NULL    |                |
+| quarter      | enum('Fall','Winter','Spring','Summer')   | NO   |     | NULL    |                |
+| status       | enum('Planned','Completed','In Progress') | YES  |     | NULL    |                |
++--------------+-------------------------------------------+------+-----+---------+----------------+
+</Plan_Items>
+
+<User_Plans>
++-----------+------------+------+-----+---------+----------------+
+| Field     | Type       | Null | Key | Default | Extra          |
++-----------+------------+------+-----+---------+----------------+
+| plan_id   | int        | NO   | PRI | NULL    | auto_increment |
+| user_id   | int        | YES  | MUL | NULL    |                |
+| major_id  | int        | YES  | MUL | NULL    |                |
+| is_shared | tinyint(1) | NO   |     | 0       |                |
++-----------+------------+------+-----+---------+----------------+
+</User_Plans>
+
+<Users>
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| user_id       | int          | NO   | PRI | NULL    | auto_increment |
+| first_name    | varchar(50)  | NO   |     | NULL    |                |
+| last_name     | varchar(50)  | NO   |     | NULL    |                |
+| email         | varchar(100) | NO   | UNI | NULL    |                |
+| password_hash | varchar(255) | NO   |     | NULL    |                |
+| major_id      | int          | YES  | MUL | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+</Users>
+
+I will now pass what the final table should look like with all of the user data.
+
+[ USER DATA ]
+```
