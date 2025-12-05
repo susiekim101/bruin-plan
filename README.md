@@ -148,7 +148,12 @@ npx cucumber-js test
 ```
 
 ## Design Diagrams
+This sequence diagram models the interaction of a user creating an account for the first time. The user's data is inserted into the database and if the query is successful, the server will return a token for the user. Otherwise, if the query fails because the user's account already exists or the server failed to connect to the database, then a token is not issued.
+<img width="1320" height="1362" alt="CS35L Design Diagram - Sign Up" src="https://github.com/user-attachments/assets/7b618340-6898-4dc5-9505-fb4b4fd953b0" />
 
+
+This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
+<img width="1320" height="1362" alt="CS35L Design Diagram - Log In" src="https://github.com/user-attachments/assets/92c2d3d3-dcb9-4f74-9091-6aa1c0c4f331" />
 
 ## Use of GenAI
 ### Course Data
