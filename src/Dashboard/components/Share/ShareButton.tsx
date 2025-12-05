@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import { handleClick, handleOpenClick, handleCloseClick, handleCloseConfirmation } from "./ShareButtonHandlers"
-interface ShareButtonProps {
-    units: number
-}
+import { handleClick, handleOpenClick, handleCloseClick, handleCloseConfirmation, handleUnshare } from "./ShareButtonHandlers"
 
+interface ShareButtonProps {
+    units: number,
+}
 export default function ShareButton({units}: ShareButtonProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const confirmationRef = useRef<HTMLDialogElement>(null);
@@ -11,11 +11,11 @@ export default function ShareButton({units}: ShareButtonProps) {
 
     return (
         <div>
-
             <dialog ref={confirmationRef} className="p-3 w-[30%] text-center bg-cyan-700 text-white rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
                 <p className="text-xl font-bold">Your plan has been successfully published!</p>
-                <p className="m-3">If you make updates to your plan on your dashboard, the changes will not be reflected unless you share again.</p>
-                <button onClick={() => handleCloseConfirmation(confirmationRef)} className="bg-yellow-400 rounded-2xl px-2 py-1 cursor-pointer text-slate-700">Close</button>
+                <p className="m-3">If you make updates to your plan on your dashboard, the changes will automatically be reflected.</p>
+                <button onClick={() => handleUnshare(confirmationRef)} className="mr-2 bg-yellow-400 rounded-2xl px-2 py-1 cursor-pointer text-slate-700 transition duration-300 hover:bg-yellow-300 hover:scale-105">Unshare</button>
+                <button onClick={() => handleCloseConfirmation(confirmationRef)} className="bg-yellow-400 rounded-2xl px-2 py-1 cursor-pointer text-slate-700 transition duration-300 hover:bg-yellow-300 hover:scale-105">Ok</button>
             </dialog>
 
             <dialog ref={dialogRef} className="p-3 w-[30%] text-center bg-cyan-700 text-white rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">

@@ -69,7 +69,7 @@ test('query with a userId, yearIndex, and quarterName should return no courses',
   const result = await fetchUserCourses({ 
     userId: 3, 
     yearIndex: 1, 
-    quarterName: 'Summer' 
+    quarterName: 'Summer'
   });
 
   expect(mockExecute).toHaveBeenCalledTimes(2);

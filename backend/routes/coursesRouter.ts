@@ -9,6 +9,7 @@ const coursesRouter = Router();
 
 coursesRouter.get('/:major_id', verifyToken, async (req: Request, res: Response) => {
     const major_id = Number(req.params.major_id);
+    
     try {
         const courses = await fetchCoursesByMajor(major_id);
         return res.status(200).json({message: `Fetched courses with major_id = ${major_id}.`, data: courses});
@@ -19,6 +20,7 @@ coursesRouter.get('/:major_id', verifyToken, async (req: Request, res: Response)
 
 coursesRouter.get("/planned/:user_id", async (req: Request, res: Response) => {
     const user_id = Number(req.params.user_id);
+
     try {
         const userCourses = await fetchAllUserCourses(user_id);
         return res.status(200).json({message: `Fetched all courses in plan for user ${user_id}.`, data: userCourses});
