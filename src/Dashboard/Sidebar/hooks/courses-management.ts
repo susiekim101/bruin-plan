@@ -23,7 +23,6 @@ export function useUserCourses ({ userId }: useUserCoursesProps) {
                 const fetchedUserCourses = response.data.data;
                 setUserCourses(fetchedUserCourses);
                 
-                console.log("User's planned courses: ", fetchedUserCourses);
             } catch (err) {
                 console.error("Failed to load user's courses: ", err);
                 navigate('/');
@@ -50,7 +49,6 @@ export function useMajorCourses ({ userMajor, selectedMajor }: useMajorCoursesPr
             try {
                 const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
                 setMajorCourses(response.data.data);
-                console.log(`Displaying courses for major ${majorID}`, response.data.data);
             } catch (err){
                 console.error(`Failed to load courses for selected major ${majorID}`, err);
                 navigate('/');
