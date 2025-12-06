@@ -22,11 +22,11 @@ Given('I am on my dashboard page', async function () {
     await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
 });
 
-// Then the plan's total units in the top left corner of the dashboard should be 26
-Then('the plan\'s total units in the top left corner of the dashboard should be 26', async function () {
+// Then the plan's total units in the top left corner of the dashboard should be 30
+Then('the plan\'s total units in the top left corner of the dashboard should be 30', async function () {
     await page.waitForLoadState('networkidle');
     const totalUnitsLocator = page.locator('#total-units');
-    await expect(totalUnitsLocator).toHaveText("Units: 26 / 30");
+    await expect(totalUnitsLocator).toHaveText("Units: 30 / 30");
 });
 
 // And the units for the first quarter should be 0 
@@ -82,11 +82,11 @@ When('I add a 4-unit course to the first quarter', async function () {
     }, { source: courseEl, target: quarterEl });
 });
 
-// Then the unit total in the top left corner of the dashboard should be 30
-Then('the unit total in the top left corner of the dashboard should be 30', async function () {
+// Then the unit total in the top left corner of the dashboard should be 34
+Then('the unit total in the top left corner of the dashboard should be 34', async function () {
     await page.waitForLoadState('networkidle');
     const totalUnitsLocator = page.locator('#total-units');
-    await expect(totalUnitsLocator).toHaveText("Units: 30 / 30");
+    await expect(totalUnitsLocator).toHaveText("Units: 34 / 30");
 });
 
 // And the unit total at bottom of the quarter container should be 4
@@ -142,11 +142,11 @@ When('I add a 5-unit course from another quarter to the first quarter', async fu
     }, { source: courseEl, target: quarterEl });
 });
 
-// Then the unit total in the top left corner of the dashboard should remain 30
-Then('the unit total in the top left corner of the dashboard should remain 30', async function () {
+// Then the unit total in the top left corner of the dashboard should remain 34
+Then('the unit total in the top left corner of the dashboard should remain 34', async function () {
     await page.waitForLoadState('networkidle');
     const totalUnitsLocator = page.locator('#total-units');
-    await expect(totalUnitsLocator).toHaveText("Units: 30 / 30");
+    await expect(totalUnitsLocator).toHaveText("Units: 34 / 30");
 });
 
 // And the unit total at the bottom of the quarter container should be 9
@@ -158,11 +158,11 @@ Then('the unit total at the bottom of the quarter container should be 9', async 
 
 // SCENARIO 2: The total units and quarter total should decrease accordingly when a course is removed
 // Given I am on my dashboard page
-// Then the plan's total units in the top left corner of the dashboard should be 30
-Then('the plan\'s total units in the top left corner of the dashboard should be 30', async function () {
+// Then the plan's total units in the top left corner of the dashboard should be 34
+Then('the plan\'s total units in the top left corner of the dashboard should be 34', async function () {
     await page.waitForLoadState('networkidle');
     const totalUnitsLocator = page.locator('#total-units');
-    await expect(totalUnitsLocator).toHaveText("Units: 30 / 30");
+    await expect(totalUnitsLocator).toHaveText("Units: 34 / 30");
 });
 
 // And the units for the first quarter should be 9
@@ -218,11 +218,11 @@ When('I remove a 4-unit course from the first quarter', async function () {
     }, { source: courseEl, target: sidebarEl });
 });
 
-// Then the unit total in the top left corner of the dashboard should be 26
-Then('the unit total in the top left corner of the dashboard should be 26', async function () {
+// Then the unit total in the top left corner of the dashboard should be 30
+Then('the unit total in the top left corner of the dashboard should be 30', async function () {
     await page.waitForLoadState('networkidle');
     const totalUnitsLocator = page.locator('#total-units');
-    await expect(totalUnitsLocator).toHaveText("Units: 26 / 30");
+    await expect(totalUnitsLocator).toHaveText("Units: 30 / 30");
 });
 
 // And the unit total at the bottom of the quarter container should be 5
@@ -277,11 +277,11 @@ When('I move a 5-unit course into another quarter', async function () {
         fire("dragend", source);
     }, { source: courseEl, target: quarterEl });
 });
-// Then the unit total in the top left corner of the dashboard should remain 26
-Then('the unit total in the top left corner of the dashboard should remain 26', async function () {
+// Then the unit total in the top left corner of the dashboard should remain 30
+Then('the unit total in the top left corner of the dashboard should remain 30', async function () {
     await page.waitForLoadState('networkidle');
     const totalUnitsLocator = page.locator('#total-units');
-    await expect(totalUnitsLocator).toHaveText("Units: 26 / 30");
+    await expect(totalUnitsLocator).toHaveText("Units: 30 / 30");
 });
 
 // And the unit total at the bottom of the quarter container should be 0

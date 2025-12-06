@@ -62,7 +62,7 @@ function Dashboard () {
         <div className="w-4/5">
             <div className="flex justify-between mx-3 mt-3 mb-2">
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={() => handleHome(navigate)}/>
-            <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={() => handleOpenClick(dialogRef)}/>
+            <LogOut id="logout-button" className="cursor-pointer transition duration-300 hover:scale-110" onClick={() => handleOpenClick(dialogRef)}/>
             </div>
             <Header totalUnits={totalUnits} year={yearNum}/>
             <div>

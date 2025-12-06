@@ -68,7 +68,9 @@ async function addToUserPlans({user_id, major_id} : addToUserPlanProps) {
     }
 }
 
-/* Returns the user_id as a number */
+/* Returns the user_id as a number if successful
+   Throws error if unsuccessful
+ */
 export async function createUser({ first_name, last_name, email, password, major}: createUserProps) {
     const user_data = await findByEmail(email);
     if (Array.isArray(user_data) && user_data.length > 0) {
