@@ -31,6 +31,14 @@ This sequence diagram models the interaction of a user creating an account for t
 This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
 <img width="1320" height="1362" alt="CS35L Design Diagram - Log In (1)" src="https://github.com/user-attachments/assets/011f211b-64fd-48bc-9da6-235bfa86c97a" />
 
+The following 2 sequence diagrams model the interaction of a logged-in user landing on the dashboard. 
+
+Display user's major
+After authentication, the user's major ID will be retrieved from the JWT payload and used to query the database for the corresponding major name. If the query succeeds, then the server returns a successful status code, and the name of the user's major will be displayed on the sidebar. If the query fails, either because no such major exists for the given major ID or because the server failed to connect to the database, then the server returns an unsuccessful status code, and the user will not see their major displayed on the sidebar.
+
+Display courses in sidebar
+The user's ID is used to map to their plan ID in order to query the database for their plan items. If the query succeeds, then the server sends a successful status code along with the user's courses; otherwise, the server sends an unsuccessful status code and an empty array. The user's major ID is used to query the database for all courses with given major ID. If the query succeeds, then the server sends a successful status code and the major courses; otherwise, the server sends an unsuccessful status code and an empty array. Then, if the user has selected a major different from their major, then the corresponding courses for that major will be displayed; otherwise, the courses corresponding to the user's major will be displayed. Furthermore, the user's courses will not be displayed.
+
 ### Entity Relationship Diagram
 The entity relationship diagram models how data is stored in our MySQL database. The database stored user data and their plans. Each course in a user's plan is identified as a plan item.
 <img width="1820" height="940" alt="CS35L Design Diagram - ER" src="https://github.com/user-attachments/assets/3e4cc66e-14fe-40a6-8044-43e1c9e02e06" />
