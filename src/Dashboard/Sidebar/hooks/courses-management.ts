@@ -19,14 +19,18 @@ export function useUserCourses ({ userId }: useUserCoursesProps) {
             
             try {
                 const response = await axios.get(`http://localhost:3001/courses/planned/${userId}`, { withCredentials: true});
-                setUserCourses(response.data.data);
-                console.log("User's planned courses: ", response.data.data);
+                
+                const fetchedUserCourses = response.data.data;
+                setUserCourses(fetchedUserCourses);
+                
             } catch (err) {
                 console.error("Failed to load user's courses: ", err);
                 navigate('/');
             }
         }
+
         loadUserCourses();
+
     }, [userId]);
 
     return { userCourses };
@@ -41,21 +45,23 @@ export function useMajorCourses ({ userMajor, selectedMajor }: useMajorCoursesPr
     const [ majorCourses, setMajorCourses ] = useState<Course[]>([]);
     const navigate = useNavigate();
     useEffect(() => {
+        if (! userMajor && ! selectedMajor)
+            return;
+
         const loadMajorCourses = async (majorID: number) => {
             try {
                 const response = await axios.get(`http://localhost:3001/courses/${majorID}`, { withCredentials: true });
                 setMajorCourses(response.data.data);
-                console.log(`Displaying courses for major ${majorID}`, response.data.data);
             } catch (err){
                 console.error(`Failed to load courses for selected major ${majorID}`, err);
                 navigate('/');
             }
         };
 
-        if ( selectedMajor ) {
+        if (selectedMajor) {
             loadMajorCourses(selectedMajor.value);
         } else if (userMajor) {
-            loadMajorCourses( userMajor.major_id )
+            loadMajorCourses(userMajor.major_id)
         } else {
             return;
         }
