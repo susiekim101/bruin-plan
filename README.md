@@ -29,15 +29,16 @@ This sequence diagram models the interaction of a user creating an account for t
 <img width="1320" height="1362" alt="CS35L Design Diagram - Sign Up (1)" src="https://github.com/user-attachments/assets/bff26c69-a3a5-48e9-9c04-3aea5e8ea8a7" />
 
 This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
-<img width="1320" height="1362" alt="CS35L Design Diagram - Log In (1)" src="https://github.com/user-attachments/assets/011f211b-64fd-48bc-9da6-235bfa86c97a" />
+<img width="1320" height="1362" alt="CS35L Design Diagram - Log In" src="https://github.com/user-attachments/assets/e0c40ee2-895f-4a2d-b733-84f0c9935946" />
 
-The following 2 sequence diagrams model the interaction of a logged-in user landing on the dashboard. 
 
-Display user's major
+**The following 2 sequence diagrams model the interaction of a logged-in user landing on the dashboard.**
+
+### Display user's major
 After authentication, the user's major ID will be retrieved from the JWT payload and used to query the database for the corresponding major name. If the query succeeds, then the server returns a successful status code, and the name of the user's major will be displayed on the sidebar. If the query fails, either because no such major exists for the given major ID or because the server failed to connect to the database, then the server returns an unsuccessful status code, and the user will not see their major displayed on the sidebar.
 <img width="1540" height="1579" alt="CS35L Design Diagram - UserMajorDisplay" src="https://github.com/user-attachments/assets/2c7769af-916e-4014-8b00-342da40f00fc" />
 
-Display courses in sidebar
+### Display courses in sidebar
 The user's ID is used to map to their plan ID in order to query the database for their plan items. If the query succeeds, then the server sends a successful status code along with the user's courses; otherwise, the server sends an unsuccessful status code and an empty array. The user's major ID is used to query the database for all courses with given major ID. If the query succeeds, then the server sends a successful status code and the major courses; otherwise, the server sends an unsuccessful status code and an empty array. Then, if the user has selected a major different from their major, then the corresponding courses for that major will be displayed; otherwise, the courses corresponding to the user's major will be displayed. Furthermore, the user's courses will not be displayed.
 <img width="1760" height="2518" alt="CS35L Design Diagram - CoursesDisplay" src="https://github.com/user-attachments/assets/71880ef6-0f51-4dfd-8e6c-8596643e7162" />
 
@@ -47,7 +48,7 @@ The entity relationship diagram models how data is stored in our MySQL database.
 
 ### Component Diagram
 The component diagram shows how the frontend, backend, and database interact. The public contract for the backend is in the form of API endpoints as illustrated by the connectors. The interface that the backend uses to interact with the database is the SQL queries.
-<img width="1220" height="447" alt="CS35L Design Diagram - Component (1)" src="https://github.com/user-attachments/assets/3f3ed7f9-d68b-433b-9ff2-dea419843acc" />
+<img width="1220" height="447" alt="CS35L Design Diagram - Component (2)" src="https://github.com/user-attachments/assets/0f3e1eeb-6fa4-49e5-8c07-29fec90f85ea" />
 
 
 ## Run the app
@@ -154,7 +155,7 @@ npm test
 ```
 
 ## Cucumber testing
-To run and verify the Cucumber tests, run
+To run and verify the Cucumber tests make sure the frontend and backend servers are running and run
 ```
 npx cucumber-js test
 ```
