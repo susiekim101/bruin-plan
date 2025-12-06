@@ -153,6 +153,7 @@ function LogIn({ textStyle, px, py }: LogInProps) {
                     <button className="btn btn-neutral mt-4" 
                             type="submit"
                             disabled={!isFormValid}
+                            id="submit-button"
                     >
                             {signup ? "Create Account" : "Log In"}
                     </button>
