@@ -155,8 +155,7 @@ npm test
 ```
 
 ## Cucumber testing
-To run and verify the Cucumber tests make sure the frontend and backend servers are running
-Reinitialize your database with the dummy_users.sql script by running
+To run and verify the Cucumber tests make sure the frontend and backend servers are running. Reinitialize your database with the dummy_users.sql script by running
 ```
 mysql -u root -p < dummy_users.sql
 ```
