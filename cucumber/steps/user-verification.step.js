@@ -1,5 +1,5 @@
 import { Given, When, Then, Before, After, setDefaultTimeout } from "@cucumber/cucumber";
-import { chromium, expect } from "@playwright/test";
+import { chromium } from "@playwright/test";
 import 'dotenv/config';
 
 setDefaultTimeout(60 * 1000);
@@ -26,7 +26,6 @@ Then('I should be able to enter my email', async function () {
 Then('I should be able to enter my password', async function () {
     await page.locator('input[name="password"]').fill('Hello6!!');
 });
-
 
 After({ tags: "@userVerification"}, async function () {
     await browser.close();

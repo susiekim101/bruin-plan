@@ -1,8 +1,8 @@
 # Bruin Plan
 
-Our project is an interactive 4-year planner that enables UCLA engineering students to plan out their degree. While the school provides a standard 4-year planning template for each major, we wanted to create a dynamic, online platform with an interactive GUI for students to easily manipulate their schedules.  Our application will have a drag-and-drop interface with interactive course cards to allow students to visually lay out their 4-year class plan.  Users will be required to create an account and log in so their information is saved across each session. 
+Our project is an interactive 4-year planner that enables UCLA engineering students to plan out their degree. While the school provides a standard 4-year planning template for each major, we wanted to create a dynamic, online platform with an interactive GUI for students to easily manipulate their schedules.  Our application has a drag-and-drop interface with interactive course cards to allow students to visually lay out their 4-year class plan.  Users are required to create an account and log in so their information is saved across each session. 
 
-Our website will also have a public bulletin board where students can anonymously share their 4-year plans for other students to view. The sample 4-year schedules provided by UCLA are outdated and generic, making them unhelpful for many students who are interested in looking for more diverse sample schedules. With our public bulletin board, students will be able to filter through posted schedules by major and observe a variety of sample 4-year plans.
+Our website has a public bulletin board where students can anonymously share their 4-year plans for other students to view. The sample 4-year schedules provided by UCLA are outdated and generic, making them unhelpful for many students who are interested in looking for more diverse sample schedules. With our public bulletin board, students are able to filter through posted schedules by major and observe a variety of sample 4-year plans.
 
 With Bruin Plan, you will be able to
 
@@ -29,7 +29,18 @@ This sequence diagram models the interaction of a user creating an account for t
 <img width="1320" height="1362" alt="CS35L Design Diagram - Sign Up (1)" src="https://github.com/user-attachments/assets/bff26c69-a3a5-48e9-9c04-3aea5e8ea8a7" />
 
 This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
-<img width="1320" height="1362" alt="CS35L Design Diagram - Log In (1)" src="https://github.com/user-attachments/assets/011f211b-64fd-48bc-9da6-235bfa86c97a" />
+<img width="1320" height="1362" alt="CS35L Design Diagram - Log In" src="https://github.com/user-attachments/assets/e0c40ee2-895f-4a2d-b733-84f0c9935946" />
+
+
+**The following 2 sequence diagrams model the interaction of a logged-in user landing on the dashboard.**
+
+### Display user's major
+After authentication, the user's major ID will be retrieved from the JWT payload and used to query the database for the corresponding major name. If the query succeeds, then the server returns a successful status code, and the name of the user's major will be displayed on the sidebar. If the query fails, either because no such major exists for the given major ID or because the server failed to connect to the database, then the server returns an unsuccessful status code, and the user will not see their major displayed on the sidebar.
+<img width="1540" height="1579" alt="CS35L Design Diagram - UserMajorDisplay" src="https://github.com/user-attachments/assets/2c7769af-916e-4014-8b00-342da40f00fc" />
+
+### Display courses in sidebar
+The user's ID is used to map to their plan ID in order to query the database for their plan items. If the query succeeds, then the server sends a successful status code along with the user's courses; otherwise, the server sends an unsuccessful status code and an empty array. The user's major ID is used to query the database for all courses with given major ID. If the query succeeds, then the server sends a successful status code and the major courses; otherwise, the server sends an unsuccessful status code and an empty array. Then, if the user has selected a major different from their major, then the corresponding courses for that major will be displayed; otherwise, the courses corresponding to the user's major will be displayed. Furthermore, the user's courses will not be displayed.
+<img width="1760" height="2518" alt="CS35L Design Diagram - CoursesDisplay" src="https://github.com/user-attachments/assets/71880ef6-0f51-4dfd-8e6c-8596643e7162" />
 
 ### Entity Relationship Diagram
 The entity relationship diagram models how data is stored in our MySQL database. The database stored user data and their plans. Each course in a user's plan is identified as a plan item.
@@ -37,7 +48,7 @@ The entity relationship diagram models how data is stored in our MySQL database.
 
 ### Component Diagram
 The component diagram shows how the frontend, backend, and database interact. The public contract for the backend is in the form of API endpoints as illustrated by the connectors. The interface that the backend uses to interact with the database is the SQL queries.
-<img width="1220" height="447" alt="CS35L Design Diagram - Component (1)" src="https://github.com/user-attachments/assets/3f3ed7f9-d68b-433b-9ff2-dea419843acc" />
+<img width="1220" height="447" alt="CS35L Design Diagram - Component (2)" src="https://github.com/user-attachments/assets/0f3e1eeb-6fa4-49e5-8c07-29fec90f85ea" />
 
 
 ## Run the app
@@ -144,94 +155,7 @@ npm test
 ```
 
 ## Cucumber testing
-To run and verify the Cucumber tests, run
+To run and verify the Cucumber tests make sure the frontend and backend servers are running and run
 ```
 npx cucumber-js test
-```
-
-## Use of GenAI
-### Course Data
-The SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu. The prompt used to generate the queries for scraping the courses were as follows:
-```
-  I want to initialize my MySQL database with course data fetched from the UCLA course catalog. I will give you the table and its fields for which you will generate
-SQL queries to insert each course into the table. Please add the following courses to the table, where the major_id is referenced using @bioe_major_id, the category is either "Major" or "Elective" and the course_units is extracted from the UCLA course catalog. Assume the category is "Major" unless otherwise specified.
-
-  Courses table:
-  +---------------+--------------+------+-----+---------+----------------+
-  | Field         | Type         | Null | Key | Default | Extra          |
-  +---------------+--------------+------+-----+---------+----------------+
-  | course_id     | int          | NO   | PRI | NULL    | auto_increment |
-  | course_number | varchar(20)  | NO   |     | NULL    |                |
-  | course_name   | varchar(255) | NO   |     | NULL    |                |
-  | course_units  | int          | YES  |     | NULL    |                |
-  | category      | varchar(50)  | YES  |     | NULL    |                |
-  | major_id      | int          | YES  | MUL | NULL    |                |
-  +---------------+--------------+------+-----+---------+----------------+  
-
-  Courses data: 
-  Complete the following course: 
-  BIOENGR 10 - Introduction to Bioengineering 
-  Chemistry 
-  Complete the following six courses: 
-  
-  CHEM 20A - Chemical Structure 
-  CHEM 20B - Chemical Energetics and Change 
-  CHEM 20L - General Chemistry Laboratory 
-  ... 
-```
-The same prompt was used for all of the majors scraped in the `course_scraper.sql` script.
-
-### Dummy Users
-For the purposes of testing, we initialize our tables with user data so there are plans to view on the Public Page. The following was the prompt we used for Gemini:
-```
-<prompt>
-I want to initialize my MySQL database with dummy data. I will write a script in .sql and run it from my terminal so that I can put user data into all of the necessary tables. I will show you the tables and table, describe each table and their fields, and what the final table should look like after you input the user data. You can ignore the specic IDs of the data, since they AUTO_INCREMENT
-</prompt>
-
-<mySQL tables>
-Plan_Items 
-User_Plans  
-Users  
-</mySQL tables>
-
-<Plan_Items>
-+--------------+-------------------------------------------+------+-----+---------+----------------+
-| Field        | Type                                      | Null | Key | Default | Extra          |
-+--------------+-------------------------------------------+------+-----+---------+----------------+
-| plan_item_id | int                                       | NO   | PRI | NULL    | auto_increment |
-| plan_id      | int                                       | YES  | MUL | NULL    |                |
-| course_id    | int                                       | YES  | MUL | NULL    |                |
-| year         | int                                       | NO   |     | NULL    |                |
-| quarter      | enum('Fall','Winter','Spring','Summer')   | NO   |     | NULL    |                |
-| status       | enum('Planned','Completed','In Progress') | YES  |     | NULL    |                |
-+--------------+-------------------------------------------+------+-----+---------+----------------+
-</Plan_Items>
-
-<User_Plans>
-+-----------+------------+------+-----+---------+----------------+
-| Field     | Type       | Null | Key | Default | Extra          |
-+-----------+------------+------+-----+---------+----------------+
-| plan_id   | int        | NO   | PRI | NULL    | auto_increment |
-| user_id   | int        | YES  | MUL | NULL    |                |
-| major_id  | int        | YES  | MUL | NULL    |                |
-| is_shared | tinyint(1) | NO   |     | 0       |                |
-+-----------+------------+------+-----+---------+----------------+
-</User_Plans>
-
-<Users>
-+---------------+--------------+------+-----+---------+----------------+
-| Field         | Type         | Null | Key | Default | Extra          |
-+---------------+--------------+------+-----+---------+----------------+
-| user_id       | int          | NO   | PRI | NULL    | auto_increment |
-| first_name    | varchar(50)  | NO   |     | NULL    |                |
-| last_name     | varchar(50)  | NO   |     | NULL    |                |
-| email         | varchar(100) | NO   | UNI | NULL    |                |
-| password_hash | varchar(255) | NO   |     | NULL    |                |
-| major_id      | int          | YES  | MUL | NULL    |                |
-+---------------+--------------+------+-----+---------+----------------+
-</Users>
-
-I will now pass what the final table should look like with all of the user data.
-
-[ USER DATA ]
 ```

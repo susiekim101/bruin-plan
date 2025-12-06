@@ -1,3 +1,35 @@
+/* 
+The SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu. The prompt used to generate the queries for scraping the courses were as follows:
+
+  I want to initialize my MySQL database with course data fetched from the UCLA course catalog. I will give you the table and its fields for which you will generate
+SQL queries to insert each course into the table. Please add the following courses to the table, where the major_id is referenced using @bioe_major_id, the category is either "Major" or "Elective" and the course_units is extracted from the UCLA course catalog. Assume the category is "Major" unless otherwise specified.
+
+  Courses table:
+  +---------------+--------------+------+-----+---------+----------------+
+  | Field         | Type         | Null | Key | Default | Extra          |
+  +---------------+--------------+------+-----+---------+----------------+
+  | course_id     | int          | NO   | PRI | NULL    | auto_increment |
+  | course_number | varchar(20)  | NO   |     | NULL    |                |
+  | course_name   | varchar(255) | NO   |     | NULL    |                |
+  | course_units  | int          | YES  |     | NULL    |                |
+  | category      | varchar(50)  | YES  |     | NULL    |                |
+  | major_id      | int          | YES  | MUL | NULL    |                |
+  +---------------+--------------+------+-----+---------+----------------+  
+
+  Courses data: 
+  Complete the following course: 
+  BIOENGR 10 - Introduction to Bioengineering 
+  Chemistry 
+  Complete the following six courses: 
+  
+  CHEM 20A - Chemical Structure 
+  CHEM 20B - Chemical Energetics and Change 
+  CHEM 20L - General Chemistry Laboratory 
+  ... 
+
+The same prompt was used for all of the majors scraped in the `course_scraper.sql` script.
+*/
+
 USE bruin_plan;
 
 SET FOREIGN_KEY_CHECKS = 0;

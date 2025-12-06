@@ -3,9 +3,9 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Course, MajorOption } from '../types.ts';
 
 import CourseCard from '../components/CourseCards/CourseCards.tsx';
-import SearchBar from './SearchBar.tsx';
-import UserMajorDisplay from '../components/UserMajorDisplay/UserMajorDisplay.tsx';
-import SelectAMajor from './SelectAMajor.tsx';
+import SearchBar from './components/SearchBar.tsx';
+import UserMajorDisplay from './components/UserMajorDisplay.tsx';
+import SelectAMajor from './components/SelectAMajor.tsx';
 
 import { useUserMajor,  useAllMajors} from './hooks/majors-selection.ts';
 import { useMajorCourses, useUserCourses } from './hooks/courses-management.ts';
