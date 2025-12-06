@@ -9,5 +9,3 @@ Feature: User registration flow from landing page
     When I click on the My Dashboard button as a returning user
     Then I should be able to enter my email
     And I should be able to enter my password
-    
-    
