@@ -104,7 +104,7 @@ Then ('navigate to the next year', async function () {
 
 // And search for MATH 32A in the sidebar
 Then ('search for MATH 32A in the sidebar', async function () {
-    await page.fill('input[placeholder="Search"]', 'MATH 32A');
+    await page.fill('input[placeholder="Search by course code"]', 'MATH 32A');
     await page.waitForTimeout(500);
 });
 
