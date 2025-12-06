@@ -35,9 +35,11 @@ The following 2 sequence diagrams model the interaction of a logged-in user land
 
 Display user's major
 After authentication, the user's major ID will be retrieved from the JWT payload and used to query the database for the corresponding major name. If the query succeeds, then the server returns a successful status code, and the name of the user's major will be displayed on the sidebar. If the query fails, either because no such major exists for the given major ID or because the server failed to connect to the database, then the server returns an unsuccessful status code, and the user will not see their major displayed on the sidebar.
+<img width="1540" height="1579" alt="CS35L Design Diagram - UserMajorDisplay" src="https://github.com/user-attachments/assets/2c7769af-916e-4014-8b00-342da40f00fc" />
 
 Display courses in sidebar
 The user's ID is used to map to their plan ID in order to query the database for their plan items. If the query succeeds, then the server sends a successful status code along with the user's courses; otherwise, the server sends an unsuccessful status code and an empty array. The user's major ID is used to query the database for all courses with given major ID. If the query succeeds, then the server sends a successful status code and the major courses; otherwise, the server sends an unsuccessful status code and an empty array. Then, if the user has selected a major different from their major, then the corresponding courses for that major will be displayed; otherwise, the courses corresponding to the user's major will be displayed. Furthermore, the user's courses will not be displayed.
+<img width="1760" height="2518" alt="CS35L Design Diagram - CoursesDisplay" src="https://github.com/user-attachments/assets/71880ef6-0f51-4dfd-8e6c-8596643e7162" />
 
 ### Entity Relationship Diagram
 The entity relationship diagram models how data is stored in our MySQL database. The database stored user data and their plans. Each course in a user's plan is identified as a plan item.
