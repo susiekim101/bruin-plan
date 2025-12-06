@@ -3,9 +3,9 @@ import CustomCard from "../components/CourseCards/CustomCards";
 import { useEffect } from 'react';
 import React from 'react';
 import Select from "react-select";
+import handleMarkAllChange from "./handleMarkAllChange";
 import handleDropLogic from "./handleDropLogic";
 import removeCourseLogic from "./removeCourseLogic";
-import axios from "axios";
 
 interface Course {
     course_id: number | null;
@@ -137,23 +137,8 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
                             }),
                         }}
                         placeholder="Mark All As" 
-                        onChange={async (selectedOption) => {
-                            if (selectedOption === null) {
-                                return;
-                            }
-                            const newStatus = selectedOption.value as 'Planned' | 'In Progress' | 'Completed';
-                                const statusData = {
-                                    userId: userId,
-                                    yearIndex: yearIndex,
-                                    quarterName: quarterName,
-                                    status: newStatus,
-                                };
-                                try {
-                                    await axios.post(`http://localhost:3001/quarter/setStatus`, statusData);
-                                } catch (err) {
-                                    console.error(`Could not update quarter status in database: `, err);
-                                }
-                            loadCourses(yearIndex, quarterName);
+                        onChange={ async (selectedOption) => {
+                             await handleMarkAllChange({selectionOption: selectedOption?.value, userId, yearIndex, quarterName, loadCourses});
                         }}
                     />
                 </div>
