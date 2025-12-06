@@ -1,5 +1,6 @@
 import { connection } from "../src/database.ts";
 import type { RowDataPacket, ResultSetHeader } from "mysql2";
+import bcrypt from "bcryptjs";
 
 interface createUserProps {
     'first_name': string
@@ -17,20 +18,38 @@ interface MajorRows extends RowDataPacket {
     major_id: number,
 }
 
+interface UserRows extends RowDataPacket {
+    'user_id': number
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password_hash': string
+    'major_id': number
+}
+
+interface UserData {
+    'user_id': number
+    'first_name': string
+    'last_name': string
+    'email': string
+    'password_hash': string
+    'major_id': number
+}
+
 /* 
     Return: An array of an single object that holds information about specified User
     [ {
         'first_name': string
         'last_name': string
         'email': string
-        'password': string
+        'password_hash': string
         'major': string
     } ]
 */
 export async function findByEmail(email: string) {
     try {
         const query = `SELECT * FROM Users WHERE email = ?`; // Prevent SQL injection
-        const [ results ] = await connection.execute(query, [email]);
+        const [ results ] = await connection.execute<UserRows[]>(query, [email]);
         return results;
     } catch (err) {
         console.log('Failed to find user by email: ', err);
@@ -79,4 +98,21 @@ async function getIdByMajorName(major: string) {
     const major_query = `SELECT major_id FROM Majors WHERE major_name = ?;`;
     const [major_rows] = await connection.execute<MajorRows[]>(major_query, [major]);
     return major_rows;
+}
+
+export async function validateUser(data: UserData[], password: string) {
+    // Check if user exists
+    if(!data || data.length == 0) {
+        console.log("User not found");
+        return {status: 403, message: "User not found"};
+    }  
+
+    const isPasswordCorrect = await bcrypt.compare(password, data[0].password_hash);
+
+    // Incorrect validation check
+    if(!isPasswordCorrect) {
+        console.log("Incorrect password");
+        return { status: 403, message: "Log in failed: Incorrect password"};
+    }
+    return {};
 }

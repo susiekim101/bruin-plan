@@ -24,14 +24,21 @@ Backend: Node.js, Express, MySQL
 Tests: Cucumber, Playwright, Jest
 
 ## Design Diagrams
+### Sequence Diagrams
 This sequence diagram models the interaction of a user creating an account for the first time. The user's data is inserted into the database and if the query is successful, the server will return a token for the user. Otherwise, if the query fails because the user's account already exists or the server failed to connect to the database, then a token is not issued.
 <img width="1320" height="1362" alt="CS35L Design Diagram - Sign Up (1)" src="https://github.com/user-attachments/assets/bff26c69-a3a5-48e9-9c04-3aea5e8ea8a7" />
 
 This sequence diagram models the interaction of a user logging in. The user will first enter their credentials, which will make a query into the database to find the user. Once the user is found, the user's password will be validated with the hashed password stored in the database. If the credentials match, the server will return a successful status code and return a new token for the user. If the credentials don't match, then a token will not be generated and return an unsuccessful status code.
 <img width="1320" height="1362" alt="CS35L Design Diagram - Log In (1)" src="https://github.com/user-attachments/assets/011f211b-64fd-48bc-9da6-235bfa86c97a" />
 
+### Entity Relationship Diagram
 The entity relationship diagram models how data is stored in our MySQL database. The database stored user data and their plans. Each course in a user's plan is identified as a plan item.
 <img width="1820" height="940" alt="CS35L Design Diagram - ER" src="https://github.com/user-attachments/assets/3e4cc66e-14fe-40a6-8044-43e1c9e02e06" />
+
+### Component Diagram
+The component diagram shows how the frontend, backend, and database interact. The public contract for the backend is in the form of API endpoints as illustrated by the connectors. The interface that the backend uses to interact with the database is the SQL queries.
+<img width="1220" height="447" alt="CS35L Design Diagram - Component (1)" src="https://github.com/user-attachments/assets/3f3ed7f9-d68b-433b-9ff2-dea419843acc" />
+
 
 ## Run the app
 ### Frontend
@@ -122,27 +129,12 @@ mysql -u new_username -p
 ```
 
 ### Datbase Initialization
-Since our application runs on the local server, you must first initialize the database with a script. The scripts will 1) Initialize all tables 2) Initialize the Courses table with relevant course data and 3) Initialize Users, User_Plans, and Plan_Items with dummy user data to see posts on the public page.
+Since our application runs on the local server, you must first initialize the database with a script. The scripts will 1) initialize all tables 2) initialize the Courses table with relevant course data and 3) initialize Users, User_Plans, and Plan_Items with dummy user data to see posts on the public page.
 ```
 cd backend/src
 mysql -u root -p < database.sql
 mysql -u root -p < course_scraper.sql
 mysql -u root -p < dummy_users.sql
-```
-
-### Setting up MySQL Connection
-Create a .env file with the following information
-```
-DB_HOST=YOUR_LOCAL_HOST
-DB_USER=YOUR_USER
-DB_PASSWORD=YOUR_PASSWORD
-DB_NAME="bruin_plan
-```
-Ensure DB_HOST, DB_USER, ad DB_PASSWORD are updated for your configuration.
-
-Add .env to .gitignore
-```
-*.env
 ```
 
 ## Jest testing
@@ -155,90 +147,4 @@ npm test
 To run and verify the Cucumber tests, run
 ```
 npx cucumber-js test
-```
-
-## Use of GenAI
-### Course Data
-The SQL queries in `backend/src/course_scraper.sql` was generated using GenAI. Real data on required courses for each major was fetched from seasoasa.ucla.edu. The prompt used to generate the queries for scraping the courses were as follows:
-```
-  I want to initialize my MySQL database with course data fetched from the UCLA course catalog. I will give you the table and its fields for which you will generate SQL queries to insert each course into the table. Please add the following courses to the table, where the major_id is referenced using @bioe_major_id, the category is either "Major" or "Elective" and the course_units is extracted from the UCLA course catalog. Assume the category is "Major" unless otherwise specified.
-
-  Courses table:
-  +---------------+--------------+------+-----+---------+----------------+
-  | Field         | Type         | Null | Key | Default | Extra          |
-  +---------------+--------------+------+-----+---------+----------------+
-  | course_id     | int          | NO   | PRI | NULL    | auto_increment |
-  | course_number | varchar(20)  | NO   |     | NULL    |                |
-  | course_name   | varchar(255) | NO   |     | NULL    |                |
-  | course_units  | int          | YES  |     | NULL    |                |
-  | category      | varchar(50)  | YES  |     | NULL    |                |
-  | major_id      | int          | YES  | MUL | NULL    |                |
-  +---------------+--------------+------+-----+---------+----------------+  
-
-  Courses data: 
-  Complete the following course: 
-  BIOENGR 10 - Introduction to Bioengineering 
-  Chemistry 
-  Complete the following six courses: 
-  
-  CHEM 20A - Chemical Structure 
-  CHEM 20B - Chemical Energetics and Change 
-  CHEM 20L - General Chemistry Laboratory 
-  ... 
-```
-The same prompt was used for all of the majors scraped in the `course_scraper.sql` script.
-
-### Dummy Users
-For the purposes of testing, we initialize our tables with user data so there are plans to view on the Public Page. The following was the prompt we used for Gemini:
-```
-<prompt>
-I want to initialize my MySQL database with dummy data. I will write a script in .sql and run it from my terminal so that I can put user data into all of the necessary tables. I will show you the tables and table, describe each table and their fields, and what the final table should look like after you input the user data. You can ignore the specic IDs of the data, since they AUTO_INCREMENT
-</prompt>
-
-<mySQL tables>
-Plan_Items 
-User_Plans  
-Users  
-</mySQL tables>
-
-<Plan_Items>
-+--------------+-------------------------------------------+------+-----+---------+----------------+
-| Field        | Type                                      | Null | Key | Default | Extra          |
-+--------------+-------------------------------------------+------+-----+---------+----------------+
-| plan_item_id | int                                       | NO   | PRI | NULL    | auto_increment |
-| plan_id      | int                                       | YES  | MUL | NULL    |                |
-| course_id    | int                                       | YES  | MUL | NULL    |                |
-| year         | int                                       | NO   |     | NULL    |                |
-| quarter      | enum('Fall','Winter','Spring','Summer')   | NO   |     | NULL    |                |
-| status       | enum('Planned','Completed','In Progress') | YES  |     | NULL    |                |
-+--------------+-------------------------------------------+------+-----+---------+----------------+
-</Plan_Items>
-
-<User_Plans>
-+-----------+------------+------+-----+---------+----------------+
-| Field     | Type       | Null | Key | Default | Extra          |
-+-----------+------------+------+-----+---------+----------------+
-| plan_id   | int        | NO   | PRI | NULL    | auto_increment |
-| user_id   | int        | YES  | MUL | NULL    |                |
-| major_id  | int        | YES  | MUL | NULL    |                |
-| is_shared | tinyint(1) | NO   |     | 0       |                |
-+-----------+------------+------+-----+---------+----------------+
-</User_Plans>
-
-<Users>
-+---------------+--------------+------+-----+---------+----------------+
-| Field         | Type         | Null | Key | Default | Extra          |
-+---------------+--------------+------+-----+---------+----------------+
-| user_id       | int          | NO   | PRI | NULL    | auto_increment |
-| first_name    | varchar(50)  | NO   |     | NULL    |                |
-| last_name     | varchar(50)  | NO   |     | NULL    |                |
-| email         | varchar(100) | NO   | UNI | NULL    |                |
-| password_hash | varchar(255) | NO   |     | NULL    |                |
-| major_id      | int          | YES  | MUL | NULL    |                |
-+---------------+--------------+------+-----+---------+----------------+
-</Users>
-
-I will now pass what the final table should look like with all of the user data.
-
-[ USER DATA ]
 ```

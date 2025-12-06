@@ -68,6 +68,8 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
         <div 
             onDragOver={handleDragOver}
             onDrop={handleDrop}
+            data-year={yearIndex}
+            data-quarter={quarterName}
             className="flex flex-col w-full justify-between bg-zinc-200 h-[calc(100vh-8em)] m-3 mt-0.5 rounded-3xl p-4 overflow-y-scroll">
             <div className="flex flex-col shrink space-y-2">
                 {courses.map((course, index) => (
@@ -93,6 +95,8 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
             <div className="flex flex-col justify-center items-center mt-0.5">
                 <div className="flex justify-center items-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 text-xs rounded-full w-fit mt-4 mb-0.5 whitespace-nowrap">
                     <Select
+                        id="mark-all-as-dropdown"
+                        classNamePrefix="markall"
                         options={[
                             { value: 'Planned', label: 'Planned' },
                             { value: 'In Progress', label: 'In Progress' },
@@ -153,7 +157,7 @@ function Quarters({userId, yearIndex, quarterName, courses, removeFromSidebar, l
                         }}
                     />
                 </div>
-                <div> 
+                <div id="unit-tracker"> 
                     { (totalUnits > 21 || (totalUnits < 12 && quarterName != "Summer")) ?
                         <p className="text-red-600 font-bold">
                             Units: {totalUnits}
