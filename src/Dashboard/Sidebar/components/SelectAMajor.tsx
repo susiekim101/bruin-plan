@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import type { MajorOption } from '../types.ts'
+import type { MajorOption } from '../../types.ts'
 
 interface FilterProps {
     majorOptions: MajorOption[],
