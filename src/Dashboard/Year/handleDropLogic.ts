@@ -8,32 +8,24 @@ type handleDropProps = {
 }
 
 async function handleDropLogic({courseJson, userId, yearIndex, quarterName} : handleDropProps) {
-    let droppedCourse;
-    if (courseJson === "") {
-        droppedCourse = {
-            "course_id": null,
-            "course_number": "", 
-            "course_name": "",
-            "course_units": 0, 
-            "category": ""
-        }
+    if (userId === null || courseJson === "") {
+        return;
     }
-    else {
-        droppedCourse = JSON.parse(courseJson);
-    }
+    const droppedCourse = JSON.parse(courseJson);
 
-    if (userId !== null && droppedCourse.course_id !== null) {
-        const courseData = {
-            userId: userId,
-            courseId: droppedCourse.course_id,
-            yearIndex: yearIndex,
-            quarterName: quarterName
-        };
-        try {
-            await axios.post(`http://localhost:3001/quarter/addCourse`, courseData);
-        } catch (err) {
-            console.error(`Could not add dropped course to database: `, err);
-        }
+    if (droppedCourse === null || droppedCourse.course_id === null) {
+        return;
+    }
+    const courseData = {
+        userId: userId,
+        courseId: droppedCourse.course_id,
+        yearIndex: yearIndex,
+        quarterName: quarterName
+    };
+    try {
+        await axios.post(`http://localhost:3001/quarter/addCourse`, courseData);
+    } catch (err) {
+        console.error(`Could not add dropped course to database: `, err);
     }
 }
 
