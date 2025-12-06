@@ -138,6 +138,7 @@ When('I drag an existing course in a quarter and drop it in another quarter', as
         fire("dragend", source);
 
     }, { source: courseEl, target: quarterEl });
+    await page.waitForTimeout(1000);
 });
     
 // Then the course should appear in the new quarter I dropped it in
