@@ -25,7 +25,7 @@ Feature: Use the Bruin Plan Website to create 4-year plans and browse others
     When I click on the my dashboard button
     Then I should see the login dialog
     Then I should be able to log in with my credentials
-    And be naviaged to my dashboard page
+    And be navigated to my dashboard page
     And drag and drop COM SCI M51A to my plan
     And share my plan
     And visit the public page

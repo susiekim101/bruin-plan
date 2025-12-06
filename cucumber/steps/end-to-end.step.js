@@ -152,12 +152,12 @@ Then ('add MATH 32A into my plan', async function () {
         fire('dragend', source);
     }, { source: courseEl, target: quarterEl });
 
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 });
 
 // And set the status of fall quarter to In Progress
 Then ('set the status of fall quarter to In Progress', async function () {
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     const quarterSelector = '[data-year="2"][data-quarter="Fall"]';
     const dropdownSelector = `${quarterSelector} #mark-all-as-dropdown`;
 
@@ -246,12 +246,56 @@ Then ('set the status of spring quarter to Completed', async function () {
 
 // And log out
 Then ('log out', async function () {
-    await page.click('#logout-dialog');
-    await page.click('text=Yes');
-    await page.waitForURL(`${process.env.BASE_URL}/login`);
+    await page.locator('#logout-button').click();
+    await page.locator('text=Yes').click();
+    await page.waitForURL(`${process.env.BASE_URL}/`);
 });
+
+// SCENARIO 2: Full end-to-end test of user login, drag-and-drop, sharing plan, viewing public page, and logging out
+// Given I navigate to the Bruin Plan landing page
+// When I click on the my dashboard button
+// Then I should see the login dialog
+Then ('I should see the login dialog', async function () {
+    await page.waitForTimeout(600);
+    expect(await page.locator('text="Email"').isVisible()).toBeTruthy();
+    expect(await page.locator('text="Password"').isVisible()).toBeTruthy();
+});
+
+// Then I should be able to log in with my credentials
+Then ('I should be able to log in with my credentials', async function () {
+    await page.fill('input[name="email"]', "testuser@ucla.edu");
+    await page.fill('input[name="password"]',"Password123!");
+    await page.click('button[type="submit"]');
+});
+
+// And be navigated to my dashboard page
+// And drag and drop COM SCI M51A to my plan
+// And share my plan
+Then ('share my plan', async function () {
+    await page.locator('text="Share"').click();
+    await page.waitForTimeout(500);
+    expect(await page.locator('text="Your plan has been successfully published!"').isVisible()).toBeTruthy();
+    await page.locator('button:text("Ok")').click();
+});
+
+// And visit the public page
+Then ('visit the public page', async function () {
+    await page.locator('text="View All"').click();
+    await page.waitForTimeout(500);
+    await page.waitForURL(`${process.env.BASE_URL}/public`);
+    await page.waitForTimeout(500);
+    expect(await page.locator('text="Browse Plans"').isVisible()).toBeTruthy();
+});
+
+// And navigate back to the dashboard
+Then ('navigate back to the dashboard', async function () {
+    await page.locator('text="My Dashboard"').click();
+    await page.waitForURL(`${process.env.BASE_URL}/dashboard`);
+    await page.waitForTimeout(500);
+});
+
+// And log out
 
 After({tags: "@endToEnd"}, async function () {
     await browser.close();
 });
-// And log out

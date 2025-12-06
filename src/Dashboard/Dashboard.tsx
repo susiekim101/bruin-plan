@@ -54,7 +54,7 @@ function Dashboard () {
     
     return (
     <div className="w-full h-screen flex">
-        <dialog id="logout-dialog" ref={dialogRef} className="py-5 p-10 text-center bg-cyan-700 text-white rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
+        <dialog ref={dialogRef} className="py-5 p-10 text-center bg-cyan-700 text-white rounded-lg shadow-2xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop:bg-gray-500 backdrop:opacity-50">
             <p className="text-xl font-bold mb-5">Log out?</p>
             <button onClick={() => handleCloseClick(dialogRef)} className="bg-yellow-400 rounded-2xl px-2 py-1 mr-5 cursor-pointer text-slate-700 transition duration-300 hover:bg-red-500 hover:scale-105">Cancel</button>
             <button onClick={() => handleLogOut(logout, navigate)} className="bg-yellow-400 rounded-2xl px-2 py-1 mr-5 cursor-pointer text-slate-700 transition duration-300 hover:bg-green-500 hover:scale-105">Yes</button>
@@ -62,7 +62,7 @@ function Dashboard () {
         <div className="w-4/5">
             <div className="flex justify-between mx-3 mt-3 mb-2">
             <House className="cursor-pointer transition duration-300 hover:scale-110" onClick={() => handleHome(navigate)}/>
-            <LogOut className="cursor-pointer transition duration-300 hover:scale-110" onClick={() => handleOpenClick(dialogRef)}/>
+            <LogOut id="logout-button" className="cursor-pointer transition duration-300 hover:scale-110" onClick={() => handleOpenClick(dialogRef)}/>
             </div>
             <Header totalUnits={totalUnits} year={yearNum}/>
             <div>
